@@ -1074,10 +1074,12 @@ section {
   overflow: hidden;
   z-index: 9;
   border-radius: 0;
+  height: 0;
+  padding-bottom: 100%;
 }
 
 .events .card-img img {
-  max-width: 100%;
+  object-fit: cover;
   transition: all 0.3s ease-in-out;
 }
 
@@ -1581,17 +1583,6 @@ section {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  letter-spacing: 1px;
-  /* display: inline-block; */
-  padding: 10px 35px;
-  border-radius: 50px;
-  transition: 0.5s;
-  margin-top: 30px;
-  border: 2px solid #fff;
-  color: #fff;
 }
 
 

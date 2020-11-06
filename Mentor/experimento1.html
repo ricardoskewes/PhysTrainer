@@ -59,43 +59,65 @@
   </header><!-- End Header -->
   
   <main id="main">
+
     <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs" data-aos="fade-in">
       <div class="container">
-        <h2>Entrenamiento para experimentos</h2>
+        <h2>Experimentos</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eget facilisis turpis, tincidunt maximus neque. Fusce in enim tristique, venenatis libero iaculis, blandit nunc. Nam pellentesque libero ut tempor volutpat. Nulla mattis lacus nec diam laoreet mollis vel non augue. Aenean id ante quam. Vestibulum gravida urna lectus, ut porta est tempor vitae. 
+          En esta sección, se simula un experimento. Debes hallar una dependencia entre las dos variables medidas.
         </p>
       </div>
     </div><!-- End Breadcrumbs -->
-    <!-- ======= Hero Section ======= -->
-    <section id="hero" class="d-flex justify-content-center align-items-center">
-      <a href="./experimento1.html" class="btn-get-started">Iniciar Experimento</a>
-    </section><!-- End Hero -->
-    
 
-
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
+    <!-- ======= Events Section ======= -->
+    <section id="events" class="events" style="padding-bottom: 0px;">
       <div class="container" data-aos="fade-up">
 
-        <div class="section-title">
-          <h2>¿Cómo usar esta sección?</h2>
-          <p>¿Cómo usar esta sección?</p>
-        </div>
-
         <div class="row">
-          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
-            <img src="assets/img/formulas.jpg" class="img-fluid" alt="">
+          <div class="col-md-6 d-flex align-items-stretch">
+            <div class="card">
+              <div class="card-img">
+                <img src="assets/img/unidades/meter.jpg" alt="...">
+              </div>
+              <div class="card-body">
+                <p class="font-italic text-center">Variable independiente</p>
+                <h5 class="card-title" id="variable-independiente-nombre">Longitud</h5>
+                <p class="card-text">
+                  <h3 style="text-align: center;">
+                    <input type="text" id="variable-independiente-valor" placeholder="Ingresa un valor" style="width: 100%; text-align: center;">
+                    <span id="variable-independiente-unidad">m</span>
+                  </h3>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure inventore tempora impedit, a ut, molestias nostrum veniam expedita aspernatur officia suscipit maxime modi pariatur quod. Odio impedit vero cumque soluta.
+          <div class="col-md-6 d-flex align-items-stretch">
+            <div class="card">
+              <div class="card-img">
+                <img src="assets/img/unidades/tesla.jpg" alt="...">
+              </div>
+              <div class="card-body">
+                <p class="font-italic text-center">Variable Dependiente</p>
+                <h5 class="card-title" id="variable-dependiente-nombre">Campo Magnético</h5>
+                <p class="card-text">
+                  <h2 id="variable-dependiente-valor" style="text-align: center;">
+                    42 <span id="variable-dependiente-unidad"> &mu;T </span> 
+                  </h2>
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
+
 
       </div>
-    </section><!-- End About Section -->
+    </section><!-- End Events Section -->
+    <a href="">
+      <div class="breadcrumbs" style="margin-top: 0;">
+        <h2>Enviar</h2>
+      </div>
+    </a>
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
