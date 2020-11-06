@@ -1561,3 +1561,37 @@ section {
   color: #fff;
   text-decoration: none;
 }
+
+/* =================================== */
+
+/* #experimental #main #hero {
+
+} */
+#experimental #main #hero{
+  height: 50vh;
+  padding: 16px;
+  background-image: url(../img/grafica_desmos.jpeg);
+}
+#experimental #main #hero:before{
+  position: relative;
+}
+
+#experimental #main #hero .btn-get-started {
+  font-size: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  /* display: inline-block; */
+  padding: 10px 35px;
+  border-radius: 50px;
+  transition: 0.5s;
+  margin-top: 30px;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+
