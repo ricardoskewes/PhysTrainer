@@ -40,10 +40,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
-
-      
       <a href="index.html" class="logo mr-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
-
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li><a href="index.html">Inicio</a></li>
@@ -53,14 +50,11 @@
           <li><a href="">Referencias de interés</a></li>
         </ul>
       </nav><!-- .nav-menu -->
-
       <a href="" class="get-started-btn">Iniciar Sesión</a>
     </div>
   </header><!-- End Header -->
   
   <main id="main">
-
-    <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs" data-aos="fade-in">
       <div class="container">
         <h2>Experimentos</h2>
@@ -68,12 +62,11 @@
           En esta sección, se simula un experimento. Debes hallar una dependencia entre las dos variables medidas.
         </p>
       </div>
-    </div><!-- End Breadcrumbs -->
+    </div>
 
-    <!-- ======= Events Section ======= -->
-    <section id="events" class="events" style="padding-bottom: 0px;">
+    <!-- ======= Paso 1 Ingresar Valores ======= -->
+    <section id="valores" class="events" style="padding-bottom: 0px;">
       <div class="container" data-aos="fade-up">
-
         <div class="row">
           <div class="col-md-6 d-flex align-items-stretch">
             <div class="card">
@@ -85,7 +78,7 @@
                 <h5 class="card-title" id="variable-independiente-nombre">Longitud</h5>
                 <p class="card-text">
                   <h3 style="text-align: center;">
-                    <input type="text" id="variable-independiente-valor" placeholder="Ingresa un valor" style="width: 100%; text-align: center;">
+                    <input type="number" id="variable-independiente-valor" placeholder="Ingresa un valor" style="width: 100%; text-align: center;">
                     <span id="variable-independiente-unidad">m</span>
                   </h3>
                 </p>
@@ -101,22 +94,42 @@
                 <p class="font-italic text-center">Variable Dependiente</p>
                 <h5 class="card-title" id="variable-dependiente-nombre">Campo Magnético</h5>
                 <p class="card-text">
-                  <h2 id="variable-dependiente-valor" style="text-align: center;">
-                    42 <span id="variable-dependiente-unidad"> &mu;T </span> 
+                  <h2 style="text-align: center;">
+                    <span id="variable-dependiente-valor">43</span> 
+                    <span id="variable-dependiente-unidad"> &mu;T </span> 
                   </h2>
                 </p>
               </div>
             </div>
           </div>
-
-
       </div>
+      <!-- quitar -->
+      <div>
+        <strong>TESTING DATA</strong>
+        <div id="test"></div>
+      </div>
+      <!-- end quitar -->
+      <a href="" id="siguiente">
+        <div class="breadcrumbs" style="margin-top: 0;">
+          <h2>Siguiente</h2>
+        </div>
+      </a>
     </section><!-- End Events Section -->
-    <a href="">
-      <div class="breadcrumbs" style="margin-top: 0;">
-        <h2>Enviar</h2>
+
+    <!-- ======= Paso 2: Ecuacion ======= -->
+    <section id="respuesta" class="events" style="padding-bottom: 0px; display: none;">
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+          <h1>Aqui ira la parte de respuestas</h1>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi cupiditate saepe, ullam consequatur et, eaque perferendis distinctio obcaecati nobis minima minus iure beatae molestiae accusamus expedita non! Blanditiis, inventore expedita.
+          </p>
+        </div>
       </div>
-    </a>
+    </section>
+
+
+
 
   </main><!-- End #main -->
 
@@ -162,7 +175,22 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
+  <!-- Phystrainer js -->
+  <script src="./assets/js/Phystrainer.js"></script>
+  <script>
+    let ecuacion = new PhysTrainerProblem('lineal')
+    document.querySelector("#variable-independiente-valor").setAttribute('max', ecuacion.x_max);
+    document.querySelector("#variable-independiente-valor").setAttribute('min', ecuacion.x_min);
+    document.querySelector("#variable-independiente-valor").addEventListener('input', (e)=>{
+      document.querySelector("#variable-dependiente-valor").innerHTML = Number(ecuacion.valores[Number(e.target.value ).toFixed(3)]).toFixed(3) ;
+      document.querySelector("#test").innerHTML = ecuacion.f + "\n a: " + ecuacion.a + ", b: " + ecuacion.b + ", c: " + ecuacion.c  
+    })
+    document.querySelector("#siguiente").addEventListener('click', (e)=>{
+      e.preventDefault();
+      document.querySelector("#valores").style.display = "none";
+      document.querySelector("#respuesta").style.display = "initial"
+    })
+  </script>
 </body>
 
 </html>
