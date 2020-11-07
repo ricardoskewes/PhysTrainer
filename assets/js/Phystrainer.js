@@ -1,3 +1,6 @@
+
+
+//Creo que esto lo vamos a tener que cambiar... :(
 const aleatorioEntre = (min, max) => Math.random() * (max - min) + min;
 class PhysTrainerProblem{
     constructor(relacion, o={}){
