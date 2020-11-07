@@ -1598,4 +1598,13 @@ section {
   text-align: center;
 }
 
-
+#experimental #main #respuestas-ecuacion{
+  /* display: inline; */
+  text-align: center;
+}
+  #experimental #main #respuestas-ecuacion>*{
+    display: inline-block;
+  }
+  #experimental #main #respuestas-ecuacion>input{
+    width: 23ch;
+  }

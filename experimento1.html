@@ -34,6 +34,13 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+
+    <!-- Katex -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
 </head>
 <body id="experimental">
 
@@ -65,7 +72,7 @@
     </div>
 
     <!-- ======= Paso 1 Ingresar Valores ======= -->
-    <section id="valores" class="events" style="padding-bottom: 0px;">
+    <section id="variables" class="events" style="padding-bottom: 0px;">
       <div class="container" data-aos="fade-up">
         <div class="row">
           <div class="col-md-6 d-flex align-items-stretch">
@@ -103,12 +110,6 @@
             </div>
           </div>
       </div>
-      <!-- quitar -->
-      <div>
-        <strong>TESTING DATA</strong>
-        <div id="test"></div>
-      </div>
-      <!-- end quitar -->
       <a href="" id="siguiente">
         <div class="breadcrumbs" style="margin-top: 0;">
           <h2>Siguiente</h2>
@@ -117,18 +118,25 @@
     </section><!-- End Events Section -->
 
     <!-- ======= Paso 2: Ecuacion ======= -->
-    <section id="respuesta" class="events" style="padding-bottom: 0px; display: none;">
+    <section id="respuestas" class="events" style="padding-bottom: 0px; display: none;">
       <div class="container" data-aos="fade-up">
-        <div class="row">
+        <!-- <div class="row"> -->
           <h1>Aqui ira la parte de respuestas</h1>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi cupiditate saepe, ullam consequatur et, eaque perferendis distinctio obcaecati nobis minima minus iure beatae molestiae accusamus expedita non! Blanditiis, inventore expedita.
-          </p>
-        </div>
+          <p>Aqui van a ir las opciones</p>
+
+          <h2 id="respuestas-ecuacion">
+            $$y=$$<input type="number" placeholder="m">$$x +$$ <input type="number" placeholder="b">
+          </h2>
+        <!-- </div> -->
       </div>
     </section>
 
-
+<!-- quitar -->
+<div>
+  <strong>TESTING DATA</strong>
+  <div id="test"></div>
+</div>
+<!-- end quitar -->
 
 
   </main><!-- End #main -->
@@ -187,8 +195,8 @@
     })
     document.querySelector("#siguiente").addEventListener('click', (e)=>{
       e.preventDefault();
-      document.querySelector("#valores").style.display = "none";
-      document.querySelector("#respuesta").style.display = "initial"
+      document.querySelector("#variables").style.display = "none";
+      document.querySelector("#respuestas").style.display = "block"
     })
   </script>
 </body>
