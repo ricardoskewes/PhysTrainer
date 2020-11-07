@@ -1066,6 +1066,7 @@ section {
   padding: 0 30px;
   margin-bottom: 60px;
   position: relative;
+  width: 100%;
 }
 
 .events .card-img {
@@ -1074,13 +1075,25 @@ section {
   overflow: hidden;
   z-index: 9;
   border-radius: 0;
-  height: 0;
-  padding-bottom: 100%;
+  position: relative;
+}
+.events .card-img:before {
+  content:     "";
+  display:     block;
+  padding-top: 100%;
+  background: red;
 }
 
 .events .card-img img {
   object-fit: cover;
   transition: all 0.3s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .events .card-body {
