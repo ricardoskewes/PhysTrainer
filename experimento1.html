@@ -187,12 +187,13 @@
   <script src="./assets/js/Phystrainer.js"></script>
   <script>
     let ecuacion = new PhysTrainerProblem('lineal')
-    document.querySelector("#variable-independiente-valor").setAttribute('max', ecuacion.x_max);
-    document.querySelector("#variable-independiente-valor").setAttribute('min', ecuacion.x_min);
-    document.querySelector("#variable-independiente-valor").addEventListener('input', (e)=>{
-      document.querySelector("#variable-dependiente-valor").innerHTML = Number(ecuacion.valores[Number(e.target.value ).toFixed(3)]).toFixed(3) ;
-      document.querySelector("#test").innerHTML = ecuacion.f + "\n a: " + ecuacion.a + ", b: " + ecuacion.b + ", c: " + ecuacion.c  
-    })
+    // document.querySelector("#variable-independiente-valor").setAttribute('max', ecuacion.x_max);
+    // document.querySelector("#variable-independiente-valor").setAttribute('min', ecuacion.x_min);
+
+    // document.querySelector("#variable-independiente-valor").addEventListener('input', (e)=>{
+    //   document.querySelector("#variable-dependiente-valor").innerHTML = Number(ecuacion.calcularValores(e.target.value)).toFixed(3) ;
+    //   //document.querySelector("#test").innerHTML = ecuacion.f + "\n a: " + ecuacion.a + ", b: " + ecuacion.b + ", c: " + ecuacion.c  
+    // })
     document.querySelector("#siguiente").addEventListener('click', (e)=>{
       e.preventDefault();
       document.querySelector("#variables").style.display = "none";
