@@ -10,8 +10,6 @@ const parametros = generarParamLineal(rangoX, rangoY);
  */
 
 
-    
-
 
 
 
@@ -44,8 +42,8 @@ class PhysTrainerProblem{
         this.magX = this._escogerMagnitud();
         this.magY = this._escogerMagnitud();
         //Hallar rango característico para X y Y
-        this.rangoX = this.hallarRangoLog(this.magnitudes[this.magX][0], this.magnitudes[this.magX][1]);
-        this.rangoY = this.hallarRangoLog(this.magnitudes[this.magY][0], this.magnitudes[this.magY][1]);
+        this.rangoX = this._hallarRangoLog(this.magnitudes[this.magX][0], this.magnitudes[this.magX][1]);
+        this.rangoY = this._hallarRangoLog(this.magnitudes[this.magY][0], this.magnitudes[this.magY][1]);
 
         //Generar parámetros y función para experimento [A, B, C]:
         this._generarFuncionYParametros();
@@ -79,8 +77,8 @@ class PhysTrainerProblem{
     //Encontrar mínimo y máximo a través de escala log
     _hallarRangoLog(expMin, expMax) {
         do {
-            lim1 = aleatorioEntre(expMin, expMax);
-            lim2 = aleatorioEntre(expMin, expMax);
+            var lim1 = aleatorioEntre(expMin, expMax);
+            var lim2 = aleatorioEntre(expMin, expMax);
         } while (Math.abs(lim1-lim2)>2);
     
         return [lim1, lim2];
@@ -88,14 +86,14 @@ class PhysTrainerProblem{
 
     //y = Ax + B
     _generarParamLineal(limX, limY) {
-        A_lim = Math.abs((Math.pow(10,limY[1])-Math.pow(10,limX[0]))/(Math.pow(10,limX[1])-Math.pow(10,limY[0])))
+        let A_lim = Math.abs((Math.pow(10,limY[1])-Math.pow(10,limX[0]))/(Math.pow(10,limX[1])-Math.pow(10,limY[0])))
         //Pendiente
-        A = aleatorioEntre(-A_lim, A_lim);
+        let A = aleatorioEntre(-A_lim, A_lim);
         //Punto Pruebaf
-        x0 = aleatorioEntre(Math.pow(10,limX[0]), Math.pow(10,limX[1]));
-        y0 = aleatorioEntre(Math.pow(10,limY[0]), Math.pow(10,limY[1]));
+        let x0 = aleatorioEntre(Math.pow(10,limX[0]), Math.pow(10,limX[1]));
+        let y0 = aleatorioEntre(Math.pow(10,limY[0]), Math.pow(10,limY[1]));
         //Ordenada
-        B = y0-A*x0;
+        let B = y0-A*x0;
         return [A, B];
     }
 
@@ -133,19 +131,19 @@ class PhysTrainerProblem{
     }
 
 
-    _generarFuncionYParametros() {
+    _generarFuncionYParametros(x) {
         switch(this.relacion){
             case 'lineal':
-                this.param = generarParamLineal(this.rangoX, this.rangoY);
-                this.funcion = (x) => this.param[0]*x + this.param[1];
+                this.param = this._generarParamLineal(this.rangoX, this.rangoY);
+                let funcion = (x) => this.param[0]*x + this.param[1];
                 break;
             case 'potencial':
                 this.param = this._generarParamPotencial(this.rangoX, this.rangoY);
-                this.funcion =  (x) => this.param[0]*Math.pow(x, this.param[1]);
+                let funcion =  (x) => this.param[0]*Math.pow(x, this.param[1]);
                 break;
             case 'exponencial':
                 this.param = this._generarParamExponencial(this.rangoX, this.rangoY);
-                this.funcion = (x) => this.param[0]*Math.exp(this.param[1]*x);
+                let funcion = (x) => this.param[0]*Math.exp(this.param[1]*x);
                 break;
             /*
             case 'sinusoidal':
@@ -154,9 +152,9 @@ class PhysTrainerProblem{
                 break
             */
             default:
-                funcion = (x) => 0;
+                let funcion = (x) => 0;
         }
-        return funcion;
+        return funcion(x);
     }
     
     //Error gaussiano. DISTRIBUCIÓN NORMAL USANDO LA TRANSFORMACIÓN DE BOX-MULLER.
@@ -170,7 +168,7 @@ class PhysTrainerProblem{
 
 
     static calcularValores(x){
-        let medicion = this._randn_bm(this.funcion(x), .05)
+        let medicion = this._randn_bm(this._generarFuncionYParametros(x), .05)
         document.getElementById("#variable-dependiente-valor").innerHTML = medicion;
         console.log(medicion)
     }
