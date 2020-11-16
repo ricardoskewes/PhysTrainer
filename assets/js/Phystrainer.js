@@ -55,8 +55,8 @@ class PhysTrainerProblem{
         let y0 = PhysTrainerProblem.aleatorioEntre(Math.pow(10,limY[0]), Math.pow(10,limY[1]));
         //Ordenada
         let B = y0-A*x0;
-        // return [A, B];
-        return (x)=>A*x + B;
+        this.params = [A, B]
+        this.funcion = (x)=>A*x + B;
     }
     // y = Ae^(Bx)
     _generarParamExponencial(limX,limY) {
@@ -71,8 +71,8 @@ class PhysTrainerProblem{
         // Valores de A y B
         let A = Math.pow(10, O_log);
         let B = P_log/Math.log10(Math.E);
-        // return [A, B];
-        return (x)=>A*Math.exp(B*x);
+        this.params = [A, B]
+        this.funcion = (x)=>A*Math.exp(B*x);
     }
     // y = Ax^B
     _generarParamPotencial(limX,limY) {
@@ -86,29 +86,29 @@ class PhysTrainerProblem{
         let O_log = y0-B*x0;
         // Generar A
         let A = Math.pow(10, O_log);
-        // return [A, B];
-        return (x)=>A*Math.pow(x, B)
+        this.params = [A, B]
+        this.funcion = (x)=>A*Math.pow(x, B)
     }
     // Generar valores a partir del tipo de relacion
     _generarFuncionYParametros() {
         switch(this.relacion){
             case 'lineal':
-                // this.param = ;
-                this.funcion = this._generarParamLineal(this.rangoX, this.rangoY);
+                this._generarParamLineal(this.rangoX, this.rangoY);
                 break;
             case 'potencial':
-                this.funcion = this._generarParamPotencial(this.rangoX, this.rangoY);
+                this._generarParamPotencial(this.rangoX, this.rangoY);
                 break;
             case 'exponencial':
-                this.funcion = this._generarParamExponencial(this.rangoX, this.rangoY);
+                this._generarParamExponencial(this.rangoX, this.rangoY);
                 break;
             /*
             case 'sinusoidal':
-                this.funcion = this._generarParamSinusoidal(this.rangoX, this.rangoY);
+                this._generarParamSinusoidal(this.rangoX, this.rangoY);
                 break
             */
             default:
                 this.funcion = (x) => 0;
+                this.params = [NaN, NaN]
         }
         return this.funcion;
     }
@@ -127,7 +127,8 @@ class PhysTrainerProblem{
     calcularValores(x){
         let medicion = PhysTrainerProblem.randn_bm(this.funcion(x), .05)
         // document.getElementById("#variable-dependiente-valor").innerHTML = medicion;
-        console.log(medicion)
+        // console.log(medicion)
+        return medicion
     }
     
 
