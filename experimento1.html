@@ -66,7 +66,7 @@
       <div class="container">
         <h2>Experimentos</h2>
         <p>
-          En esta sección, se simula un experimento. Debes hallar una dependencia entre las dos variables medidas.
+          En esta sección, se simula un experimento. Debes hallar una dependencia entre las dos variables medidas. 
         </p>
       </div>
     </div>
@@ -86,7 +86,7 @@
                 <p class="card-text">
                     <input type="number" id="variable-independiente-valor" placeholder="Ingresa un valor" style="width: 100%; text-align: center; font-size: large;">
                   <h3 style="text-align: center;">
-                    <span id="variable-independiente-unidad">m</span>
+                    <span id="variable-independiente-unidad">Esperando medición</span>
                   </h3>
                 </p>
               </div>
@@ -102,8 +102,8 @@
                 <h5 class="card-title" id="variable-dependiente-nombre">Campo Magnético</h5>
                 <p class="card-text">
                   <h2 style="text-align: center;">
-                    <span id="variable-dependiente-valor">43</span> 
-                    <span id="variable-dependiente-unidad"> &mu;T </span> 
+                    <span id="variable-dependiente-valor">Esperando medición</span> 
+                    <span id="variable-dependiente-unidad"></span> 
                   </h2>
                 </p>
               </div>
@@ -186,14 +186,31 @@
   <!-- Phystrainer js -->
   <script src="./assets/js/Phystrainer.js"></script>
   <script>
-    let ecuacion = new PhysTrainerProblem('lineal')
+    let ecuacion = new PhysTrainerProblem()
+    //Escribir nombre de X y Y:
+    document.querySelector("#variable-independiente-nombre").innerHTML = PhysTrainerProblem.MAGNITUDES[ecuacion.magX][4];
+    document.querySelector("#variable-dependiente-nombre").innerHTML = PhysTrainerProblem.MAGNITUDES[ecuacion.magY][4];
+    var expVarIndep = ecuacion._expVariableIndep();
+
     // document.querySelector("#test").innerHTML = ecuacion.funcion
     document.querySelector("#test").innerHTML = ecuacion.funcion + "\n a: " + ecuacion.params[0] + ", b: " + ecuacion.params[1] + ", c: " + ecuacion.params[2]  
     // document.querySelector("#variable-independiente-valor").setAttribute('max', ecuacion.x_max);
     // document.querySelector("#variable-independiente-valor").setAttribute('min', ecuacion.x_min);
-
+    
     document.querySelector("#variable-independiente-valor").addEventListener('input', (e)=>{
-      document.querySelector("#variable-dependiente-valor").innerHTML = Number(ecuacion.calcularValores(e.target.value)).toFixed(3) ;
+      katex.render(ecuacion._unidadConPrefijo(PhysTrainerProblem.MAGNITUDES[ecuacion.magX][3],expVarIndep), document.querySelector("#variable-independiente-unidad"), {
+        throwOnError: false
+        } );
+      if(e.target.value == ""){
+        document.querySelector("#variable-dependiente-valor").innerHTML = "Esperando medición"
+        document.querySelector("#variable-dependiente-unidad").innerHTML = ""
+      } else{
+        document.querySelector("#variable-dependiente-valor").innerHTML = ecuacion.calcularValores(e.target.value*expVarIndep)[0].toFixed(1);
+        katex.render(ecuacion.calcularValores(e.target.value)[1], document.querySelector("#variable-dependiente-unidad"), {
+        throwOnError: false
+        } ); 
+
+      }
     })
     document.querySelector("#siguiente").addEventListener('click', (e)=>{
       e.preventDefault();
