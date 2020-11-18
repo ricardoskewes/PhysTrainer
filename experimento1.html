@@ -78,7 +78,7 @@
           <div class="col-md-6 d-flex align-items-stretch">
             <div class="card">
               <div class="card-img">
-                <img src="assets/img/unidades/meter.jpg" alt="...">
+                <img id="variable-independiente-img" src="assets/img/unidades/longitud.jpg" alt="...">
               </div>
               <div class="card-body">
                 <p class="font-italic text-center">Variable independiente</p>
@@ -95,7 +95,7 @@
           <div class="col-md-6 d-flex align-items-stretch">
             <div class="card">
               <div class="card-img">
-                <img src="assets/img/unidades/tesla.jpg" alt="...">
+                <img id="variable-dependiente-img" src="assets/img/unidades/campoMagnetico.jpg" alt="...">
               </div>
               <div class="card-body">
                 <p class="font-italic text-center">Variable Dependiente</p>
@@ -187,6 +187,9 @@
   <script src="./assets/js/Phystrainer.js"></script>
   <script>
     let ecuacion = new PhysTrainerProblem()
+    //Cambiar imágenes:
+    document.querySelector("#variable-independiente-img").src = ("assets/img/unidades/" + ecuacion.magX + ".jpg");
+    document.querySelector("#variable-dependiente-img").src = ("assets/img/unidades/" + ecuacion.magY + ".jpg");
     //Escribir nombre de X y Y:
     document.querySelector("#variable-independiente-nombre").innerHTML = PhysTrainerProblem.MAGNITUDES[ecuacion.magX][4];
     document.querySelector("#variable-dependiente-nombre").innerHTML = PhysTrainerProblem.MAGNITUDES[ecuacion.magY][4];

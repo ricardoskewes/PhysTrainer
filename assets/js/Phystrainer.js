@@ -3,7 +3,7 @@ class PhysTrainerProblem{
     //Unidades fundamentales: [m, g, s, A, K, cd, mol] (NOTA: La Unidad Fundamental de masa en el SI es kg, pero se tomará como g para simplificar el código)
     static MAGNITUDES = {
         masa: [-4,5, "m", [0,1,0,0,0,0,0], "Masa"],
-        densidad: [-3, 5, "rho", [-3,1,0,0,0,0,0], "Densidad"],
+        densidad: [-3, 5, "\\rho", [-3,1,0,0,0,0,0], "Densidad"],
         volumen: [-9, 1, "V" ,[3,0,0,0,0,0,0], "Volumen"],
         area: [-6, 1, "A" ,[2,0,0,0,0,0,0], "Área"],
         longitud: [-4,1, "l" ,[1,0,0,0,0,0,0], "Longitud"],
@@ -17,7 +17,9 @@ class PhysTrainerProblem{
         temperatura:[2.38, 2.77, "T", [0,0,0,0,1,0,0], "Temperatura"],
         torque: [0, 9, "tau", [2,1,-2,0,0,0,0], "Torque"], 
         resistencia: [-1, 10, "R", [2, 1, -3, -2], "Resistencia"],
-        coefFriccion: [-2, 0.05, "mu", [0,0,0,0,0,0,0], "Coeficiente de fricción"]
+        coefFriccion: [-2, 0.05, "\\mu", [0,0,0,0,0,0,0], "Coeficiente de fricción"],
+        campoMagnetico: [-6, 1, "B", [0,1,-2,-1,0,0,0], "Campo magnético"], 
+        viscosidad: [-1.3, 8, "\\eta", [-1,1,-1,0,0,0,0], "Viscosidad"]
     }
     //Error gaussiano. DISTRIBUCIÓN NORMAL USANDO LA TRANSFORMACIÓN DE BOX-MULLER.
     static randn_bm(mu, delta) {
@@ -255,21 +257,6 @@ class PhysTrainerProblem{
         return medicionUnidadesApropiadas;
 
     }
-    
-
-
-    
-
-    
-
-    
-
-
-    
-    
-    
-
-
     
 
 }
