@@ -7,10 +7,12 @@
   --secondary_color-4: #44E78F;
 }
 
-
+/* INDICE
+ * - Todo el documento
+ * - Texto
+*/
 
 /* TODO EL DOCUMENTO*/
-
 *{
   font-family: 'Roboto', sans-serif;
 }
@@ -24,115 +26,142 @@ html, body{
   font-size: 19px;
 
 }
-
 /* TEXTO */
 h1{
   font-size: 4rem;
   margin-top: 0px;
   margin-bottom: 0px;
   overflow: hidden;
-  z-index: 49;
   cursor: default;
 }
-
 p{
   font-size: 2rem;
-  z-index: 49;
   cursor: default;
-
 }
-
 a:hover{
   color: var(--secondary_color-1);
 }
 
-/* NAV-BAR*/
-nav{
-  position: static;
-}
 
+/* FORMS */
+form label{
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+form input{
+  border: 2px solid var(--main_color);
+  padding: 8px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+}
+form input[type="submit"]{
+  background-color: var(--main_color);
+  font-weight: 600;
+}
+form input[type="checkbox"]{
+  appearance: none;
+  -webkit-appearance: none;
+  margin-left: 0;
+}
+  form input[type="checkbox"]:checked{
+    background-color: var(--main_color);
+    position: relative;
+  }
+  form input[type="checkbox"]:checked+label{
+    color: var(--main_color);
+  }
+  form input[type="checkbox"]:checked::before{
+    content: '✓';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+/* NAV-BAR*/
+.nav-cont{
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+nav{
+  position: relative;
+  z-index: 52;
+  background: var(--main_color);
+  display: flex;
+  flex: 1;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: var(--gray_color);
+}
 nav:hover{
   cursor: default;
 }
+  nav *{
+    font-weight: 500;
+  }
+  nav img{
+    height: 60px;
+    margin: 20px;
+    cursor: pointer;
+  }
+  nav ul{
+    margin:0;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    flex: 1;
+  }
+    nav ul li{
+      margin: 20px;
+      cursor: pointer;
+    }
 
-nav *{
-  font-weight: 500;
-}
-
-nav ul{
-  margin:0;
-}
-
-nav svg{
-  position: relative;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  margin-top: -40px;
-}
-
-.menu{
-  display: flex;
-  align-items: center;
-  background: var(--main_color);
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: relative;
-  z-index: 52;
-  color: var(--gray_color);
-  flex: 1
-}
-.menu img{
-  height: 60px;
-  margin: 20px;
-  cursor: pointer;
-}
-.menu ul{
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  /* flex-wrap: wrap; */
-  padding: 10px;
-  flex: 1;
-}
-
-.menu ul li{
-  margin: 20px;
-  cursor: pointer;
-}
+  nav+svg{
+    --y-offset: -40px;
+    position: relative;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    margin-top: var(--y-offset);
+    transition: 1s ease-out;
+    transform-origin: center calc(-1*var(--y-offset));
+  }
+  nav.scroll-collapse+svg{
+    transform: scaleY(0);
+  }
 
 
-
-/* HERO*/
-
-.hero{
-  background:white;
-  min-height: 300px;
-  text-align: left;
+section{
+  padding-top: 1rem;
+  padding-bottom: 1rem; 
   padding: 30px
 }
-.hero>*{
-  width: 100%;
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
+  section>*{
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
 
-.hero .blob{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 50vmax;
-  z-index: 0;
-  opacity: 50%;
-  fill: var(--secondary_color-1);
-  margin: 0;
+/* HERO*/
+.hero{
+  padding-top: 0rem;
+  min-height: 70vh;
 }
+  
+  .hero .blob{
+    position: fixed;
+    top: 0; left: 0;
+    fill: var(--secondary_color-1);
+    width: 50vmax;
+    z-index: -1;
+    opacity: 50%;
+    margin: 0;
+  }
 
-.hero h1, .hero p{
-  position: relative;
-  z-index: 49;
-}
 
 
 /* ACERCA DE*/
@@ -202,8 +231,7 @@ footer{
 
 /* SMALL */
 @media only screen and (max-width: 640px){
-  .menu, ul{
-    display: flex;
+  nav, nav ul{
     flex-direction: column;
     justify-content: stretch;
     margin: 0
@@ -236,21 +264,21 @@ footer{
     z-index: 49;
   }
 
-  nav svg{
-    margin-top: -4px;
+  nav+svg{
+    --y-offset: -4px;
   }
 }
 
 
 @media only screen and (min-width: 641px) and (max-width: 1007px) {
-  .menu{
+  nav{
     display: flex;
     flex-direction: column;
     justify-content: stretch;
     margin: 0
   }
   nav ul li{
-    margin:0px 
+    margin: 10px 
   }
   nav img{
     margin-bottom: 0px !important;
@@ -259,9 +287,8 @@ footer{
     text-align: center;
   }
 
-  nav svg{
-    position: relative;
-    margin-top: -4px;
+  nav+svg{
+    --y-offset: -4px;
   }
 
   .hero h1{
