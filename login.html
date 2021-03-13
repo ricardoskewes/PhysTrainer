@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        form{
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+            form>*{
+                flex: 1;
+                padding: 14px;
+                display: flex;
+                flex-direction: column;
+            }
+            /* form>*:first-child{
+                margin-left: -14px;
+            }
+            form>*:last-child{
+                margin-right: -14px;
+            } */
+            .options{
+                flex-basis: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+</head>
+<body>
+
+    <!--HEADER-->
+    <div class="nav-cont">
+        <nav>
+            <a href="./index.html"><img src="/assets/img/logo_gris.png" alt="Logo PhysTrainer"></a>
+            <ul>
+                <li><a>Catálogo de problemas</a></li>
+                <li><a>Entrenar Teórico</a></li>
+                <li><a>Entrenar Experimental</a></li>
+                <li><a href="./login.html">Iniciar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 219.04">
+            <path fill="var(--main_color)" 
+                fill-opacity="1" 
+                d="M0,96L48,128C96,160,192,224,288,218.7C384,213,480,139,576,101.3C672,64,768,64,864,90.7C960,117,1056,171,1152,181.3C1248,192,1344,160,1392,144L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
+            </path>
+        </svg>
+    </div>
+
+    <section>
+        <h1>Iniciar sesión</h1>
+        <form action="">
+            <div>
+                <label for="email">Correo</label>
+                <input type="email" name="email" id="email">    
+            </div>
+            <div>
+                <label for="password">Contraseña</label>
+                <input type="password" name="password" id="password">    
+            </div>
+            <div>
+                <input type="submit">
+            </div>
+
+            <div class="options">
+                <span style="display: flex; align-items: center;">
+                    <input type="checkbox" name="remember" id="remember">
+                    <label for="remember">Recordarme</label>
+                </span>
+                <a href="">Regístrate aquí</a>
+            </div>
+        </form>
+    </section>
+    <script src="/assets/js/colors.js"></script>
+    <script src="/assets/js/firebase.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', async e=>{
+            e.preventDefault();
+            let email = document.querySelector("#email").value;
+            let password = document.querySelector("#password").value;
+            try{
+                let user = await firebase.auth().signInWithEmailAndPassword(email, password);
+                alert("Inicio de sesion");
+            } catch(e){
+                alert(e.message);
+                console.log(e.code);
+            }
+        })
+    </script>
+</body>
+</html>

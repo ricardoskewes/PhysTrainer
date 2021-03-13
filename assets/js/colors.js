@@ -29,3 +29,12 @@ function seleccionarColor() {
         return color;
     }
 }
+
+window.onscroll = (e)=>{
+    console.log(document.documentElement.scrollTop)
+    if(document.body.scrollTop > window.innerHeight/5 || document.documentElement.scrollTop > window.innerHeight/5){
+        document.querySelector('nav').classList.add('scroll-collapse');
+    } else {
+        document.querySelector('nav').classList.remove('scroll-collapse');
+    }
+}
