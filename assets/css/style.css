@@ -78,15 +78,33 @@ form input[type="checkbox"]{
   }
 
 /* NAV-BAR*/
+.nav-cont{
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
 nav{
-  position: static;
+  position: relative;
+  z-index: 52;
+  background: var(--main_color);
+  display: flex;
+  flex: 1;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: var(--gray_color);
 }
 nav:hover{
   cursor: default;
 }
-nav *{
-  font-weight: 500;
-}
+  nav *{
+    font-weight: 500;
+  }
+  nav img{
+    height: 60px;
+    margin: 20px;
+    cursor: pointer;
+  }
   nav ul{
     margin:0;
     list-style: none;
@@ -100,35 +118,25 @@ nav *{
       cursor: pointer;
     }
 
-  nav svg{
+  nav+svg{
+    --y-offset: -40px;
     position: relative;
     left: 0;
     right: 0;
     z-index: 50;
-    margin-top: -40px;
+    margin-top: var(--y-offset);
+    transition: 1s ease-out;
+    transform-origin: center calc(-1*var(--y-offset));
   }
-
-  .menu{
-    position: relative;
-    z-index: 52;
-    background: var(--main_color);
-    display: flex;
-    flex: 1;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    color: var(--gray_color);
+  nav.scroll-collapse+svg{
+    transform: scaleY(0);
   }
-    .menu img{
-      height: 60px;
-      margin: 20px;
-      cursor: pointer;
-    }
 
 
 section{
   padding-top: 1rem;
   padding-bottom: 1rem; 
+  padding: 30px
 }
   section>*{
     width: 100%;
@@ -141,8 +149,7 @@ section{
 /* HERO*/
 .hero{
   padding-top: 0rem;
-  min-height: 300px;
-  padding: 30px
+  min-height: 70vh;
 }
   
   .hero .blob{
@@ -225,7 +232,7 @@ footer{
 
 /* SMALL */
 @media only screen and (max-width: 640px){
-  .menu, ul{
+  nav, nav ul{
     flex-direction: column;
     justify-content: stretch;
     margin: 0
@@ -256,21 +263,21 @@ footer{
    
   }
 
-  nav svg{
-    margin-top: -4px;
+  nav+svg{
+    --y-offset: -4px;
   }
 }
 
 
 @media only screen and (min-width: 641px) and (max-width: 1007px) {
-  .menu{
+  nav{
     display: flex;
     flex-direction: column;
     justify-content: stretch;
     margin: 0
   }
   nav ul li{
-    margin:0px 
+    margin: 10px 
   }
   nav img{
     margin-bottom: 0px !important;
@@ -279,9 +286,8 @@ footer{
     text-align: center;
   }
 
-  nav svg{
-    position: relative;
-    margin-top: -4px;
+  nav+svg{
+    --y-offset: -4px;
   }
 
   .hero h1{
