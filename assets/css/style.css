@@ -118,7 +118,7 @@ nav svg{
   margin-right: auto;
 }
 
-.blob{
+.hero .blob{
   position: fixed;
   top: 0;
   left: 0;
@@ -171,12 +171,11 @@ nav svg{
 /*FOOTER */
 
 footer{
-  background: navy;
-  min-height: 300px;
+  position: relative;
+  z-index: 49;
+  padding: 0;
+  margin: 0;
 }
-
-
-
 
 
 /*BOTONES*/
@@ -225,14 +224,16 @@ footer{
     margin-bottom: 1.5rem;
   }
 
-  h1{
+  .hero h1{
     font-size: 2.5rem;
-    
+    position: relative;
+    z-index: 49;
   }
 
-  p{
+  .hero p{
     font-size: 1.5rem;
-   
+    position: relative;
+    z-index: 49;
   }
 
   nav svg{
@@ -265,12 +266,14 @@ footer{
 
   .hero h1{
     font-size: 3rem;
-    
+    position: relative;
+    z-index: 49;
   }
 
   .hero p{
     font-size: 1.8rem;
-    
+    position: relative;
+    z-index: 49;
   }
 
 }
