@@ -1,0 +1,19 @@
+{
+  "name": "npm",
+  "version": "1.0.0",
+  "description": "Exam framework for working with LaTeX. Co-developed with @edvilme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricardoskewes/PhysTrainer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ricardoskewes/PhysTrainer/issues"
+  },
+  "homepage": "https://github.com/ricardoskewes/PhysTrainer#readme"
+}

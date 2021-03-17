@@ -1,3 +1,4 @@
+//Array colores disponibles
 const colores = [
     "#6EE744",
     "#D0E744",
@@ -8,12 +9,13 @@ const colores = [
     "#8244E7",
     "#E7446B",
 ];
+
 const colPrim = colores[Math.floor(Math.random()*colores.length)];
 let root = document.documentElement;
 root.style.setProperty('--main_color', colPrim);
 var coloresUtilizados = [colPrim];
 
-for (let i = 1; i < 5; i++) {
+for (let i = 1; i < 6; i++) {
     let str = "--secondary_color-"+i;
     root.style.setProperty(str, seleccionarColor());
 }
@@ -29,6 +31,14 @@ function seleccionarColor() {
         return color;
     }
 }
+
+
+
+
+
+
+
+//Efecto scroll
 
 window.onscroll = (e)=>{
     console.log(document.documentElement.scrollTop)
