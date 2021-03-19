@@ -18,6 +18,11 @@
 /*---------------------ELEMENTOS GENERALES---------------------*/
 
 
+
+
+
+
+
 /*CARD*/
 
 .card{
@@ -203,9 +208,16 @@ p{
   font-size: 2rem;
   cursor: default;
 }
+
+a,a:visited{
+  text-decoration: none;
+  color: var(--gray_color);
+}
+
 a:hover{
   color: var(--secondary_color-1);
 }
+
 
 
 
