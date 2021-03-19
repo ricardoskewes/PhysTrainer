@@ -82,13 +82,13 @@
 }
 
 .form-card img{
-  width: 60%;
-  margin: 1rem;
+  width: 100%;
+  margin: 1rem 0 1rem 0;
 }
 
 
 .form-card form{
-  width: 80%;
+  width: 100%;
   margin: 0rem;
 }
 
@@ -104,7 +104,7 @@ form input{
   padding: 8px;
   font-size: 1rem;
   border-radius: 50px;
-  width: 80%;
+  width: 100%;
   margin-top: 0.3rem;
   margin-bottom: 0.3rem;
   font-weight: lighter;
@@ -112,12 +112,14 @@ form input{
 }
 
 .inputWithIcon input[type=email], .inputWithIcon input[type=password], .inputWithIcon input[type=text]{
-  width: 80%;
+  width: 100%;
   padding-left: calc(3rem);
+  box-sizing: border-box;
 }
 
 .inputWithIcon{
   position: relative;
+  width: 100%;
 }
 .inputWithIcon svg{
   position: absolute;
@@ -366,21 +368,28 @@ section{
 
 .login-card{
   z-index: 49;
-  width: 70%;
-  height: 65%;
+  margin: 10vmax 20vmax;
   padding: 0;
+  max-height: 100vh;
+  overflow: scroll
 }
 
 .login-card .form-card{
   width: 50%;
   z-index: 11;
   padding: 2.5rem;
+  box-sizing: border-box;
+}
+
+.login-container .form-card *{
+  flex-shrink: 1;
 }
 
 .login-container .form-card img{
   margin-top: 0;
-  
+  width: 80%;
 }
+
 
 .login-card .img-container{
   width: 50%;
@@ -393,7 +402,7 @@ section{
   content:'';
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 12;
     width: 100%;
     height: 100%;
     display: block;
@@ -401,7 +410,7 @@ section{
     background: var(--main_color);
     opacity: 0.65;
     border-radius: 0 30px 30px 0;
-}
+} 
 
 .img-container .bg{
   object-fit: cover; 
@@ -410,12 +419,12 @@ section{
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 11;
   border-radius: 0 30px 30px 0;
 }
 
 .img-container .wrap-img-p {
-  z-index: 11;
+  z-index: 13;
   width: 60%;
   margin: 0;
   position: absolute;
@@ -516,12 +525,35 @@ section{
   nav+svg{
     --y-offset: -4px;
   }
+
+  /*LOGIN*/
+
+  .login-card {
+    flex-direction: column-reverse;
+    max-height: 100vh;
+    overflow: scroll;
+    margin: 15px;
+   }
+ 
+   .login-card>*{
+     width: 100%  !important;
+   }
+ 
+   .login-card .img-container,.login-card .img-container::after {
+     flex-grow: 1;
+     flex-shrink: 0;
+     height: 170px;
+   }
+ 
+   .login-card .form-card {
+     flex-grow: 1;
+     flex-shrink: 1;
+   }
 }
 
 /*MEDIUM*/
-@media only screen and (min-width: 641px) and (max-width: 1007px) {
+@media only screen and (min-width: 641px) and (max-width: 1025px) {
  
-  
   nav{
     display: flex;
     flex-direction: column;
@@ -558,5 +590,53 @@ section{
     z-index: 49;
   }
 
+  /*LOGIN*/
+
+  .login-card {
+   flex-direction: column-reverse;
+   max-height: 100vh;
+   overflow: scroll;
+  }
+
+  .login-card>*{
+    width: 100%  !important;
+  }
+
+  .login-card .img-container,.login-card .img-container::after {
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 170px;
+  }
+
+  .login-card .form-card {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
 }
 
+/*LARGE BUT WIDE AND SUPER-SHORT*/
+@media only screen and (min-width: 1026px) and (max-height: 401px){
+
+  /*LOGIN*/
+
+  .login-card {
+    flex-direction: column-reverse;
+    max-height: 100vh;
+    overflow: scroll;
+   }
+ 
+   .login-card>*{
+     width: 100%  !important;
+   }
+ 
+   .login-card .img-container,.login-card .img-container::after {
+     flex-grow: 1;
+     flex-shrink: 0;
+     height: 170px;
+   }
+ 
+   .login-card .form-card {
+     flex-grow: 1;
+     flex-shrink: 1;
+   }
+}
