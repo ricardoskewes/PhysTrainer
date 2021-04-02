@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests</title>
+</head>
+<body>
+    <h1>Tests</h1>
+    <section>
+        <h1>Sign In</h1>
+        <form method="" action="">
+            <input type="email" name="email" id="email">
+            <input type="password" name="password" id="password">
+            <input type="submit" value="submit">
+        </form>
+        <p id="sign-in-test"></p>
+    </section>
+   
+    <section>
+        <h1>Get Users Collection</h1>
+        <p id="users-test"></p>
+    </section>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-firestore.js"></script>
+    <script src="./assets/js/firebase.js"></script>
+    <script src="./assets/js/Usuario.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            try{
+                await User.signInWithEmailAndPassword(
+                    document.querySelector('#email').value, 
+                    document.querySelector('#password').value
+                );
+                document.querySelector('#sign-in-test').innerHTML = 'Success';
+                document.querySelector('#sign-in-test').style.color = 'green';
+            } catch (e){
+                document.querySelector('#sign-in-test').innerHTML = e;
+                document.querySelector('#sign-in-test').style.color = 'red';
+            }
+        });
+
+    </script>
+</body>
+</html>
