@@ -652,3 +652,8 @@ section{
      flex-shrink: 1;
    }
 }
+
+
+.separador h1{
+  font-family: "comic sans";
+}

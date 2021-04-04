@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,7 +61,7 @@
     </section>
 
     <!--SOBRE NOSOTROS-->
-    <section class="about">
+    <section class="separador about">
         <h1>¿Qué puedes aprender?</h1>
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur, expedita. Iusto quisquam tempora quidem enim tenetur non voluptatibus delectus veritatis consequatur corrupti repudiandae dolor, excepturi rerum maiores numquam quaerat a.</p>
     </section>
@@ -90,5 +90,18 @@
     
     
     <script src="/assets/js/colors.js"></script>
+    <script>
+                //Efecto scroll
+
+        window.onscroll = (e)=>{
+            console.log(document.documentElement.scrollTop)
+            if(document.body.scrollTop > window.innerHeight/5 || document.documentElement.scrollTop > window.innerHeight/5){
+                document.querySelector('nav').classList.add('scroll-collapse');
+            } else {
+                document.querySelector('nav').classList.remove('scroll-collapse');
+            }
+        }
+
+    </script>
 </body>
 </html>
