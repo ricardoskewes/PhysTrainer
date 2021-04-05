@@ -14,6 +14,7 @@ class ListaProblemas{
     probs = [];
     /**@type {Array} */
     tags = [];
+    ref;
     constructor(){}
     /** Lee la referencia y devuelve un objeto con el creador
      * @returns {Promise<Usuario>}
@@ -25,6 +26,12 @@ class ListaProblemas{
         return this.probs.map(async problema=>{
             return (await problema.withConverter(ProblemaConverter).get()).data()
         })
+    }
+    async push(){
+        if(this.ref == undefined){
+            this.ref = await firebase.firestore().collection('listasProblemas').add({});
+        }
+        this.ref.withConverter(ListaProblemasConverter).set(this);
     }
 }
 
@@ -43,6 +50,7 @@ const ListaProblemasConverter = {
         const data = snapshot.data(options);
         let listaProblemas = new ListaProblemas();
         Object.assign(listaProblemas, data);
+        listaProblemas.ref = snapshot.ref;
         return listaProblemas;
     }
 }

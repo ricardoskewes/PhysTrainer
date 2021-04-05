@@ -15,9 +15,11 @@
     <script src="./assets/js/Usuario.js"></script>
     <script src="./assets/js/ListaProblemas.js"></script>
     <script src="./assets/js/Problema.js"></script>
+    <script src="./assets/js/Grupo.js"></script>
+    <script src="./assets/js/Tarea.js"></script>
 
     <script>
-        let obtenerUsuarios = async()=>{
+        /* let obtenerUsuarios = async()=>{
             let collection = await firebase.firestore().collection('usuarios').withConverter(UsuarioConverter).get();
             return collection.docs.map(doc=>doc.data());
         }
@@ -27,12 +29,48 @@
             return collection.docs.map(doc=>doc.data());
         }
 
+        let obtenerGrupos = async()=>{
+            let collection = await firebase.firestore().collection('grupos').withConverter(GrupoConverter).get();
+            return collection.docs.map(doc=>doc.data());
+        }
+
         (async ()=>{
             let listas = await obtenerListas();
             console.log('Listas');
-            console.log(listas)
+            console.log(listas);
+            let grupos = await obtenerGrupos();
+            console.log('Grupos');
+            console.log(grupos)
         })()
+ */
+/*         
+        let ricardo = new Usuario();
+        ricardo.nombre = 'Ricardo Skewes Zorrilla'
+        ricardo.estaEnLinea = false;
+        ricardo.fechaRegistro = new Date();
+        ricardo.idUsuario = 'rsekewes';
+        ricardo.nivel = "Principiante";
+        ricardo.privilegios = "Administrador";
+        ricardo.puntaje = 10;
 
+        
+        (async ()=>{
+            await ricardo.push();
+        })() */
+        let user;
+        (async ()=>{
+            let queryUsuario = await firebase.firestore().collection('usuarios').where("idUsuario", "==", "rskewes").withConverter(UsuarioConverter).get();
+            user = queryUsuario.docs[0].data();
+
+            let queryLista = await firebase.firestore().collection('listasProblemas').doc('xphbwZJzyWmGbzoiI2Sh').withConverter(ListaProblemasConverter).get();
+            let lista = queryLista.data();
+
+            user.seguirListaProblemas(lista);
+            await user.push();
+            console.log("wuwu")
+        })();
+
+    
     </script>
 </body>
 </html>
