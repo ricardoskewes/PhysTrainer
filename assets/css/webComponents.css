@@ -16,6 +16,7 @@ grupo-card{
         color: gray;
         text-transform: uppercase;
         font-weight: 600;
+        font-size: 1.2rem
     }
     grupo-card>.nombre{
         font-size: 1.9rem;
@@ -46,7 +47,7 @@ listaproblemas-card{
     }
     listaproblemas-card .nombre{
         margin: 8px;
-        font-size: 1.5rem;
+        font-size: 1.9rem;
         display: inline-block;
         font-weight: 600;
         margin-top: 1rem;

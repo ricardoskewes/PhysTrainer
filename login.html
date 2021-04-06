@@ -86,39 +86,28 @@
         feather.replace()
     </script>
 
+    <script src="./assets/js/Phystrainer.js"></script>
 
-     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
-  
-    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js"></script>
-  
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-auth.js"></script>
-   
-
-    <script src="/assets/js/firebase.js"></script>
     <script>
+        (async ()=>{
+            await includeScripts();
+            await Login.requerirInicio();
+            document.querySelector('form').addEventListener('submit', async e=>{
+                e.preventDefault();
+                try{
+                    await Login.iniciarSesion({
+                        email: document.querySelector('#email').value,
+                        password: document.querySelector('#password').value
+                    })
+                    alert('Inicio de sesión')
+                } catch (e){
+                    alert(e.message)
+                }
+            })
 
-
-
-        document.querySelector('form').addEventListener('submit', async e=>{
-            e.preventDefault();
-            let email = document.querySelector("#email").value;
-            let password = document.querySelector("#password").value;
-            try{
-                let user = await firebase.auth().signInWithEmailAndPassword(email, password);
-                alert("Inicio de sesion");
-            } catch(e){
-                alert(e.message);
-                console.log(e.code);
-            }
-        })
+        })()
     </script>
-    
-    
+
 
 </body>
 </html>

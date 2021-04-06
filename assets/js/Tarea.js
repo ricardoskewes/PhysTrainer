@@ -67,3 +67,13 @@ const TareaEntregaConverter = {
         return tareaEntrega;
     }
 }
+
+customElements.define('tarea-card', class extends HTMLElement{
+    constructor(){
+        super();
+        if(this.attributes.length>0) this.render();
+    }
+    render(){
+        
+    }
+})

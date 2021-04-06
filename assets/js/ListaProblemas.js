@@ -1,3 +1,7 @@
+var script = document.createElement('script');
+script.src = 'https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js';
+document.head.appendChild(script)
+
 class ListaProblemas{
     creador;
     /**@type {Date} */
@@ -33,6 +37,17 @@ class ListaProblemas{
         }
         this.ref.withConverter(ListaProblemasConverter).set(this);
     }
+    async obtenerTarjeta(props){
+        let tarjeta = document.createElement('listaproblemas-card');
+        tarjeta.setAttribute('creador', JSON.stringify(await this.getCreador()));
+        tarjeta.setAttribute('fechaCreacion', this.fechaCreacion);
+        tarjeta.setAttribute('nombre', this.nombre);
+        tarjeta.setAttribute('descripcion', this.descripcion);
+        tarjeta.setAttribute('estatusPublico', this.estatusPublico);
+
+        tarjeta.addEventListener('followChange', ()=>{alert('Follow!')});
+        return tarjeta;
+    }
 }
 
 const ListaProblemasConverter = {
@@ -67,7 +82,9 @@ customElements.define('listaproblemas-card', class extends HTMLElement{
         this.nombre = this.getAttribute('nombre');
         this.descripcion = this.getAttribute('descripcion');
         this.estatusPublico = this.getAttribute('statusPublico');
-                
+        
+        // let background = 
+
         let creador = document.createElement('usuario-card');
         creador.setAttribute('xsmall', true);
         creador.setAttribute('idUsuario', this.creador.idUsuario);
@@ -87,6 +104,9 @@ customElements.define('listaproblemas-card', class extends HTMLElement{
             className: 'descripcion', innerHTML: this.descripcion
         })
         this.append(detalles, nombre, descripcion)
+        
+        let background = GeoPattern.generate(this.nombre, {baseColor: '#FFFFFF'}).toDataUrl();
+        this.style.backgroundImage = background;
 
         if(window.usuarioActivo.idUsuario == this.creador.idUsuario){
             let button = Object.assign(document.createElement('button'), {

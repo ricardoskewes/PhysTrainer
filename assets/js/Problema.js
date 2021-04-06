@@ -1,3 +1,9 @@
+/**
+ * FASE 2
+ * IMPORTANTE!!
+ * Deberá dedicarse bastante tiempo para planear bien los problemas
+ */
+
 class ProblemaInciso{
     enunciado;
     pistas;
@@ -7,6 +13,13 @@ class ProblemaInciso{
     solucion;
     tipo;
     constructor(){}
+
+    responder(respuesta){
+        if(this.tipo == 'simbolico'){
+            return KAS.compare( KAS.parse(this.respuesta).expr, KAS.parse(respuesta).expr ).equal;
+        }
+    }
+
 }
 class Problema{
     comentarios;

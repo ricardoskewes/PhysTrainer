@@ -61,11 +61,9 @@ customElements.define('grupo-card', class extends HTMLElement{
         this.innerHTML = "";
         this.nombre = this.getAttribute('nombre');
         this.descripcion = this.getAttribute('descripcion');
-
         let grupo = Object.assign(document.createElement('span'), {className: 'grupo', innerHTML: 'grupo'})
         let nombre = Object.assign(document.createElement('span'), {className: 'nombre', innerHTML: this.nombre})
         let descripcion = Object.assign(document.createElement('span'), {className: 'descripcion', innerHTML: this.descripcion})
-
         this.append(grupo, nombre, descripcion)
 
     }
