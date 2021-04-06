@@ -48,9 +48,55 @@ const ListaProblemasConverter = {
     }),
     fromFirestore: (snapshot, options)=>{
         const data = snapshot.data(options);
+        data.fechaCreacion = data.fechaCreacion.toDate()
         let listaProblemas = new ListaProblemas();
         Object.assign(listaProblemas, data);
         listaProblemas.ref = snapshot.ref;
         return listaProblemas;
     }
 }
+
+customElements.define('listaproblemas-card', class extends HTMLElement{
+    constructor(){
+        super();
+        if(this.attributes.length>0) this.render();
+    }
+    render(){
+        this.creador = typeof this.getAttribute('creador') == 'string' ? JSON.parse(this.getAttribute('creador')) : this.getAttribute('creador');
+        this.fechaCreacion = typeof this.getAttribute('fechaCreacion') == 'string' ? new Date(this.getAttribute('fechaCreacion')) : this.getAttribute('fechaCreacion');
+        this.nombre = this.getAttribute('nombre');
+        this.descripcion = this.getAttribute('descripcion');
+        this.estatusPublico = this.getAttribute('statusPublico');
+                
+        let creador = document.createElement('usuario-card');
+        creador.setAttribute('xsmall', true);
+        creador.setAttribute('idUsuario', this.creador.idUsuario);
+        creador.setAttribute('nombre', this.creador.nombre);
+        creador.setAttribute('photoURL', this.creador.photoURL);
+        creador.setAttribute('puntaje', this.creador.puntaje)
+        creador.render()
+        let detalles = Object.assign(document.createElement('div'), {className: 'detalles'});
+        detalles.append(
+            creador,
+            Object.assign(document.createElement('span'), {innerHTML: this.fechaCreacion.toLocaleDateString(), className: 'fecha'})
+        )
+        let nombre = Object.assign(document.createElement('span'), {
+            className: 'nombre', innerHTML: this.nombre
+        })
+        let descripcion = Object.assign(document.createElement('p'), {
+            className: 'descripcion', innerHTML: this.descripcion
+        })
+        this.append(detalles, nombre, descripcion)
+
+        if(window.usuarioActivo.idUsuario == this.creador.idUsuario){
+            let button = Object.assign(document.createElement('button'), {
+                className: 'follow', innerHTML: 'Seguir'
+            })
+            button.addEventListener('click', ()=>{
+                this.dispatchEvent( new CustomEvent('followChange', {detail: true}) )
+            })
+            this.append(button)
+        }
+
+    }
+})

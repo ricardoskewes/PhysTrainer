@@ -13,11 +13,11 @@ class Usuario{
     puntaje;
     /**@type {String} */
     photoURL = '/assets/img/user.png';
+    /**@type {Array} */
     listasSeguidas = [];
     ref;
     constructor(){
     }
-
     seguirListaProblemas(/**@type {ListaProblemas} */ listaProblemas){
         this.listasSeguidas.push(listaProblemas.ref)
     }
@@ -25,6 +25,11 @@ class Usuario{
         let lista = this.listasSeguidas.find(l=>l.id == listaProblemas.ref.id);
         let index = this.listasSeguidas.indexOf(lista);
         this.listasSeguidas = this.listasSeguidas.splice(index, 1);
+    }
+    getListasProblemas(){
+        return this.listasSeguidas.map(async lista=>{
+            return (await lista.withConverter(ListaProblemasConverter).get()).data()
+        })
     }
     async push(){
         if(this.ref == undefined){
@@ -54,3 +59,38 @@ const UsuarioConverter = {
         return usuario;
     }
 }
+
+customElements.define('usuario-card', class extends HTMLElement{
+    constructor(){
+        super();
+        if(this.attributes.length>0) this.render()
+    }
+    render(){
+        this.estaEnLinea = this.getAttribute('estaEnLinea') || false;
+        this.idUsuario = this.getAttribute('idUsuario');
+        this.nombre = this.getAttribute('nombre');
+        this.photoURL = this.getAttribute('photoURL');
+        this.puntaje = this.getAttribute('puntaje');
+        this.innerHTML = "";
+
+        let img = Object.assign(document.createElement('img'), {
+            className: 'perfil', src: this.photoURL
+        });
+        if(this.estaEnLinea) img.classList.add('en-linea')
+
+        let detail = document.createElement('div');
+
+        detail.append(
+            Object.assign(document.createElement('span'), {
+                className: 'nombre', innerHTML: this.nombre
+            }),
+            Object.assign(document.createElement('span'), {
+                className: 'usuario', innerHTML: this.idUsuario
+            }),
+            Object.assign(document.createElement('span'), {
+                className: 'puntaje', innerHTML: this.puntaje
+            })
+        )
+        this.append(img, detail)
+    }
+})

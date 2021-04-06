@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>UI</title>
+    <link rel="stylesheet" href="./assets/css/webComponents.css">
+    <style>
+        section{
+            height: 100vh;
+            padding: 24px;
+            border-bottom: 1px solid;
+        }
+            section h1{
+                font-size: 2rem;
+            }
+    </style>
 </head>
 <body>
     <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
@@ -18,59 +29,91 @@
     <script src="./assets/js/Grupo.js"></script>
     <script src="./assets/js/Tarea.js"></script>
 
+    <section>
+        <h1>Usuario</h1>
+        <h2>Tarjeta</h2>
+        <usuario-card id="usuario-card-0" card>
+        </usuario-card>
+        <h2>Normal</h2>
+        <usuario-card id="usuario-card-1">
+        </usuario-card>
+        <h2>Mediano</h2>
+        <usuario-card id="usuario-card-2" small>
+        </usuario-card>
+        <h2>Pequeño</h2>
+        <usuario-card id="usuario-card-3" xsmall>
+        </usuario-card>
+    </section>
+
+    <section>
+        <h1>Lista de problemas</h1>
+        <h2>Tarjeta</h2>
+        <listaproblemas-card id="listaproblemas-card-0" card>
+        </listaproblemas-card>
+        <h2>Normal</h2>
+        <listaproblemas-card id="listaproblemas-card-1">
+        </listaproblemas-card>
+    </section>
+
+    <section>
+        <h1>Grupos</h1>
+        <h2>Tarjeta</h2>
+        <grupo-card card id="grupo-card-0"></grupo-card>
+    </section>
+
     <script>
-        /* let obtenerUsuarios = async()=>{
-            let collection = await firebase.firestore().collection('usuarios').withConverter(UsuarioConverter).get();
-            return collection.docs.map(doc=>doc.data());
-        }
+        (async()=>{
+            let usuario = await firebase.firestore().collection('usuarios')
+                .doc('usuarioPrueba')
+                .withConverter(UsuarioConverter)
+                .get();
+            usuario = usuario.data();
 
-        let obtenerListas = async()=>{
-            let collection = await firebase.firestore().collection('listasProblemas').withConverter(ListaProblemasConverter).get();
-            return collection.docs.map(doc=>doc.data());
-        }
+            window.usuarioActivo = usuario;
 
-        let obtenerGrupos = async()=>{
-            let collection = await firebase.firestore().collection('grupos').withConverter(GrupoConverter).get();
-            return collection.docs.map(doc=>doc.data());
-        }
+            ['estaEnLinea', 'idUsuario', 'nombre', 'photoURL', 'puntaje'].forEach(key=>{
+                document.querySelector('#usuario-card-0').setAttribute(key, usuario[key]);
+                document.querySelector('#usuario-card-1').setAttribute(key, usuario[key]);
+                document.querySelector('#usuario-card-2').setAttribute(key, usuario[key]);
+                document.querySelector('#usuario-card-3').setAttribute(key, usuario[key]);
+            })
+            document.querySelector('#usuario-card-0').render();
+            document.querySelector('#usuario-card-1').render();
+            document.querySelector('#usuario-card-2').render();
+            document.querySelector('#usuario-card-3').render();
 
-        (async ()=>{
-            let listas = await obtenerListas();
-            console.log('Listas');
-            console.log(listas);
-            let grupos = await obtenerGrupos();
-            console.log('Grupos');
-            console.log(grupos)
-        })()
- */
-/*         
-        let ricardo = new Usuario();
-        ricardo.nombre = 'Ricardo Skewes Zorrilla'
-        ricardo.estaEnLinea = false;
-        ricardo.fechaRegistro = new Date();
-        ricardo.idUsuario = 'rsekewes';
-        ricardo.nivel = "Principiante";
-        ricardo.privilegios = "Administrador";
-        ricardo.puntaje = 10;
+            let lista = await firebase.firestore().collection('listasProblemas')
+                .doc('listaProblemasEjemplo')
+                .withConverter(ListaProblemasConverter)
+                .get();
+            lista = lista.data();
 
-        
-        (async ()=>{
-            await ricardo.push();
-        })() */
-        let user;
-        (async ()=>{
-            let queryUsuario = await firebase.firestore().collection('usuarios').where("idUsuario", "==", "rskewes").withConverter(UsuarioConverter).get();
-            user = queryUsuario.docs[0].data();
+            let listaCreador = await lista.getCreador();
 
-            let queryLista = await firebase.firestore().collection('listasProblemas').doc('xphbwZJzyWmGbzoiI2Sh').withConverter(ListaProblemasConverter).get();
-            let lista = queryLista.data();
+            ['fechaCreacion', 'nombre', 'descripcion', 'estatusPublico', 'tags'].forEach(key=>{
+                document.querySelector('#listaproblemas-card-0').setAttribute(key, lista[key]);
+                document.querySelector('#listaproblemas-card-1').setAttribute(key, lista[key]);
+            }) 
+            document.querySelector('#listaproblemas-card-0').setAttribute('creador', JSON.stringify(listaCreador));
+            document.querySelector('#listaproblemas-card-1').setAttribute('creador', JSON.stringify(listaCreador));
 
-            user.seguirListaProblemas(lista);
-            await user.push();
-            console.log("wuwu")
+            document.querySelector('#listaproblemas-card-0').render();
+            document.querySelector('#listaproblemas-card-1').render();
+
+            document.querySelector('#listaproblemas-card-0').addEventListener('followChange', ()=>{alert('Follow!')});
+            document.querySelector('#listaproblemas-card-1').addEventListener('followChange', ()=>{alert('Follow!')});
+
+            let grupo = await firebase.firestore().collection('grupos')
+                .doc('grupoPichardo')
+                .withConverter(GrupoConverter)
+                .get();
+            grupo = grupo.data();
+
+            document.querySelector('#grupo-card-0').setAttribute('nombre', grupo.nombre)
+            document.querySelector('#grupo-card-0').setAttribute('descripcion', grupo.descripcion)
+            document.querySelector('#grupo-card-0').render()
         })();
-
-    
     </script>
+
 </body>
 </html>
