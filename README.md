@@ -1,2 +1,2 @@
-# TeXAM
-Exam framework for working with LaTeX. Co-developed with @edvilme
+# Phystrainer
+Plataforma para resolución de problemas de física. 

@@ -22,12 +22,7 @@ const Login = {
     }, 
     iniciarSesion: async (data)=>{
         try{
-            let usuarioAuth = await firebase.auth().signInWithEmailAndPassword(data.email, data.password);
-            let usuario = await firebase.firestore().collection('usuarios')
-                .doc(usuarioAuth.user.uid)
-                .withConverter(UsuarioConverter)
-                .get();
-            Login.usuarioActual = usuario.data();
+            await firebase.auth().signInWithEmailAndPassword(data.email, data.password);
         } catch (e) {
             Login.usuarioActual = undefined
             console.error('Login.iniciarSesion', e);
@@ -44,20 +39,26 @@ const Login = {
             throw e;
         }
     },
-    requerirInicio: async ()=>{
+    requerirInicio: async (callback)=>new Promise((resolve, reject)=>{
         firebase.auth().onAuthStateChanged(async user=>{
             if(user){
-                let usuario = await firebase.firestore().collection('usuarios')
-                .doc(firebase.auth().currentUser.uid)
-                .withConverter(UsuarioConverter)
-                .get();
-                Login.usuarioActual = usuario.data();
-                Login.usuarioActual.estaEnLinea = true;
-                await Login.usuarioActual.push();
+                await Login.obtenerUsuarioActual();
+                resolve();
             } else {
+                reject();
                 if(window.location.pathname != '/login.html') window.location.href = '/login.html'
             }
         })
+    }),
+
+    obtenerUsuarioActual: (callback=function(){}) => {
+        if(firebase.auth().currentUser == undefined) return;
+        firebase.firestore().collection('usuarios')
+            .withConverter(UsuarioConverter)
+            .doc(firebase.auth().currentUser.uid)
+            .onSnapshot(doc=>{
+                Login.usuarioActual = doc.data()
+                callback(doc.data())
+            })
     }
 }
-

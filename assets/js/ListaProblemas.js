@@ -19,9 +19,20 @@ class ListaProblemas{
     /**@type {Array} */
     tags = [];
     ref;
-    constructor(){}
+
+    siguiendo = false;
+    constructor(){
+        this.creador = Login.usuarioActual.ref;
+        this.fechaCreacion = new Date();
+        this.descripcion = undefined;
+        this.nombre = undefined;
+        this.estatusPublico = true;
+        this.likes = 0;
+        this.probs = [];
+        this.tags = [];
+    }
     /** Lee la referencia y devuelve un objeto con el creador
-     * @returns {Promise<Usuario>}
+      * @returns {Promise<Usuario>}
      */
     async getCreador(){
         return (await this.creador.withConverter(UsuarioConverter).get()).data();
@@ -31,29 +42,60 @@ class ListaProblemas{
             return (await problema.withConverter(ProblemaConverter).get()).data()
         })
     }
-    async push(){
-        if(this.ref == undefined){
-            this.ref = await firebase.firestore().collection('listasProblemas').add({});
-        }
-        this.ref.withConverter(ListaProblemasConverter).set(this);
+    estaSiguiendo(){
+        this.siguiendo = Login.usuarioActual.listasSeguidas.some(lista=>lista.id == this.ref.id);
+        return this.siguiendo;
+    }
+    async seguir(){
+        this.siguiendo = true;
+        Login.usuarioActual.listasSeguidas.push(this.ref);
+        await Login.usuarioActual.push();
+    }
+    async dejarDeSeguir(){
+        this.siguiendo = false;
+        let index = Login.usuarioActual.listasSeguidas.findIndex(l=>l.id === this.ref.id);
+        if(index == -1) return;
+        Login.usuarioActual.listasSeguidas.splice(index, 1);
+        await Login.usuarioActual.push();
     }
     async obtenerTarjeta(props){
+        this.estaSiguiendo();
         let tarjeta = document.createElement('listaproblemas-card');
         tarjeta.setAttribute('creador', JSON.stringify(await this.getCreador()));
         tarjeta.setAttribute('fechaCreacion', this.fechaCreacion);
         tarjeta.setAttribute('nombre', this.nombre);
         tarjeta.setAttribute('descripcion', this.descripcion);
         tarjeta.setAttribute('estatusPublico', this.estatusPublico);
-
-        tarjeta.addEventListener('followChange', ()=>{alert('Follow!')});
+        tarjeta.setAttribute('siguiendo', this.siguiendo);
+        tarjeta.setAttribute('card', true)
+        tarjeta.render();
+        tarjeta.addEventListener('followChange', async ()=>{
+            if(this.siguiendo){
+                await this.dejarDeSeguir()
+            } else {
+                await this.seguir();
+            }
+            tarjeta.setAttribute('siguiendo', this.siguiendo);
+            tarjeta.render();
+            console.log('done')
+        });
         return tarjeta;
     }
+
+    async push(){
+        if(this.ref == undefined){
+            this.ref = await firebase.firestore().collection('listasProblemas').add({});
+            await this.seguir();
+        }
+        this.ref.withConverter(ListaProblemasConverter).set(this);
+    }
+
 }
 
 const ListaProblemasConverter = {
     toFirestore: (/**@type {ListaProblemas} */ listaProblemas)=>({
         creador: listaProblemas.creador,
-        fechaCreacion: listaProblemas.fechaCreacion, 
+        fechaCreacion: firebase.firestore.Timestamp.fromDate(listaProblemas.fechaCreacion), 
         descripcion: listaProblemas.descripcion, 
         nombre: listaProblemas.nombre, 
         estatusPublico: listaProblemas.estatusPublico, 
@@ -77,14 +119,15 @@ customElements.define('listaproblemas-card', class extends HTMLElement{
         if(this.attributes.length>0) this.render();
     }
     render(){
+        this.innerHTML = ""
         this.creador = typeof this.getAttribute('creador') == 'string' ? JSON.parse(this.getAttribute('creador')) : this.getAttribute('creador');
         this.fechaCreacion = typeof this.getAttribute('fechaCreacion') == 'string' ? new Date(this.getAttribute('fechaCreacion')) : this.getAttribute('fechaCreacion');
         this.nombre = this.getAttribute('nombre');
         this.descripcion = this.getAttribute('descripcion');
         this.estatusPublico = this.getAttribute('statusPublico');
-        
+        this.siguiendo = this.getAttribute('siguiendo');
         // let background = 
-
+        // console.log(this.siguiendo == 'true' ? 'Dejar de seguir' : 'Seguir')
         let creador = document.createElement('usuario-card');
         creador.setAttribute('xsmall', true);
         creador.setAttribute('idUsuario', this.creador.idUsuario);
@@ -108,9 +151,9 @@ customElements.define('listaproblemas-card', class extends HTMLElement{
         let background = GeoPattern.generate(this.nombre, {baseColor: '#FFFFFF'}).toDataUrl();
         this.style.backgroundImage = background;
 
-        if(window.usuarioActivo.idUsuario == this.creador.idUsuario){
+        if(Login.usuarioActual.idUsuario != this.creador.idUsuario || true){
             let button = Object.assign(document.createElement('button'), {
-                className: 'follow', innerHTML: 'Seguir'
+                className: 'follow', innerHTML: this.siguiendo == 'true' ? 'Dejar de seguir' : 'Seguir'
             })
             button.addEventListener('click', ()=>{
                 this.dispatchEvent( new CustomEvent('followChange', {detail: true}) )

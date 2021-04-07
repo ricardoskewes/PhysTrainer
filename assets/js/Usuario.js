@@ -27,20 +27,17 @@ class Usuario{
         this.photoURL = '/assets/img/user.png';
         this.listasSeguidas = [];
     }
-    seguirListaProblemas(/**@type {ListaProblemas} */ listaProblemas){
-        this.listasSeguidas.push(listaProblemas.ref)
-    }
-    dejarDeSeguirListaProblemas(/**@type {ListaProblemas} */ listaProblemas){
-        let lista = this.listasSeguidas.find(l=>l.id == listaProblemas.ref.id);
-        let index = this.listasSeguidas.indexOf(lista);
-        this.listasSeguidas = this.listasSeguidas.splice(index, 1);
-    }
-    getListasProblemas(){
-        return this.listasSeguidas.map(async lista=>{
-            return (await lista.withConverter(ListaProblemasConverter).get()).data()
-        })
+    
+    async getListasProblemas(){
+        return await Promise.all(
+            this.listasSeguidas.map(async lista=>{
+                return (await lista.withConverter(ListaProblemasConverter).get()).data()
+            })
+        )
     }
     async push(){
+        console.log('haha')
+
         if(this.ref == undefined && this.uid == undefined){
             this.ref = await firebase.firestore().collection('usuarios').add({})
         } else if (this.ref == undefined){
