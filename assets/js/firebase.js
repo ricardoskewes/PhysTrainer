@@ -15,3 +15,5 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics(); 
+// Settings
+firebase.auth().Persistance = 'LOCAL';

@@ -1,4 +1,5 @@
 class Usuario{
+    uid;
     /**@type {Boolean} */
     estaEnLinea;
     /**@type {Date} */
@@ -12,28 +13,35 @@ class Usuario{
     /**@type {Number} */
     puntaje;
     /**@type {String} */
-    photoURL = '/assets/img/user.png';
+    photoURL;
     /**@type {Array} */
-    listasSeguidas = [];
+    listasSeguidas;
     ref;
     constructor(){
+        this.estaEnLinea = false;
+        this.fechaRegistro = new Date();
+        this.idUsuario = '';
+        this.nombre = '';
+        this.privilegios = 'Estudiante';
+        this.puntaje = 0;
+        this.photoURL = '/assets/img/user.png';
+        this.listasSeguidas = [];
     }
-    seguirListaProblemas(/**@type {ListaProblemas} */ listaProblemas){
-        this.listasSeguidas.push(listaProblemas.ref)
-    }
-    dejarDeSeguirListaProblemas(/**@type {ListaProblemas} */ listaProblemas){
-        let lista = this.listasSeguidas.find(l=>l.id == listaProblemas.ref.id);
-        let index = this.listasSeguidas.indexOf(lista);
-        this.listasSeguidas = this.listasSeguidas.splice(index, 1);
-    }
-    getListasProblemas(){
-        return this.listasSeguidas.map(async lista=>{
-            return (await lista.withConverter(ListaProblemasConverter).get()).data()
-        })
+    
+    async getListasProblemas(){
+        return await Promise.all(
+            this.listasSeguidas.map(async lista=>{
+                return (await lista.withConverter(ListaProblemasConverter).get()).data()
+            })
+        )
     }
     async push(){
-        if(this.ref == undefined){
+        console.log('haha')
+
+        if(this.ref == undefined && this.uid == undefined){
             this.ref = await firebase.firestore().collection('usuarios').add({})
+        } else if (this.ref == undefined){
+            this.ref = await firebase.firestore().collection('usuarios').doc(this.uid)
         }
         this.ref.withConverter(UsuarioConverter).set(this);
     }
@@ -42,7 +50,7 @@ class Usuario{
 const UsuarioConverter = {
     toFirestore: (/**@type {Usuario} */ usuario)=>({
         estaEnLinea: usuario.estaEnLinea, 
-        fechaRegistro: new firebase.firestore.Timestamp.fromDate(usuario.fechaRegistro), 
+        fechaRegistro: firebase.firestore.Timestamp.fromDate(usuario.fechaRegistro), 
         idUsuario: usuario.idUsuario, 
         nombre: usuario.nombre, 
         privilegios: usuario.privilegios, 

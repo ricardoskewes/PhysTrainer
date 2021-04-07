@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/webComponents.css">
+</head>
+<body>
+    <header>
+        <h1>Listas</h1>
+        <p>Aca puedes encontrar todas las listas, y las que sigues. </p>
+    </header>
+    <h1>Listas seguidas por mi</h1>
+    <section id="seguidas" style="display: flex;"></section>
+
+    <h1>Listas</h1>
+    <section id="todas" style="display: flex;"></section>
+
+    <script src="./assets/js/Phystrainer.js"></script>
+
+    <script>
+        (async ()=>{
+            await includeScripts();
+            await Login.requerirInicio();
+
+            let allListas = (await firebase.firestore().collection('listasProblemas')
+                .withConverter(ListaProblemasConverter)
+                .get())
+                .docs
+                .map(doc=>doc.data());
+
+            Login.obtenerUsuarioActual( async (usuario)=>{
+                document.querySelector('#seguidas').innerHTML = "";
+                (await usuario.getListasProblemas()).forEach(async lista => {
+                    document.querySelector('#seguidas').append( await lista.obtenerTarjeta() ) 
+                })
+
+                document.querySelector('#todas').innerHTML = "";
+                allListas.forEach(async lista=>{
+                    document.querySelector('#todas').append( await lista.obtenerTarjeta() )
+                });
+
+            } )
+
+
+        })()
+    </script>
+
+</body>
+</html>

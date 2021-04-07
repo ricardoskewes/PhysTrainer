@@ -18,16 +18,6 @@
     </style>
 </head>
 <body>
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-firestore.js"></script>
-    <script src="./assets/js/firebase.js"></script>
-    <script src="./assets/js/Usuario.js"></script>
-    <script src="./assets/js/ListaProblemas.js"></script>
-    <script src="./assets/js/Problema.js"></script>
-    <script src="./assets/js/Grupo.js"></script>
-    <script src="./assets/js/Tarea.js"></script>
 
     <section>
         <h1>Usuario</h1>
@@ -61,8 +51,14 @@
         <grupo-card card id="grupo-card-0"></grupo-card>
     </section>
 
+    <section>
+        <h1>Tareas</h1>
+    </section>
+
     <script>
+        
         (async()=>{
+
             let usuario = await firebase.firestore().collection('usuarios')
                 .doc('usuarioPrueba')
                 .withConverter(UsuarioConverter)
