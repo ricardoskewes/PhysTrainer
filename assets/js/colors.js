@@ -54,7 +54,9 @@ class Colors {
             div.innerHTML+=svgString;
             var ultimoBlob = div.querySelector("svg:last-of-type");
             ultimoBlob.style.opacity = 0.1+Math.random()*0.8;
-
+            ultimoBlob.style.position = 'absolute';
+            ultimoBlob.style.top = Math.random()*100 + "%";
+            ultimoBlob.style.left = Math.random()*100 + "%";
             }            
         
 

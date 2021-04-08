@@ -490,9 +490,15 @@ section{
 }
 
 /*---------------------PORTAL---------------------*/
-.panel{
-  height: 40vh;
+.panel-hero{
+  min-height: 20vh;
+  max-height: 50vh;
+  position: relative;
+
 }
+  .panel-hero *{
+    width: auto;
+  }
 
 
 
