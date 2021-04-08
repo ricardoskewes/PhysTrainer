@@ -54,6 +54,13 @@
 }
 
 
+/*GLASS EFFECT*/
+
+.glass-effect{
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+}
+
 /*FORMS*/
 
 .form-card{
@@ -546,12 +553,17 @@ section{
 
 /*Hero*/
 .panel-hero{
-  height: 20vh;
+  height: 30vh;
   position: relative;
   z-index: 1;
 
 }
-  .panel-hero *{
+  .panel-hero .card{
+    width: auto;
+    height: 60%;
+    margin: 2rem auto;
+  }
+  .panel-hero svg{
     width: auto;
   }
 
