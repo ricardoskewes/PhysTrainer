@@ -559,9 +559,9 @@ section{
 
 }
   .panel-hero .card{
-    width: auto;
+    width: 70vw;
     height: 60%;
-    margin: 2rem auto;
+    margin: auto;
   }
   .panel-hero svg{
     width: auto;
