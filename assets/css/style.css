@@ -490,15 +490,23 @@ section{
 }
 
 /*---------------------PORTAL---------------------*/
+nav{
+  height: fit-content ;
+}
+  nav img{
+    height: 40px;
+  }
+/*Hero*/
 .panel-hero{
-  min-height: 20vh;
-  max-height: 50vh;
+  height: 20vh;
   position: relative;
+  z-index: 1;
 
 }
   .panel-hero *{
     width: auto;
   }
+
 
 
 
