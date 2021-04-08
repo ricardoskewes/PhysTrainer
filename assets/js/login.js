@@ -39,13 +39,13 @@ const Login = {
             throw e;
         }
     },
-    requerirInicio: async (callback)=>new Promise((resolve, reject)=>{
+    requerirInicio: ()=>new Promise((resolve, reject)=>{
         firebase.auth().onAuthStateChanged(async user=>{
             if(user){
-                await Login.obtenerUsuarioActual();
+                Login.obtenerUsuarioActual();
                 resolve();
             } else {
-                reject();
+                resolve()
                 if(window.location.pathname != '/login.html') window.location.href = '/login.html'
             }
         })
