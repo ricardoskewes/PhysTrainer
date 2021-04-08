@@ -70,7 +70,7 @@ class Colors {
 
             div.innerHTML+=svgString;
             var ultimoBlob = div.querySelector("svg:last-of-type");
-            ultimoBlob.style.opacity = 0.1+Math.random()*0.8;
+            ultimoBlob.style.opacity = 0.3+Math.random()*0.6;
             ultimoBlob.style.position = 'absolute';
             ultimoBlob.style.bottom =  (-20 + Math.random()*70) + "%";
             ultimoBlob.style.left = (-10 + Math.random()*90) + "%";

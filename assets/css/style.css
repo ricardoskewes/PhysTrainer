@@ -190,9 +190,6 @@ form input[type="submit"]:hover{
 
 
 
-
-
-
 /*BLOB*/
 
 .blob{
@@ -272,7 +269,10 @@ nav:hover{
     height: 60px;
     margin: 20px;
     cursor: pointer;
+   
   }
+ 
+
   nav ul{
     margin:0;
     list-style: none;
