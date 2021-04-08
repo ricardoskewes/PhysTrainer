@@ -48,12 +48,16 @@ class Colors {
                     size: Math.random()*300 + 100,
                 },
                 {
-                    fill: `var(--secondary_color-${r})`,
+                    fill: `var(--secondary_color-${r})`
                 },
             );
-            
             div.innerHTML+=svgString;
-        }
+            var ultimoBlob = div.querySelector("svg:last-of-type");
+            ultimoBlob.style.opacity = 0.1+Math.random()*0.8;
+
+            }            
+        
+
     }
 
     
