@@ -34,12 +34,16 @@
             Login.obtenerUsuarioActual( async (usuario)=>{
                 document.querySelector('#seguidas').innerHTML = "";
                 (await usuario.getListasProblemas()).forEach(async lista => {
-                    document.querySelector('#seguidas').append( await lista.obtenerTarjeta() ) 
+                    let card = await lista.obtenerTarjeta();
+                    card.addEventListener('click', ()=>{window.location.href = '/lista.html?id=' + lista.ref.id})
+                    document.querySelector('#seguidas').append( card ); 
                 })
 
                 document.querySelector('#todas').innerHTML = "";
                 allListas.forEach(async lista=>{
-                    document.querySelector('#todas').append( await lista.obtenerTarjeta() )
+                    let card = await lista.obtenerTarjeta();
+                    card.addEventListener('click', ()=>{window.location.href = '/lista.html?id=' + lista.ref.id})
+                    document.querySelector('#todas').append( card );                 
                 });
 
             } )

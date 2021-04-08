@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/webComponents.css">
+</head>
+<body>
+    <header>
+        <h1 id="lista-nombre">Nombre de la lista</h1>
+    </header>
+    <p id="test"></p>
+
+    <script src="./assets/js/Phystrainer.js"></script>
+
+    <script>
+        let listaID = (new URLSearchParams(window.location.search)).get('id');
+
+        (async ()=>{
+            await includeScripts();
+            await Login.requerirInicio();
+            try{
+                let lista = await firebase.firestore().collection('listasProblemas')
+                    .doc(listaID)
+                    .withConverter(ListaProblemasConverter)
+                    .get();
+                
+                lista = lista.data();
+    
+                document.querySelector('#lista-nombre').innerHTML = lista.nombre;
+                document.querySelector('#test').innerHTML = JSON.stringify(lista, null, 2)
+            } catch (e){
+                document.querySelector('#lista-nombre').innerHTML = "Und";
+
+            }
+
+        })()
+    </script>
+
+</body>
+</html>
