@@ -89,7 +89,7 @@
     <script src="./assets/js/Phystrainer.js"></script>
 
     <script>
-        (async ()=>{
+        (async()=>{
             await includeScripts();
             await Login.requerirInicio();
             document.querySelector('form').addEventListener('submit', async e=>{
@@ -99,10 +99,12 @@
                         email: document.querySelector('#email').value,
                         password: document.querySelector('#password').value
                     })
-                    alert('Inicio de sesión')
+                    alert('Inicio de sesión');
+                    window.location.href = '/listas.html'
                 } catch (e){
                     alert(e.message)
                 }
+                return false;
             })
 
         })()
