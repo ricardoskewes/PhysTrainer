@@ -11,6 +11,7 @@ class Colors {
         for (let i = 1; i <= this.numberOfSecondaryColors; i++) {
             let str = "--secondary_color-"+i;
             this.root.style.setProperty(str, this.seleccionarColor());
+            
         }
     }
     static colores = [
@@ -25,7 +26,7 @@ class Colors {
     ];
 
     root = document.documentElement;
-    numberOfSecondaryColors = 5;
+    numberOfSecondaryColors = 7;
 
     seleccionarColor() {
         let color = Colors.colores[Math.floor(Math.random()*Colors.colores.length)];
@@ -37,9 +38,24 @@ class Colors {
         }
     }
 
+    //Este método sirve para elegir un color de entre los secundarios 
+    //ya seleccionados, que no se incluya entre aquellos del parámetro arr
+    seleccionarColorSecundario(arr) {
+        let color = this.coloresUtilizados[Math.floor(Math.random()*this.coloresUtilizados.length)];
+        if(arr.includes(color) || color===this.colPrim){
+            return this.seleccionarColorSecundario(arr);
+        } else{
+            return color;
+        }
+    }
+
+    
+
     generateBlobsInDiv(div, times){
+        let coloresDeBlobUtilizados = [];
         for(let i = 0; i<times; i++){
-            var r = Math.floor(Math.random()*this.numberOfSecondaryColors)+1;
+            let colorBlob = this.seleccionarColorSecundario(coloresDeBlobUtilizados);
+            coloresDeBlobUtilizados.push(colorBlob);
             const svgString = blobs2.svg(
                 {
                     seed: Math.random(),
@@ -48,15 +64,18 @@ class Colors {
                     size: Math.random()*300 + 100,
                 },
                 {
-                    fill: `var(--secondary_color-${r})`
+                    fill: colorBlob
                 },
             );
+
             div.innerHTML+=svgString;
             var ultimoBlob = div.querySelector("svg:last-of-type");
             ultimoBlob.style.opacity = 0.1+Math.random()*0.8;
             ultimoBlob.style.position = 'absolute';
             ultimoBlob.style.top = Math.random()*100 + "%";
             ultimoBlob.style.left = Math.random()*100 + "%";
+
+
             }            
         
 
