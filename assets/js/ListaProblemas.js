@@ -148,7 +148,7 @@ customElements.define('listaproblemas-card', class extends HTMLElement{
         })
         this.append(detalles, nombre, descripcion)
         
-        let background = GeoPattern.generate(this.nombre, {baseColor: '#FFFFFF'}).toDataUrl();
+        let background = GeoPattern.generate(this.nombre, {baseColor: '#6EE744'}).toDataUrl();
         this.style.backgroundImage = background;
 
         if(Login.usuarioActual.idUsuario != this.creador.idUsuario || true){
