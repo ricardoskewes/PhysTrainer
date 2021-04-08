@@ -133,6 +133,20 @@ form input{
   padding: calc(0.8625rem - 2px)  0  calc(0.8625rem - 2px) 1rem;
 }
 
+.search-bar{
+  color: var(--gray_color);
+
+
+  
+}
+  .search-bar *{
+    color: var(--gray_color);
+    background: rgba(240, 240, 240, 0.4);
+    border: none;
+  }
+
+
+
 form input::-webkit-input-placeholder { /* Edge */
   color: var(--light_gray_color);
   font-weight: lighter;
@@ -163,6 +177,7 @@ form input[type="submit"]:hover{
   background: var(--gray_color);
   cursor: pointer;
 }
+
 
 
 
@@ -490,12 +505,40 @@ section{
 }
 
 /*---------------------PORTAL---------------------*/
-nav{
+.header-portal nav{
   height: fit-content ;
 }
-  nav img{
-    height: 40px;
+
+  .header-portal nav {
+    align-items: center;
   }
+  .header-portal nav * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  .header-portal nav img{
+    height: 40px;
+    flex-grow: 0;
+    margin: auto;
+  }
+
+  .header-portal .inputWithIcon{
+    flex-grow: 1;
+    margin: 1rem 20%;
+  }
+
+  .header-portal .search-bar{
+    min-width: 200px;
+  }
+
+  .box:first-child > span { margin-right: auto; }
+  
+  .box:last-child  > span { margin-left: auto;  }
+
 /*Hero*/
 .panel-hero{
   height: 20vh;
