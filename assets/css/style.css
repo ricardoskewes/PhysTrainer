@@ -130,7 +130,8 @@ form input{
   position: absolute;
   left: 0px;
   top: 0;
-  padding: calc(0.8625rem - 2px)  0  calc(0.8625rem - 2px) 1rem;
+  padding: calc(0.8625rem - 4px)  0  calc(0.8625rem - 4px) 1rem;
+
 }
 
 .search-bar{
@@ -527,8 +528,12 @@ section{
   }
 
   .header-portal .inputWithIcon{
-    flex-grow: 1;
+    
     margin: 1rem 20%;
+  }
+
+  .inputWithIcon svg{
+    background: none;
   }
 
   .header-portal .search-bar{
