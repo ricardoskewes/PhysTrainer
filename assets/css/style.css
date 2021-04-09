@@ -57,9 +57,21 @@
 /*GLASS EFFECT*/
 
 .glass-effect{
-  background-color: rgba(255, 255, 255, .15);  
-  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, .3);  
+  backdrop-filter: blur(15px);
 }
+
+/*NUM PUNTOS*/
+.numPuntos{
+  height: auto;
+  font-size: 2.7rem;
+  padding: 1.5rem 2.5rem;
+  background-color: var(--main_color);
+  border-radius: 1.5rem;
+  font-weight: 550;
+
+}
+
 
 /*FORMS*/
 
@@ -561,12 +573,16 @@ section{
   .panel-hero .card{
     width: 70vw;
     height: 60%;
-    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
   }
   .panel-hero svg{
     width: auto;
   }
 
+  
 
 
 

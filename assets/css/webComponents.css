@@ -83,6 +83,7 @@ usuario-card{
     align-items: center;
     padding: 8px;
     cursor: default;
+    height: fit-content;
 }
     usuario-card .perfil{
         --radius: 30px;
@@ -128,6 +129,20 @@ usuario-card{
     usuario-card>div>.puntaje{
         font-weight: 600;
     }
+
+usuario-card[huge]{}
+    usuario-card[huge] .perfil{
+        --radius: 60px
+    }
+    usuario-card[huge]>div>*{
+        font-size: 2.3rem;
+    }
+    usuario-card[huge] .nombre{
+        font-size: 2.7rem;
+    }
+
+    
+
 usuario-card[small]{}
     usuario-card[small] .perfil{
         --radius: 20px
