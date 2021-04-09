@@ -30,7 +30,9 @@
             </ul>
         </nav>
         <section class="panel-hero">
-            <div class="card glass-effect"></div>
+            <div class="card glass-effect">
+                <usuario-card class="personal-card"></usuario-card>
+            </div>
         </section>
     </header>
     
@@ -86,12 +88,27 @@
     </script>   
 
     <script src="https://unpkg.com/blobs/v2"></script>
-
     <script src="./assets/js/colors.js"></script>
-
+    <script src="./assets/js/Phystrainer.js"></script>
     <script>
         let c = new Colors();
         c.generateBlobsInDiv(document.querySelector(".panel-hero"), 5);
+        
+        let listaID = (new URLSearchParams(window.location.search)).get('id');
+
+        (async ()=>{
+            await includeScripts();
+            await Login.requerirInicio();
+
+            Login.obtenerUsuarioActual( async (usuario)=>{
+                let {idUsuario, photoURL, nombre} = usuario;
+                document.querySelector('.personal-card').setAttribute('idUsuario', idUsuario);
+                document.querySelector('.personal-card').setAttribute('photoURL', photoURL);
+                document.querySelector('.personal-card').setAttribute('nombre', nombre);
+                document.querySelector('.personal-card').render();
+            })
+        })();
+    
     </script>
 </body>
 </html>
