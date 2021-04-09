@@ -61,6 +61,21 @@
   backdrop-filter: blur(15px);
 }
 
+/*SEPARADOR*/
+
+.separador{
+  min-height: 3rem;
+  padding: 3rem;
+  background: var(--main_color);
+  width: 100vw;
+  margin: 0rem 0rem;
+}
+  .separador h1{
+    text-align: center;
+    font-size: 3rem;
+
+  }
+
 /*NUM PUNTOS*/
 .numPuntos{
   height: auto;
@@ -565,18 +580,16 @@ section{
 
 /*Hero*/
 .panel-hero{
-  height: 30vh;
   position: relative;
   z-index: 1;
 
 }
   .panel-hero .card{
-    width: 70vw;
+    width: 50vw;
     height: 60%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-
   }
   .panel-hero svg{
     width: auto;
@@ -748,9 +761,4 @@ section{
      flex-grow: 1;
      flex-shrink: 1;
    }
-}
-
-
-.separador h1{
-  font-family: "comic sans";
 }
