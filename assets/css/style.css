@@ -233,8 +233,20 @@ h1 {
   cursor: default;
 }
 
+h2 {
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
 p {
-  font-size: 2rem;
+  font-size: 1rem;
   cursor: default;
 }
 
@@ -574,13 +586,14 @@ footer {
 
 .portal-main aside {
   flex-grow: 0;
-  padding: 2rem 0rem 1rem 6rem;
+  padding: 2rem 2rem 2rem 6rem;
 }
 
 .portal-main aside ul {
-  padding: 1rem;
   margin: 0rem;
   text-align: left;
+  text-indent: none;
+  padding: 0;
 }
 
 .portal-main aside li {
@@ -600,13 +613,6 @@ footer {
 
 .portal-main ul {
   list-style: none;
-}
-
-.mis-listas {
-  margin: 2rem;
-}
-
-.resumen-listas {
 }
 
 /*---------------------MEDIA QUERIES---------------------*/
