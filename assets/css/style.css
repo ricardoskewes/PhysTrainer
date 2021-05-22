@@ -227,6 +227,7 @@ body {
 /* TEXTO */
 h1 {
   font-size: 4rem;
+  font-weight: 500;
   margin-top: 0px;
   margin-bottom: 0px;
   overflow: hidden;
@@ -234,6 +235,7 @@ h1 {
 }
 
 h2 {
+  font-weight: 400;
   font-size: 3rem;
 }
 
@@ -587,6 +589,7 @@ footer {
 .portal-main aside {
   flex-grow: 0;
   padding: 2rem;
+  border-right: 1px solid rgba(157, 157, 157, 0.4);
 }
 
 .portal-main ul {
@@ -617,25 +620,31 @@ footer {
   padding: 1rem;
 }
 
+.portal-main article section h1 {
+  margin-bottom: 3rem;
+}
+
 .portal-main article section h3 {
   margin: 1.5rem 1.5rem 1.5rem 0;
 }
 
 .portal-main .resumen-listas {
   display: flex;
-  height: fit-content;
 }
 
 .resumen-listas .view-listas-izquierda {
   flex-shrink: 1;
   min-width: 0;
   padding: 1rem;
+  border-right: 1px solid rgba(157, 157, 157, 0.4);
+  color: var(--light_gray_color);
 }
 
 .view-listas-izquierda li {
   margin-top: 3rem;
   margin-bottom: 3rem;
   text-align: center;
+  font-size: 1.2rem;
 }
 
 .resumen-listas .view-listas-derecha {
@@ -676,13 +685,14 @@ footer {
 
 .view-listas-derecha .lista-mosaico-problemas * {
   display: flex;
-  background: crimson;
+  background: var(--main_color);
   border: 1px white solid;
   margin: 0.8rem;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: x-large;
+  font-size: 4rem;
+  font-weight: lighter;
 }
 
 /*---------------------MEDIA QUERIES---------------------*/
