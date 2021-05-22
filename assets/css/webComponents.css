@@ -121,7 +121,7 @@ usuario-card{
         font-weight: 600;
     }
     usuario-card>div>.usuario{
-        color: gray;
+        opacity: 0.7;
     }
         usuario-card>div>.usuario::before{
             content: '@';
