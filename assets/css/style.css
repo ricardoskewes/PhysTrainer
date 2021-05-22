@@ -59,7 +59,7 @@
   min-height: 1rem;
   padding: 2rem;
   background: var(--main_color);
-  width: 100vw;
+  width: auto;
   margin: 0rem 0rem;
   position: relative;
   z-index: 9;
@@ -586,14 +586,15 @@ footer {
 
 .portal-main aside {
   flex-grow: 0;
-  padding: 2rem 2rem 2rem 6rem;
+  padding: 2rem;
 }
 
-.portal-main aside ul {
+.portal-main ul {
   margin: 0rem;
   text-align: left;
   text-indent: none;
   padding: 0;
+  list-style-type: none;
 }
 
 .portal-main aside li {
@@ -601,8 +602,8 @@ footer {
   padding: 1rem;
   color: var(--light_gray_color);
 }
-.portal-main aside h {
-  margin: 0;
+.portal-main aside h3 {
+  margin: 0rem;
   padding: 1rem 0.5rem 1rem 0.5rem;
   color: var(--light_gray_color);
 }
@@ -611,8 +612,77 @@ footer {
   flex-grow: 1;
 }
 
-.portal-main ul {
-  list-style: none;
+.portal-main article section {
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.portal-main article section h3 {
+  margin: 1.5rem 1.5rem 1.5rem 0;
+}
+
+.portal-main .resumen-listas {
+  display: flex;
+  height: fit-content;
+}
+
+.resumen-listas .view-listas-izquierda {
+  flex-shrink: 1;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.view-listas-izquierda li {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.resumen-listas .view-listas-derecha {
+  flex-shrink: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.view-listas-derecha .lista-contenido-descripcion {
+  margin: 0;
+  padding: 1rem;
+}
+.view-listas-derecha .lista-contenido-descripcion h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.view-listas-derecha .lista-mosaico-problemas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-auto-rows: 1fr;
+}
+
+.view-listas-derecha .lista-mosaico-problemas::before {
+  content: "";
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.view-listas-derecha .lista-mosaico-problemas > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.view-listas-derecha .lista-mosaico-problemas * {
+  display: flex;
+  background: crimson;
+  border: 1px white solid;
+  margin: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: x-large;
 }
 
 /*---------------------MEDIA QUERIES---------------------*/
