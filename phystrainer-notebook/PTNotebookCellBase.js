@@ -60,25 +60,36 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
             this.setAttribute('contenteditable', false);
         });
         // Ctrl + Enter event: stop editing
+        // Escape: stop editing
         this.shadowRoot.addEventListener('keydown', (e)=>{
+            if(e.key === 'Escape') this.setAttribute('contenteditable', false);
             if(e.keyCode == 13 && e.ctrlKey) this.setAttribute('contenteditable', false);
         })
         // Click outside: stop editing
-        document.addEventListener('dblclick', (e)=>{
-            if(!e.composedPath().includes(this)) this.setAttribute('contenteditable', false);
+        this.parentNode.addEventListener('dblclick', (e)=>{
+            if( this.isContentEditable && !e.composedPath().includes(this)) this.setAttribute('contenteditable', false);
         })
     }
     // Called when editing begins
     beginEditingCallback(){
         this.classList.add('editing');
+        this.dispatchEvent(new Event('beginedit'))
     }
     // End editing callback
     endEditingCallback(){
         this.classList.remove('editing');
+        this.dispatchEvent(new Event('endedit'))
     }
 
     // Render custom data
     render(){
 
     }
+
+    // Custom focus
+    focus(){
+        if(!this.isContentEditable) this.setAttribute('contenteditable', true);
+    }
 }
+
+window.PTNotebookCellBaseElement = PTNotebookCellBaseElement;
