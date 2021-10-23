@@ -54,8 +54,6 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
         // Initial value
         this.shadowRoot.querySelector('.input div textarea').innerHTML = this.slotInnerHTML;
         // Handle input
-        this.shadowRoot.querySelector('.input div textarea').style.height = 'auto';
-        this.shadowRoot.querySelector('.input div textarea').style.height = this.shadowRoot.querySelector('.input div textarea').scrollHeight + 'px';
         this.shadowRoot.querySelector('.input div textarea').addEventListener('input', (e)=>{
             e.target.style.height = 'auto';
             e.target.style.height = e.target.scrollHeight + 'px';
