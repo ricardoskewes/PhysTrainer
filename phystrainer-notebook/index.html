@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phystrainer Notebook Demo</title>
+</head>
+<body>
+    <div id="notebook">
+        <pt-notebook-cell-markdown>
+# Phystrainer Notebooks
+Phystrainer notebooks take inspiration from Jupyter Notebooks to provide flexibility when reading and writing problems in Phystrainer. There are two types of cells:
+* Markdown/Text 
+* Question/Input
+
+_Hint: Double click any of the cells to begin editing. Double click outside to exit edit mode._
+> Important: Only Markdown cells are currently available.
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
+## Format
+Markdown supports several format styles, such as:
+
+**Bold text**
+__Bold text__
+*Italic text*
+_Italic text_
+~~Strikethrough~~
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
+## Tables
+
+| Option | Description |
+| ------ | ----------- |
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext    | extension to be used for dest files. |
+
+Right aligned columns
+
+| Option | Description |
+| ------:| -----------:|
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext    | extension to be used for dest files. |
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
+## Math
+$$\pi = 3, \sin(x) = x$$
+We use [Katex](https://katex.org/) from KhanAcademy to render $\LaTeX$ inside cells. Simply use dollar signs ($)
+> Note: Still buggy, will fix.
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
+## Lorem Ipsum
+<span style='font-family: "Comic Sans MS", cursive, sans-serif; color: blue; font-size: 2rem;'>Hola Skewes! ¿Qué te parece?</span>
+Voy a pulir un poco los componentes de las celdas para quitar todos los bugs (en esta hay otro con las comillas lol). Igual iré pensando en los tipos de inputs que podemos recibir (eg, opción múltiple, para expresiones simbólicas con https://github.com/Khan/KAS, numérico con rango, etc).
+        </pt-notebook-cell-markdown>
+    </div>
+
+    <script type="module" src="./PTNotebookCellMarkdownElement.js"></script>
+    <script type="module" src="./PTNotebookCellQuestionElement.js"></script>
+
+</body>
+</html>
