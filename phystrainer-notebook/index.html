@@ -35,6 +35,18 @@ Support for Phystrainer questions is still under development. Check [questions](
 * <kbd>X</kbd> Deletes the cell
         </pt-notebook-cell-markdown>
         <pt-notebook-cell-markdown>
+# Data structure
+Cells will be stored in a database as a JSON object:
+```js
+{
+        "type": "markdown", // markdown, question.text, question.datapoints, question.multiplechoice, 
+        "protected": true,  // Whether other users can edit or view the cell's raw content
+        "content": "...", // Raw content of the cell (custom question JSON for questions, and raw string for markdown)
+        "id": 3, // Id of the cell in database
+}
+```
+        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-markdown>
 ## Roadmap
 0. Fix a bug that causes HTML tags to not be rendered inside markdown. 
 1. Define questions requirements and Format
