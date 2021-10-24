@@ -67,12 +67,13 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
     }
     endEditingCallback(){
         super.endEditingCallback();
-        this.slotInnerHTML = this.shadowRoot.querySelector('.input div textarea').innerHTML;
+        this.slotInnerHTML = this.shadowRoot.querySelector('.input div textarea').value;
         this.render();
     }
     
     // Render
     render(){
+        console.log("Rendering")
         // Render markdown
         this.shadowRoot.querySelector('.output').innerHTML = md.render(this.slotInnerHTML)
         // Render KaTeX

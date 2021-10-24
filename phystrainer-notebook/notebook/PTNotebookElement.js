@@ -37,10 +37,12 @@ class PTNotebookElement extends HTMLElement{
         })
         this.shadowRoot.querySelector('.add_markdown').addEventListener('click', ()=>{
             let cell = document.createElement('pt-notebook-cell-markdown');
+            cell.innerHTML = '(Markdown) Double click to edit.'
             this.append(cell)
         })
         this.shadowRoot.querySelector('.add_question').addEventListener('click', ()=>{
             let cell = document.createElement('pt-notebook-cell-question');
+            cell.innerHTML = '(Question) Double click to edit.'
             this.append(cell)
         })
     }

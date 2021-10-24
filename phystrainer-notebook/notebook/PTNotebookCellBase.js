@@ -27,7 +27,6 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
         doc.body.childNodes.forEach(node=>{
             this.append(node)
         })
-
     }
 
     // Constructor
