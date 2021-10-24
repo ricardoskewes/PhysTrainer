@@ -1,7 +1,7 @@
 // Create a template
 const template = document.createElement('template');
 template.innerHTML = `
-    <link rel="stylesheet" href="./PTNotebookCellBase.css">
+    <link rel="stylesheet" href="./notebook/PTNotebookCellBase.css">
     <div class="input">
         <div></div>
         <button>OK</button>

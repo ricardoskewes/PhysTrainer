@@ -13,6 +13,7 @@
         padding: 16px;
         display: inline-block;
         width: 100%;
+        box-sizing: border-box;
     }
     :host>.input{
         display: none;

@@ -1,11 +1,15 @@
 import PTNotebookCellBaseElement from './PTNotebookCellBase.js';
-import './PTNotebookCellMarkdownElement.js';
-import './PTNotebookCellQuestionElement.js';
+import './markdown/PTNotebookCellMarkdownElement.js';
+import './question/PTNotebookCellQuestionElement.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
     <link rel="stylesheet" href="PTNotebookElement.css">
-    <div></div>
+    <div class='content'></div>
+    <div>
+        <button class='add_markdown'>Add Markdown</button>
+        <button class='add_question'>Add Question</button>
+    </div>
     <div>
         <slot></slot>
     </div>
@@ -23,23 +27,25 @@ class PTNotebookElement extends HTMLElement{
 
     connectedCallback(){
         this.shadowRoot.append(template.content.cloneNode(true));
-        // Check if all children are notebook cells
-        if(this.shadowRoot.querySelector('slot').assignedElements().some(node => !node instanceof PTNotebookCellBaseElement)) throw "PTNotebookElement can only contain children of type PTNotebookCellBaseElement"
-
         this.shadowRoot.querySelector('slot').assignedElements().forEach((cell, i)=>{
             cell.addEventListener('keyup', (e)=>{
                 // Delete using delete, backspace or x
-                if(!cell.isContentEditable && ( e.key === 'Backspace' || e.key === 'Delete' || e.key === 'x' )){
-                    if(confirm("?")) cell.remove();
-                }
+                if(!cell.isContentEditable && ( e.key === 'Backspace' || e.key === 'Delete' || e.key === 'x' ) && confirm ("?")) cell.remove();
                 // Enter edit mode on enter
                 if(!cell.isContentEditable && e.key === 'Enter') cell.focus();         
             })
         })
+        this.shadowRoot.querySelector('.add_markdown').addEventListener('click', ()=>{
+            let cell = document.createElement('pt-notebook-cell-markdown');
+            this.append(cell)
+        })
+        this.shadowRoot.querySelector('.add_question').addEventListener('click', ()=>{
+            let cell = document.createElement('pt-notebook-cell-question');
+            this.append(cell)
+        })
     }
 
     render(){
-
     }
 }
 

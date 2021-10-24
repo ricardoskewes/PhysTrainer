@@ -1,4 +1,4 @@
-import PTNotebookCellBaseElement from "./PTNotebookCellBase.js";
+import PTNotebookCellBaseElement from "../PTNotebookCellBase.js";
 import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.js';
 import 'https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.js';
 import renderMathInElement from "https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/contrib/auto-render.mjs";
@@ -15,7 +15,7 @@ const template = document.createElement('template');
 template.innerHTML = `
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
-`
+`;
 
 const templateInput = document.createElement('template');
 templateInput.innerHTML = `
@@ -75,6 +75,7 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
     render(){
         // Render markdown
         this.shadowRoot.querySelector('.output').innerHTML = md.render(this.slotInnerHTML)
+        // Render KaTeX
         renderMathInElement(this.shadowRoot.querySelector('.output'), {
             delimiters: [
                 {left: "$$", right: "$$", display: true},
