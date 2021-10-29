@@ -1,32 +1,62 @@
-## Checkbox problem
-Gives a list of options in which 1+ are valid.
+# Questions
+On excercises, Questions allow for user input and data validation, making them interactive and augmenting the learning experience. The implementation is designed **flexibility**, **customizability** and **security** in mind. 
 
-## Multiple choice
-In multiple choice questions, learners select one option from a list of answer options.
-Multiple choice questions can also have several advanced options, such as reordering, or shuffling, the set of answer choices for each learner.
+## `PTQuestion` object
+All questions are normalized into the following schema, with the properties:
 
-Multiple choice questions can be represented as a list of multiple choices, or a dropdown menu, or a combo box for big lists of options. 
+### `type: String`
+Specifies the question's type. The rendering and validation tests depend on this value. 
 
-### Multiple choice extended
-Optionally, an _other_ choice can be added with a specified type of input (numerical, text, etc.)
+**Types**:
+| Type | Description |
+| ---- | ----------- |
+| PTQuestion.checkbox | Learners select from a list of choice in which one or more may be valid |
+| PTQuestion.multipleChoice | Learners select only one answer from a list of choices. These can be reordered or shuffled. In future versions, an _other_ option can be configured to display an additional input |
+| PTQuestion.number | Learners input a number (integers, fractions, constants). A tolerance options is provided, as well as min and max allowed values |
+| PTQuestion.math | A mathematical expression is entered and compared symbolically using [KAS](https://github.com/Khan/KAS) | 
+| PTQuestion.function | A mathematical function is entered and evaluated to a set of variables using [KAS](https://github.com/Khan/KAS) to see if the function outputs the expected values within a certain range |
 
-## Numerical input
-In numerical input questions, learners enter integers, fractions or constants (_pi_, _e_, _g_). A tolerance parameter is provided so that learners’ responses do not have to be exact.
+### `description: String`
+Text to be shown alongside the question input, such as instructions. 
 
-Numerical input questions can be represented as an input box or a slider (min, max values should be provided)
+### `showAnswer: String`
+Determines when and if to show the answer to learners
 
-## Text input
-Learners enter text into a response field. The response can include numbers, letters, and special
-characters such as punctuation marks. It is recommended to have more than one correct answer to allow for differences in capitalization and typographical errors.
+### `attempts: Number`
+Maximum number of allowed attempts
 
-## Symbolic input
-Learners enter a mathematical formulae in a textbox using plain text math or LaTeX. Answers are compared using [KAS](https://github.com/Khan/KAS) to allow for differences in format while ensuring the learner's input matches the expected expression.
+### `attemptPenalization: Number`
+For questions with multiple attempts, indicates the **percentage** penalization on score per incorrect attempt.
 
-## Data points prediction input
-Given a list of example points, learners should enter a mathematical function that best describes said points within a tolerance range. The formula will be parsed using [KAS](https://github.com/Khan/KAS) and compared with such values. Like multiple choice questions, example points can be reordered or shuffled. 
+### `score: Number`
+Indicates the maximum possible score to be awarded when the question is answered correctly (assuming no penalization per incorrect attempts)
 
-# References
-OXL https://buildmedia.readthedocs.org/media/pdf/edx-open-learning-xml/latest/edx-open-learning-xml.pdf
-GIFT https://docs.moodle.org/311/en/GIFT_format
-Moodle XML https://docs.moodle.org/311/en/Moodle_XML_format
-JSON Quiz http://json-quiz.github.io/json-quiz/spec/base-question.html
+### `minValue: Number`
+(PTQuestion.number). Minimum (inclusive) value the learner is allowed to enter on an input.
+
+### `maxValue: Number`
+(PTQuestion.number). Maximum (inclusive) value the learner is allowed to enter on an input. 
+
+### `stepValue: Number`
+(PTQuestion.number). Step value the learner is allowed to enter on an input (ie, range slider)
+
+### `randomnize: Boolean`
+(PTQuestion.checkbox, PTQuestion.multipleChoice). Determines if the order in which the choices are rendered should be random.
+
+(PTQuestion.function). Determines if the order in which data points are rendered should be random. 
+
+### `maxChoices: Number`
+(PTQuestion.checkbox, PTQuestion.multipleChoice). Number of choices to be shown to the learner. Useful when having large amounts of choices, randomnized.
+
+(PTQuestion.function). Number of data points to be shown to the learner. Useful when having large amounts of data points, randomnized.
+
+### `choices: {id: String, type: String, value: String}[]`
+(PTQuestion.checkbox, PTQuestion.multipleChoice). Choices to be shown
+
+(PTQuestion.function). Data points 
+
+> TODO: Consider changing name to allow for future extensibility. Proposal: data
+
+### `rules: []`
+Rules used to verify answers. 
+> TODO: Define

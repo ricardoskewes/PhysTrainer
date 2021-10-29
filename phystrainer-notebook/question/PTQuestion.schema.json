@@ -1,0 +1,98 @@
+{
+    "$schema": "http://json-schema.org/schema", 
+    "$id": "https://phystrainer.com/schemas/question.schema.json", 
+    "title": "Question schema", 
+    "description": "Describes a generic question object", 
+    "type": "object", 
+    "properties": {
+        "type": {
+            "description": "Specifies the question's type. Necessary for rendering and identifying the validation tests", 
+            "type": "string",
+            "pattern": "PTQuestion(\\.(?:\\w)+)*$"
+        },
+        "description": {
+            "description": "Text to be shown alongside the question inputs", 
+            "type": "string"
+        }, 
+        "showAnswer": {
+            "description": "When and if to show the answer to learners",
+            "type": "string", 
+            "enum": [
+                "always", "answered", "attempted", "closed", "correct_or_past_due", "finished", "past_due", "never"
+            ], 
+            "default": "answered"
+        },
+        "attempts": {
+            "description": "Maximum number of attempts before a question is unavailable", 
+            "type": "number", 
+            "default": 1
+        }, 
+        "attemptPenalization": {
+            "description": "Penalization on learner's score per incorrect attempt", 
+            "type": "number", 
+            "default": 1
+        }, 
+        "score": {
+            "description": "Maximum possible score to be awarded to learner if question is answered correctly", 
+            "type": "number", 
+            "default": 1
+        }, 
+        "minValue": {
+            "description": "Only for numeric questions. Min value to be used when rendering the question (eg, in a slider)", 
+            "type": "number"
+        }, 
+        "maxValue": {
+            "description": "Only for numeric questions. Max value to be used when rendering the question (eg, in a slider)", 
+            "type": "number"
+        }, 
+        "stepValue": {
+            "description": "Only for numeric questions. Step value to be used when rendering the question (eg, in a slider)", 
+            "type": "number"
+        }, 
+        "randomnize": {
+            "description": "Only for questions showing large amounts of options. Determines if the order should be random", 
+            "type": "boolean", 
+            "default": true
+        },
+        "choices": {
+            "description": "Only for checkbox / multiple choice questions. Available choices", 
+            "type": "array", 
+            "minItems": 1, 
+            "uniqueItems": true, 
+            "items": {
+                "properties": {
+                    "id": {
+                        "description": "Choice unique identifier", 
+                        "type": "number"
+                    }, 
+                    "type": {
+                        "description": "Type of choice (text/input)", 
+                        "type": "string", 
+                        "enum": [
+                            "text", "input"
+                        ]
+                    }, 
+                    "value": {
+                        "description": "Choice value", 
+                        "type": "string"
+                    }
+                }, 
+                "required": ["id", "value"]
+            }
+        },
+        "maxChoices": {
+            "description": "Maximum number of choices to be shown to learner. Useful when used with randomnized", 
+            "type": "number", 
+            "default": 10
+        },
+        "rules": {
+            "description": "Rules for validation of a correct answer", 
+            "type": "array", 
+            "items": {
+                "description": "Rule for validation", 
+                "type": "object"
+            }
+        }
+    },
+    "required": ["type", "description", "score", "validation"]
+}
