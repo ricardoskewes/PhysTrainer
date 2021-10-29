@@ -8,7 +8,7 @@ templateInput.innerHTML = `
 
     </style>
     <div style="padding: 8px"> 
-        Question type: <select id="question-type">
+        Question type: <select id="input-question-type">
             <optgroup label="Multiple choice">
                 <option value="PTQuestion.checkbox">Checkboxes</option>
                 <option value="PTQuestion.multipleChoice.radio">Radio buttons</option>
@@ -26,8 +26,21 @@ templateInput.innerHTML = `
                 <option value="PTQuestion.function">Mathematical function</option>
             </optgroup>
         </select>
+        <br />
+        <input type="text" id="input-question-description" placeholder="description"></input
     </div>
 `
+
+const templateOutput = document.createElement('template');
+templateOutput.innerHTML = `
+    <form>
+        <p id="output-question-description">Lorem ipsum</p>
+        <fieldset>
+            <input type="submit" value="Submit"></input>
+        </fieldset>
+    </form>
+`
+
 class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
     // Watch for changes on these (custom) properties
     static get observedAttributes(){
@@ -44,22 +57,26 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
         super.connectedCallback();
         // Append templates
         this.shadowRoot.querySelector('.input div').append(templateInput.content.cloneNode(true));
+        this.shadowRoot.querySelector('.output').append(templateOutput.content.cloneNode(true))
         this.render();
     }
     // TODO: Update
     endEditingCallback(){
         super.endEditingCallback();
-        this.question.type = this.shadowRoot.querySelector('.input #question-type').options[this.shadowRoot.querySelector('.input #question-type').selectedIndex].value
+        this.question.type = this.shadowRoot.querySelector('.input #input-question-type').options[this.shadowRoot.querySelector('.input #input-question-type').selectedIndex].value
+        this.question.description = this.shadowRoot.querySelector('.input #input-question-description').value
         this.render();
     }
     // Render
     render(){
-        this.shadowRoot.querySelector('.output').innerHTML = '';
-        let form = document.createElement('form');
+        this.shadowRoot.querySelector('.output #output-question-description').innerHTML = this.question.description
+
+        let fieldset = this.shadowRoot.querySelector('.output fieldset')
+        fieldset.innerHTML = '';
         switch(this.question.type){
             case 'PTQuestion.checkbox':
                 for(let {id, type, value} of this.question.choices){
-                    form.innerHTML += `
+                    fieldset.innerHTML += `
                         <input type="checkbox" value="${value}" id="choice-${id}"></input>
                         <label for="choice-${id}">${value}</label>
                     `
@@ -68,7 +85,7 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
             case 'PTQuestion.multipleChoice':
             case 'PTQuestion.multipleChoice.radio':
                 for(let {id, type, value} of this.question.choices){
-                    form.innerHTML += `
+                    fieldset.innerHTML += `
                         <input type="radio" value="${value}" id="choice-${id}"></input>
                         <label for="choice-${id}">${value}</label>
                     `
@@ -81,22 +98,22 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
                         <option value="${value}">${value}</option>
                     `
                 }
-                form.append(select);
+                fieldset.append(select);
                 break;
             }
             case 'PTQuestion.number':
             case 'PTQuestion.number.input':
-                form.innerHTML = `<input type="number" min="${this.question.minValue}" max="${this.question.maxValue}" step="${this.question.stepValue}" placeholder="Answer here..."></input>`
+                fieldset.innerHTML = `<input type="number" min="${this.question.minValue}" max="${this.question.maxValue}" step="${this.question.stepValue}" placeholder="Answer here..."></input>`
                 break;
             case 'PTQuestion.number.slider':
                 if(this.question.minValue == undefined || this.question.maxValue == undefined) throw "PTQuestion.number.slider requieres minValue and maxValue attributes";
-                form.innerHTML = `<input type="range" min="${this.question.minValue}" max="${this.question.maxValue}" step="${this.question.stepValue}"></input>`
+                fieldset.innerHTML = `<input type="range" min="${this.question.minValue}" max="${this.question.maxValue}" step="${this.question.stepValue}"></input>`
                 break;
             case 'PTQuestion.text':    
-                form.innerHTML = `<input type="text" placeholder="Answer here..."></input>`
+                fieldset.innerHTML = `<input type="text" placeholder="Answer here..."></input>`
                 break;
             case 'PTQuestion.math':
-                form.innerHTML = `
+                fieldset.innerHTML = `
                     (math)
                     <math-field virtual-keyboard-mode="manual">
                     x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}
@@ -104,7 +121,7 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
                 `
                 break;
             case 'PTQuestion.function':
-                form.innerHTML = `
+                fieldset.innerHTML = `
                     (function)
                     <math-field virtual-keyboard-mode="manual">
                     x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}
@@ -112,9 +129,8 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
                 `
                 break;
             default:
-                form.append('I am empty inside')
+                fieldset.append('I am empty inside')
         }
-        this.shadowRoot.querySelector('.output').append(form)
     }
 }
 
