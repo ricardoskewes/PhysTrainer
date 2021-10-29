@@ -57,6 +57,11 @@ Indicates the maximum possible score to be awarded when the question is answered
 
 > TODO: Consider changing name to allow for future extensibility. Proposal: data
 
-### `rules: []`
+----
+
+### `(private) rules: []`
 Rules used to verify answers. 
 > TODO: Define
+
+### `(private) userSubmissions: []`
+All past submissions made by the user

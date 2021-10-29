@@ -1,4 +1,4 @@
-class PTQuestion{
+export default class PTQuestion{
     type;
     description;
     showAnswer;
@@ -9,11 +9,37 @@ class PTQuestion{
     maxValue;
     stepValue;
     randomnize;
-    choices;
     maxChoices;
-    rules;
+    choices;
+    
+    #rules;
+    #userSubmissions;
+    constructor(data = {}){
+        this.type = data.type || "";
+        this.description = data.description || [];
+        this.showAnswer = data.showAnswer || "never";
+        this.attempts = data.attempts || 1;
+        this.attemptPenalization = data.attemptPenalization || 1;
+        this.score - data.score || 1;
+        this.minValue = data.minValue;
+        this.maxValue = data.maxValue;
+        this.stepValue = data.stepValue;
+        this.randomnize = data.randomnize || false;
+        this.choices = data.choices || [];
+        this.maxChoices = data.maxChoices || this.choices.length;
 
-    constructor(data){
-        
+        this.#rules = data.rules;
+        this.#userSubmissions = data.userSubmissions || [];
+
+        // TODO: Remove
+        this.choices = [
+            {id: '1', type: 'choice', value: 'Microsoft'},
+            {id: '2', type: 'choice', value: 'Google'},
+            {id: '3', type: 'choice', value: 'Apple'},
+            {id: '4', type: 'choice', value: 'Facebook'},
+            {id: '5', type: 'choice', value: 'Netflix'},
+            {id: '6', type: 'choice', value: 'Amazon'}
+        ]
+
     }
 }
