@@ -38,7 +38,8 @@ export default class PTQuestion{
             {id: '3', type: 'choice', value: 'Apple'},
             {id: '4', type: 'choice', value: 'Facebook'},
             {id: '5', type: 'choice', value: 'Netflix'},
-            {id: '6', type: 'choice', value: 'Amazon'}
+            {id: '6', type: 'choice', value: 'Amazon'}, 
+            {id: '7', type: 'choice', value: 'Phystrainer'}, 
         ]
 
     }

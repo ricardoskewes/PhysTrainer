@@ -15,28 +15,17 @@ Phystrainer notebooks take inspiration from Jupyter Notebooks to provide flexibi
 * Question/Input
 
 _Hint: Double click any of the cells to begin editing. Double click outside to exit edit mode._
-> Important: Only Markdown cells are currently available.
+> Important: Only Markdown cells are currently available. Question cells are still under development.
         </pt-notebook-cell-markdown>
-        <!-- <pt-notebook-cell-markdown>
-## Questions
-Support for Phystrainer questions is still under development. Check [questions](./question/README.md).
-> Last update: 2021-10-23
-        </pt-notebook-cell-markdown>
+        <pt-notebook-cell-question>
+                {
+                        "description": "E.g., write down Euler´s identity", 
+                        "type": "PTQuestion.math"
+                }
+        </pt-notebook-cell-question>
         <pt-notebook-cell-markdown>
-## Keyboard shortcuts
-### When editing cells
-* <kbd>Esc</kbd> Stops editing
-* <kbd>Ctrl</kbd> <kbd>Enter</kbd> Stops editing
-
-### When not editing cells
-* <kbd>Enter</kbd> Enters edit mode
-* <kbd>Delete</kbd> Deletes the cell
-* <kbd>Backspace</kbd> Deletes the cell
-* <kbd>X</kbd> Deletes the cell
-        </pt-notebook-cell-markdown>
-        <pt-notebook-cell-markdown>
-# Data structure
-Cells will be stored in a database as a JSON object:
+## Data structure
+Cells inside a notebook have the following structure
 ```js
 {
         "type": "markdown", // markdown, question.text, question.datapoints, question.multiplechoice, 
@@ -45,64 +34,35 @@ Cells will be stored in a database as a JSON object:
         "id": 3, // Id of the cell in database
 }
 ```
-        </pt-notebook-cell-markdown>
-        <pt-notebook-cell-markdown>
-## Roadmap
-0. Fix a bug that causes HTML tags to not be rendered inside markdown. 
-1. Define questions requirements and Format
-2. Fix a bug that causes edit mode to appear the wrong font-size
-3. Fix $\KaTeX$ bugs
-4. Fix quote escaping bugs
-5. Add functionality for reordering cells
-6. Add functionality for inserting cells at a given position
-7. **LOTS OF TESTING!!!**
-        </pt-notebook-cell-markdown>
-        <pt-notebook-cell-markdown>
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
-        </pt-notebook-cell-markdown>
-        <pt-notebook-cell-markdown>
-## Format
-Markdown supports several format styles, such as:
+### Markdown cells
+Content in markdown cells is stored as a raw string. 
 
-**Bold text**
-__Bold text__
-*Italic text*
-_Italic text_
-~~Strikethrough~~
+### Question Cells
+Content in question cells is stored as a [**PTQuestion**](./question/README.md) object
         </pt-notebook-cell-markdown>
         <pt-notebook-cell-markdown>
-## Tables
-
-| Option | Description |
-| ------ | ----------- |
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
-
-Right aligned columns
-
-| Option | Description |
-| ------:| -----------:|
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
+## Known bugs
+- HTML tags are not rendered inside markdown cells
+- Edit mode does not initially appear in the correct height
+- $\KaTeX$ is not rendered correctly
+- Quotation marks are not escaped correctly
+- Questions edit mode does not reflect question's settings
         </pt-notebook-cell-markdown>
         <pt-notebook-cell-markdown>
-## Math
-$$\pi = 3, \sin(x) = x$$
-We use [Katex](https://katex.org/) from KhanAcademy to render $\LaTeX$ inside cells. Simply use dollar signs ($)
-> Note: Still buggy, will fix.
+## Further development
+- Continue development on questions edit-mode/output
+- Define styles for inputs on questions
+- Allow to reorder cells
+- Allow to insert cells at a given position
+- Add buttons/visual cues for reordering, editing, deleting
+- Lots of testing
         </pt-notebook-cell-markdown>
-        <pt-notebook-cell-markdown>
-## Lorem Ipsum
-<span style='font-family: "Comic Sans MS", cursive, sans-serif; color: blue; font-size: 2rem;'>Hola Skewes! ¿Qué te parece?</span>
-Voy a pulir un poco los componentes de las celdas para quitar todos los bugs (en esta hay otro con las comillas lol). Igual iré pensando en los tipos de inputs que podemos recibir (eg, opción múltiple, para expresiones simbólicas con https://github.com/Khan/KAS, numérico con rango, etc).
-        </pt-notebook-cell-markdown> -->
+        <pt-notebook-cell-question>
+                {
+                        "type": "PTQuestion.checkbox", 
+                        "description": "Which is cooler?"
+                }
+        </pt-notebook-cell-question>
 </pt-notebook>
         <script src="./notebook/PTNotebookElement.js" type="module"></script>
 </body>

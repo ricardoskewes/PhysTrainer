@@ -33,6 +33,12 @@ templateInput.innerHTML = `
 
 const templateOutput = document.createElement('template');
 templateOutput.innerHTML = `
+    <style> 
+        fieldset{
+            border: none !important;
+            background: lightgrey
+        }
+    </style>
     <form>
         <p id="output-question-description">Lorem ipsum</p>
         <fieldset>
@@ -57,8 +63,13 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
         super.connectedCallback();
         // Append templates
         this.shadowRoot.querySelector('.input div').append(templateInput.content.cloneNode(true));
-        this.shadowRoot.querySelector('.output').append(templateOutput.content.cloneNode(true))
+        this.shadowRoot.querySelector('.output').append(templateOutput.content.cloneNode(true));
+        // Load data
+        Object.assign(this.question, new PTQuestion(JSON.parse(this.slotInnerHTML)))
         this.render();
+    }
+    beginEditingCallback(){
+        super.beginEditingCallback();
     }
     // TODO: Update
     endEditingCallback(){
@@ -114,18 +125,12 @@ class PTNotebookCellQuestionElement extends PTNotebookCellBaseElement{
                 break;
             case 'PTQuestion.math':
                 fieldset.innerHTML = `
-                    (math)
-                    <math-field virtual-keyboard-mode="manual">
-                    x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}
-                    </math-field>
+                    <math-field virtual-keyboard-mode="manual"></math-field>
                 `
                 break;
             case 'PTQuestion.function':
                 fieldset.innerHTML = `
-                    (function)
-                    <math-field virtual-keyboard-mode="manual">
-                    x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}
-                    </math-field>
+                    <math-field virtual-keyboard-mode="manual"></math-field>
                 `
                 break;
             default:
