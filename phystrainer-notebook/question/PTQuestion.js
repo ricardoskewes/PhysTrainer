@@ -21,9 +21,9 @@ export default class PTQuestion{
         this.attempts = data.attempts || 1;
         this.attemptPenalization = data.attemptPenalization || 1;
         this.score - data.score || 1;
-        this.minValue = data.minValue;
-        this.maxValue = data.maxValue;
-        this.stepValue = data.stepValue;
+        this.minValue = data.minValue || 0;
+        this.maxValue = data.maxValue || 1;
+        this.stepValue = data.stepValue || 0.5;
         this.randomnize = data.randomnize || false;
         this.choices = data.choices || [];
         this.maxChoices = data.maxChoices || this.choices.length;

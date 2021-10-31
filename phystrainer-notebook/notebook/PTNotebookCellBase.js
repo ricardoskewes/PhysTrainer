@@ -60,14 +60,14 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
         });
         // Ctrl + Enter event: stop editing
         // Escape: stop editing
-        this.shadowRoot.addEventListener('keydown', (e)=>{
+        /* this.shadowRoot.addEventListener('keydown', (e)=>{
             if(e.key === 'Escape') this.setAttribute('contenteditable', false);
             if(e.keyCode == 13 && e.ctrlKey) this.setAttribute('contenteditable', false);
         })
         // Click outside: stop editing
         this.parentNode.addEventListener('dblclick', (e)=>{
             if( this.isContentEditable && !e.composedPath().includes(this)) this.setAttribute('contenteditable', false);
-        })
+        }) */
     }
     // Called when editing begins
     beginEditingCallback(){
