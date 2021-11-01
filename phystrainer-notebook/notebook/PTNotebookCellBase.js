@@ -14,7 +14,7 @@ template.innerHTML = `
 export default class PTNotebookCellBaseElement extends HTMLElement{
     // Watch for changes on these (custom) properties
     static get observedAttributes(){
-        return ['contenteditable']
+        return ['contenteditable', 'preventedit']
     }
     // Used to get children text contents
     get slotInnerHTML(){
@@ -36,9 +36,18 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
     }
     // Called when attribute changes
     attributeChangedCallback(attribute, oldValue, newValue){
+        // Make content editable
         if(attribute === 'contenteditable'){
             if(this.isContentEditable) this.beginEditingCallback();
             else this.endEditingCallback();
+        }
+        // prevent edit prevents from being editable. IMPORTANT! Cannot be unset
+        if(attribute === 'preventedit' && newValue === 'true'){
+            Object.defineProperty(this, "isContentEditable", {
+                value: false, 
+                configurable: false, 
+                writable: false
+            })
         }
     }
     // Called when connected to document
@@ -71,13 +80,17 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
     }
     // Called when editing begins
     beginEditingCallback(){
+        if(Object.getOwnPropertyDescriptor(this, 'preventedit')?.writable === false) return false;
         this.classList.add('editing');
         this.dispatchEvent(new Event('beginedit'))
+        return true;
     }
     // End editing callback
     endEditingCallback(){
+        if(Object.getOwnPropertyDescriptor(this, 'preventedit')?.writable === false) return false;
         this.classList.remove('editing');
         this.dispatchEvent(new Event('endedit'))
+        return true;
     }
 
     // Render custom data
@@ -87,7 +100,7 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
 
     // Custom focus
     focus(){
-        if(!this.isContentEditable) this.setAttribute('contenteditable', true);
+        // if(!this.isContentEditable) this.setAttribute('contenteditable', true);
     }
 }
 

@@ -2,12 +2,7 @@ import PTQuestion from "../../question/PTQuestion.js";
 
 const template = document.createElement('template');
 template.innerHTML = `
-    <style> 
-        fieldset{
-            border: none !important;
-            background: lightgrey
-        }
-    </style>
+    <link rel="stylesheet" href="./notebook/question/PTNotebookCellQuestionOutput.css"></link>
     <form>
         <p id="description">Lorem ipsum</p>
         <fieldset></fieldset>
@@ -16,6 +11,7 @@ template.innerHTML = `
 `
 
 class PTNotebookCellQuestionOutput extends HTMLElement{
+    static formAssociated = true;
     /**@type {PTQuestion} */
     #question;
     // Only setter for security reasons
@@ -25,17 +21,15 @@ class PTNotebookCellQuestionOutput extends HTMLElement{
     constructor(){
         super();
         this.attachShadow({mode: "open"})
+        this._internals = this.attachInternals();
     }
     connectedCallback(){
         this.shadowRoot.append(template.content.cloneNode(true));
         this.render();
         // Event listeners
-        this.shadowRoot.querySelector('form').addEventListener('submit', e=>{
+        this.shadowRoot.querySelector('form').addEventListener('submit', async e=>{
             e.preventDefault();
-            let data = new FormData(this.shadowRoot.querySelector('form'));
-            this.dispatchEvent(
-                new CustomEvent('submit', { detail: [...data].map(([a,b])=>b) })
-            )
+            await this.submitAnswer();
         })
     }
     render(){
@@ -47,8 +41,10 @@ class PTNotebookCellQuestionOutput extends HTMLElement{
             case 'PTQuestion.checkbox':
                 for(let {id, type, value} of this.#question.choices){
                     this.shadowRoot.querySelector('fieldset').innerHTML += `
+                    <span>
                         <input type="checkbox" value="${value}" id="choice-${id}" name="submission"></input>
                         <label for="choice-${id}">${value}</label>
+                    </span>
                     `
                 }
                 break;
@@ -56,8 +52,10 @@ class PTNotebookCellQuestionOutput extends HTMLElement{
             case 'PTQuestion.multipleChoice.radio':
                 for(let {id, type, value} of this.#question.choices){
                     this.shadowRoot.querySelector('fieldset').innerHTML += `
+                    <span>
                         <input type="radio" value="${value}" id="choice-${id}" name="submission"></input>
                         <label for="choice-${id}">${value}</label>
+                    </span>
                     `
                 }
                 break;
@@ -95,6 +93,10 @@ class PTNotebookCellQuestionOutput extends HTMLElement{
             default:
                 this.shadowRoot.querySelector('fieldset').append('I am empty inside')
         }
+    }
+    async submitAnswer(){
+        let data = new FormData(this.shadowRoot.querySelector('form'));
+        await this.#question.submit( [...data].map(([a,b])=>b ))
     }
 }
 

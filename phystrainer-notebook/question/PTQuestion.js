@@ -43,4 +43,7 @@ export default class PTQuestion{
         ]
 
     }
+    async submit(data){
+        console.log(data);
+    }
 }

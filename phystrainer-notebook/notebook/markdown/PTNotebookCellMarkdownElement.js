@@ -62,13 +62,15 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
     }
     // 
     beginEditingCallback(){
-        super.beginEditingCallback();
+        if(!super.beginEditingCallback()) return false;
         this.shadowRoot.querySelector('.input div textarea').focus();
+        return true;
     }
     endEditingCallback(){
-        super.endEditingCallback();
+        if(!super.endEditingCallback()) return false;
         this.slotInnerHTML = this.shadowRoot.querySelector('.input div textarea').value;
         this.render();
+        return true;
     }
     
     // Render

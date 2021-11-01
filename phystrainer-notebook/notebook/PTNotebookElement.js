@@ -1,6 +1,6 @@
 import PTNotebookCellBaseElement from './PTNotebookCellBase.js';
 import './markdown/PTNotebookCellMarkdownElement.js';
-import './question/PTNotebookCellQuestionElement.js';
+import PTNotebookCellQuestionElement from './question/PTNotebookCellQuestionElement.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -9,6 +9,11 @@ template.innerHTML = `
     <div>
         <button class='add_markdown'>Add Markdown</button>
         <button class='add_question'>Add Question</button>
+        <button class='submit'>Submit</button>
+        <label>
+            <input type="checkbox" class="lock"></input>
+            Locked
+        </label>
     </div>
     <div>
         <slot></slot>
@@ -45,9 +50,29 @@ class PTNotebookElement extends HTMLElement{
             cell.innerHTML = '(Question) Double click to edit.'
             this.append(cell)
         })
+        this.shadowRoot.querySelector('.submit').addEventListener('click', async ()=>{
+            await this.submit();
+        })
+        this.shadowRoot.querySelector('.lock').addEventListener('click', this.lock.bind(this))
     }
 
     render(){
+    }
+
+    async submit(){
+        this.shadowRoot.querySelector('slot').assignedElements().forEach(async cell => {
+            if(cell instanceof PTNotebookCellQuestionElement){
+                await cell.submitAnswer();
+            }
+        })
+    }
+    lock(e){
+        e.target.setAttribute('disabled', true)
+        this.shadowRoot.querySelector('slot').assignedElements().forEach(async cell => {
+            if(cell instanceof PTNotebookCellBaseElement){
+                await cell.setAttribute('preventedit', 'true');
+            }
+        })
     }
 }
 

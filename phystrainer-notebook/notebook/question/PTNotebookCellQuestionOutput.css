@@ -1,0 +1,29 @@
+:host{
+
+}
+:host > form > p {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+:host fieldset{
+    border: none !important;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 4px;
+
+    display: flex;
+    align-items: center;
+}
+:host fieldset>*{
+    flex: 1;
+}
+:host input[type="submit"]{
+    display: block;
+    margin-left: auto;
+}
+
+input, 
+select{
+    padding: 4px;
+    box-sizing: border-box;
+}

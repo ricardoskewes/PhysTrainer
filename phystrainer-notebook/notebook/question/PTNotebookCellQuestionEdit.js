@@ -5,7 +5,7 @@ template.innerHTML = `
     <style>
 
     </style>
-    <div style="padding: 8px"> 
+    <div style="padding: 16px"> 
         Question type: <select id="question-type">
             <optgroup label="Multiple choice">
                 <option value="PTQuestion.checkbox">Checkboxes</option>
@@ -25,7 +25,11 @@ template.innerHTML = `
             </optgroup>
         </select>
         <br />
-        <input type="text" id="question-description" placeholder="description"></input
+        <input type="text" id="question-description" placeholder="description"></input>
+
+
+
+
     </div>
 `
 
@@ -36,7 +40,7 @@ class PTNotebookCellQuestionEdit extends HTMLElement {
     set question(question){
         this.#question = question;
     }
-    constructor(question){
+    constructor(){
         super();
         this.attachShadow({mode: "open"})
     }
