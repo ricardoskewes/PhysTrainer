@@ -1,4 +1,4 @@
-import PTQuestion from "../../question/PTQuestion.js";
+import PTQuestion from "../../../entities/question/PTQuestion.js";
 
 const template = document.createElement('template');
 template.innerHTML = `

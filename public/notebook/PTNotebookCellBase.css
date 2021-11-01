@@ -4,7 +4,7 @@
     max-width: 800px;
     width: 100%;
     margin-left: auto; margin-right: auto;
-    border-bottom: 0.5px solid rgb(200,200,200);
+    border-bottom: 0.5px solid rgb(220,220,220);
 }
     :host(:hover){
         background: rgba(250,250,250);

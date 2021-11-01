@@ -1,0 +1,7 @@
+:host{
+    position: relative;
+}
+:host .toolbar{
+    position: sticky;
+    top: 0;
+}
