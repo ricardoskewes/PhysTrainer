@@ -14,7 +14,7 @@ template.innerHTML = `
 export default class PTNotebookCellBaseElement extends HTMLElement{
     // Watch for changes on these (custom) properties
     static get observedAttributes(){
-        return ['contenteditable', 'preventedit']
+        return ['contenteditable', 'immutable']
     }
     // Used to get children text contents
     get slotInnerHTML(){
@@ -42,7 +42,7 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
             else this.endEditingCallback();
         }
         // prevent edit prevents from being editable. IMPORTANT! Cannot be unset
-        if(attribute === 'preventedit' && newValue === 'true'){
+        if(attribute === 'immutable' && newValue === 'true'){
             Object.defineProperty(this, "isContentEditable", {
                 value: false, 
                 configurable: false, 

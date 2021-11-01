@@ -70,7 +70,7 @@ class PTNotebookElement extends HTMLElement{
         e.target.setAttribute('disabled', true)
         this.shadowRoot.querySelector('slot').assignedElements().forEach(async cell => {
             if(cell instanceof PTNotebookCellBaseElement){
-                await cell.setAttribute('preventedit', 'true');
+                await cell.setAttribute('immutable', 'true');
             }
         })
     }
