@@ -1,12 +1,12 @@
 const express = require('express');
-const authMiddleware = require('./src/auth-middleware');
+const authMiddleware = require('./backend/auth-middleware');
 const path = require('path');
 const app = express();
 // Routes
-const user = require('./src/user');
+const user = require('./backend/api/user');
 
 // Static files
-app.use(express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, '/frontend')))
 app.use('/entities', express.static(path.join(__dirname, '/entities')))
 
 app.use('/api/1/users', user);

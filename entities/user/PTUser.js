@@ -1,4 +1,7 @@
 export default class PTUser {
+    
+
+
     /**@type {String} */
     uuid;
     /**@type {Boolean} */

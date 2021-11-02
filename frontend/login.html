@@ -86,28 +86,29 @@
         feather.replace()
     </script>
 
-    <script src="./assets/js/Phystrainer.js"></script>
+    <script type="module">
+        import firebase, {phystrainerAPI} from './apiFetch.js';
+        
+        async function testSomething(){
+            const req = await phystrainerAPI('/api/1/users/edvilme');
+            const data = await req.json();
+            console.log(data)
+        }
+        window.testSomething = testSomething;
 
-    <script>
-        (async()=>{
-            await includeScripts();
-            await Login.requerirInicio();
-            document.querySelector('form').addEventListener('submit', async e=>{
-                e.preventDefault();
-                try{
-                    await Login.iniciarSesion({
-                        email: document.querySelector('#email').value,
-                        password: document.querySelector('#password').value
-                    })
-                    alert('Inicio de sesión');
-                    window.location.href = '/listas.html'
-                } catch (e){
-                    alert(e.message)
-                }
-                return false;
+        document.querySelector('form').addEventListener('submit', e=>{
+            e.preventDefault();
+            firebase.auth().signInWithEmailAndPassword(
+                document.querySelector('#email').value, 
+                document.querySelector('#password').value
+            ).then(credential => {
+                alert("Signed in!");
+        testSomething()
+
+            }).catch(e => {
+                alert(e.code)
             })
-
-        })()
+        })
     </script>
 
 
