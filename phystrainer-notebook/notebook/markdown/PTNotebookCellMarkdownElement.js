@@ -52,7 +52,7 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
         // Initial config
         this.shadowRoot.querySelector('.output').classList.add('markdown-body')
         // Initial value
-        this.shadowRoot.querySelector('.input div textarea').innerHTML = this.data.content;
+        this.shadowRoot.querySelector('.input div textarea').innerHTML = this.slotInnerHTML;
         // Handle input
         this.shadowRoot.querySelector('.input div textarea').addEventListener('input', (e)=>{
             e.target.style.height = 'auto';
@@ -68,7 +68,7 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
     }
     endEditingCallback(){
         if(!super.endEditingCallback()) return false;
-        this.data.content = this.shadowRoot.querySelector('.input div textarea').value;
+        this.slotInnerHTML = this.shadowRoot.querySelector('.input div textarea').value;
         this.render();
         return true;
     }
@@ -77,7 +77,7 @@ class PTNotebookCellMarkdownElement extends PTNotebookCellBaseElement {
     render(){
         console.log("Rendering")
         // Render markdown
-        this.shadowRoot.querySelector('.output').innerHTML = md.render(this.data.content)
+        this.shadowRoot.querySelector('.output').innerHTML = md.render(this.slotInnerHTML)
         // Render KaTeX
         renderMathInElement(this.shadowRoot.querySelector('.output'), {
             delimiters: [

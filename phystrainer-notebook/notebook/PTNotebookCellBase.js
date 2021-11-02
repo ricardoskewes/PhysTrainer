@@ -28,6 +28,7 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
             this.append(node)
         })
     }
+
     // Constructor
     constructor(){
         super();
@@ -53,13 +54,7 @@ export default class PTNotebookCellBaseElement extends HTMLElement{
     connectedCallback(){
         this.setAttribute('tabindex', 0)
         this.shadowRoot.append(template.content.cloneNode(true));
-        
-        try{
-            this.data = this.data || this.slotInnerHTML;
-        } catch(e){
-            this.data = {content: " "}
-        }
-
+        // this.render();
         // Double click event: begin editing
         this.addEventListener('dblclick', ()=>{
             if(!this.isContentEditable) this.setAttribute('contenteditable', true);

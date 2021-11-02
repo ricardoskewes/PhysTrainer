@@ -1,4 +1,4 @@
-import PTQuestion from "../../../entities/question/PTQuestion.js";
+import PTQuestion from "../../question/PTQuestion.js";
 import PTNotebookCellBaseElement from "../PTNotebookCellBase.js";
 import 'https://unpkg.com/mathlive/dist/mathlive.min.js'
 import "./PTNotebookCellQuestionEdit.js";
@@ -20,8 +20,7 @@ export default class PTNotebookCellQuestionElement extends PTNotebookCellBaseEle
         super.connectedCallback();
         // Load data
         try{
-            Object.assign(this.question, new PTQuestion(this.data.content))
-            console.log(this.data.conent)
+            Object.assign(this.question, new PTQuestion(JSON.parse(this.slotInnerHTML)))
         } catch(e){
             
         }
