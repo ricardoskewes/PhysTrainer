@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const firebase = require('../firebase/index')
+const firebase = require('../services/firebase/index')
 const authMiddleware = require('../auth-middleware');
+const userService = require('../services/userService');
 
 router.get('/:username', authMiddleware, async (req, res) => {
-    // Get user data
-    const query = await firebase.firestore().collection('users').where("username", "==", req.params.username).get();
-    if(query.empty) return res.json({message: "User not found"}).status(404)
-    const user = query.docs[0].data();
-    res.json(user);
+    try{
+        res.json(await userService.getUser(req.params.username))
+    } catch(e){
+        res.send(e).code(e.code)
+    }
 })
 
 router.post('/:username', authMiddleware, (req, res) => {
