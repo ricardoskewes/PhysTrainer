@@ -10,8 +10,9 @@ const authMiddleware = (req, res, next) => {
     // Login
     const token = headerToken.split(" ")[1];
     firebase.auth().verifyIdToken(token)
-        .then((decodedToken)=>{
-            req.firebaseUser = decodedToken.uid;
+        .then(async (decodedToken)=>{
+            const doc = await firebase.firestore().collection('users').doc(decodedToken.uid).get();
+            req.firebaseUser = doc.data();
             next();
         }) // If token is verified, continue
         .catch(()=>{
