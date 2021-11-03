@@ -5,6 +5,11 @@ const authMiddleware = require('../auth-middleware');
 const userService = require('../../services/userService');
 const firebaseOptions = require('../../firebase/config.json')
 
+router.post('/passwordreset', (req, res) => {
+    // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email
+    res.json({message: "Feature not implemented yet"})
+})
+
 router.get('/:username', express.json(), authMiddleware, async (req, res) => {
     try{
         res.json(await userService.getUser(req.params.username))
@@ -26,9 +31,5 @@ router.post('/:username', express.json(), authMiddleware, async (req, res) => {
     }
 })
 
-router.post('/passwordreset', (req, res) => {
-    // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email
-    res.redirect(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${firebaseOptions.apiKey}`)
-})
 
 module.exports = router;

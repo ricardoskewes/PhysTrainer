@@ -16,6 +16,8 @@
             <br>
             <label for="password">Password: </label><input type="password" name="password" id="password">
             <br>
+            <input type="button" value="Forgot password" id="passwordreset">
+            <br>
             <input type="submit" value="Submit">
         </form>
     </section>
@@ -26,7 +28,10 @@
         firebase.auth().onAuthStateChanged((user)=>{
             document.querySelector('#current-user').innerHTML = `Welcome user: ${user.email} (${user.uid})`
         })
-
+        document.querySelector('#passwordreset').addEventListener('click', async e=>{
+            const email = document.querySelector('#email').value;
+            const request = await phystrainerAPI(`/api/1/users/passwordreset?email=${email}`)
+        })
         document.querySelector('#signin').addEventListener('submit', e=>{
             e.preventDefault();
             firebase.auth().signInWithEmailAndPassword(
