@@ -1,4 +1,4 @@
-const firebase = require('./firebase/index')
+const firebase = require('../firebase/index')
 
 const userConverter = {
     fromFirestore: (snapshot, options)=>{
@@ -16,7 +16,6 @@ const userConverter = {
 }
 
 const getUser = async username => {
-    // Get user data
     const query = await firebase.firestore().collection('users')
         .where("username", "==", username)
         .withConverter(userConverter).get();
@@ -24,5 +23,20 @@ const getUser = async username => {
     return query.docs[0].data();
 };
 
-const userService = {getUser}
+const updateUser = async (username, data) => {
+    const query = await firebase.firestore().collection('users')
+        .where("username", "==", username)
+        .withConverter(userConverter).get();
+    if(query.empty) throw {error: "User not found", code: 404}
+    try{
+        await query.docs[0].ref.update(data);
+        return {message: "success"}
+    } catch(e){
+        console.log(e)
+        throw {error: "Could not update data", code: 500}
+    }
+
+}
+
+const userService = {getUser, updateUser}
 module.exports = userService;

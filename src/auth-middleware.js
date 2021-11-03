@@ -1,4 +1,4 @@
-const firebase = require('./services/firebase/index');
+const firebase = require('../firebase/index');
 
 const authMiddleware = (req, res, next) => {
     // Header token

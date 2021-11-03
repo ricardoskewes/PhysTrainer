@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing</title>
+</head>
+<body>
+    <h1>User</h1>
+    <section>
+        <p id="current-user"></p>
+        <h2>Log in</h2>
+        <form action="" id="signin">
+            <label for="email">Email: </label><input type="email" name="email" id="email">
+            <br>
+            <label for="password">Password: </label><input type="password" name="password" id="password">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        
+        firebase.auth().onAuthStateChanged((user)=>{
+            document.querySelector('#current-user').innerHTML = `Welcome user: ${user.email} (${user.uid})`
+        })
+
+        document.querySelector('#signin').addEventListener('submit', e=>{
+            e.preventDefault();
+            firebase.auth().signInWithEmailAndPassword(
+                document.querySelector('#email').value,
+                document.querySelector('#password').value
+            ).then(()=>{
+                alert("Signed in!")
+            }).catch(e=>{
+                alert(e.message)
+            })
+        })
+    </script>
+    <section>
+        <h2>Get user data</h2>
+        <form action="" id="getuser">
+            <label for="getuser-username">Username: </label>
+            <input type="text" name="getuser-username" id="getuser-username">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <textarea name="getuser-response" id="getuser-response" cols="30" rows="10"></textarea>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        document.querySelector('#getuser').addEventListener('submit', async e=>{
+            e.preventDefault();
+            const username = document.querySelector('#getuser-username').value;
+            const request = await phystrainerAPI(`/api/1/users/${username}`);
+            const response = await request.json();
+            document.querySelector('#getuser-response').innerHTML = JSON.stringify(response, null, 2)
+        })
+    </script>
+
+    <section>
+        <h2>Update user data</h2>
+        <form action="" id="updateuser">
+            <label for="updateuser-username">Username: </label><input type="text" name="updateuser-username" id="updateuser-username">
+            <br>
+            <label for="updateuser-data">Data: </label><textarea name="updateuser-data" id="updateuser-data" cols="30" rows="10"></textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+
+        document.querySelector('#updateuser').addEventListener('submit', async e=>{
+            e.preventDefault();
+            const username = document.querySelector('#updateuser-username').value;
+            const data = JSON.parse(document.querySelector('#updateuser-data').value);
+            const request = await phystrainerAPI(`/api/1/users/${username}`, {
+                method: "POST", 
+                body: JSON.stringify(data), 
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            const response = await request.json();
+            alert(JSON.stringify(response))
+        })
+    </script>
+
+
+</body>
+</html>
