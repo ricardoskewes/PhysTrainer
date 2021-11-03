@@ -3,7 +3,7 @@
 ## `PTUser` object
 All users are normalized into the following object
 
-### `uuid: String`
+### `userID: String`
 Unique identifier in database, auth managment and hosting
 
 ### `isOnline: Boolean`

@@ -3,7 +3,7 @@ export default class PTUser {
 
 
     /**@type {String} */
-    uuid;
+    userID;
     /**@type {Boolean} */
     isOnline;
     /**@type {Date} */

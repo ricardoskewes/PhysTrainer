@@ -4,7 +4,7 @@ const userConverter = {
     fromFirestore: (snapshot, options)=>{
         const data = snapshot.data();
         return {
-            uuid: snapshot.id, 
+            userID: snapshot.id, 
             isOnline: data.isOnline, 
             creationDate: new Date(data.creationDate.seconds*1000), 
             username: data.username, 
