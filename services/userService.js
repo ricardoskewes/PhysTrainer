@@ -37,5 +37,14 @@ const updateUser = async (username, data) => {
     }
 }
 
-const userService = {getUser, updateUser}
+/**
+ * 
+ * @param {string} uuid Unique identifier of user
+ * @param {string} tmpFile Path to temp file
+ */
+const updateProfilePicture = (uuid, tmpFile) => {
+
+}
+
+const userService = {getUser, updateUser, updateProfilePicture}
 module.exports = userService;

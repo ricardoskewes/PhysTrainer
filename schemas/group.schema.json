@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "https://phystrainer.com/schemas/group.schema.json",
+    "title": "Group schema", 
+    "description": "Describes groups of users within the system", 
+    "type": "object", 
+    "properties": {
+        "uuid": {
+            "description": "Unique identifier in database", 
+            "type": "string"
+        }, 
+        "name": {
+            "description": "Name of the group", 
+            "type": "string"
+        }, 
+        "description": {
+            "description": "Brief text description of the group", 
+            "type": "string"
+        }, 
+        "creationDate": {
+            "description": "Date the group was created", 
+            "format": "date", 
+            "type": "string"
+        }, 
+        "members": {
+            "description": "Array containing info about all the members", 
+            "type": "array", 
+            "items": {
+                "properties": {
+                    "role": {
+                        "description": "Role of the user within the group", 
+                        "type": "string",
+                        "enum": [
+                            "admin", "editor", "commenter", "viewer"
+                        ]
+                    },
+                    "user": {
+                        "oneOf": [
+                            {
+                                "description": "User data object",
+                                "$schema": "https://phystrainer.com/schemas/user.schema.json"
+                            },
+                            {
+                                "description": "Path reference to user data object in database", 
+                                "type": "string"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "content": {
+            "description": "Content shared within the group",
+            "type": "array"
+        }
+    }
+}
