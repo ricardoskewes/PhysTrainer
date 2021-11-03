@@ -33,7 +33,7 @@ router.post('/:username', express.json(), authMiddleware, async (req, res) => {
 })
 
 // Get profile picture
-router.post('/:username/profilepic', authMiddleware, fileUpload, async (req, res) => {
+router.post('/:username/profilepic', authMiddleware, async (req, res) => {
     try{
         res.json(await userService.updateProfilePicture(req.files.image.data))
     } catch(e){
