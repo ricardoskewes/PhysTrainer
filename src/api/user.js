@@ -3,7 +3,7 @@ const router = express.Router();
 const firebase = require('../../firebase/index')
 const authMiddleware = require('../auth-middleware');
 const userService = require('../../services/userService');
-
+const firebaseOptions = require('../../firebase/config.json')
 
 router.get('/:username', express.json(), authMiddleware, async (req, res) => {
     try{
@@ -24,6 +24,11 @@ router.post('/:username', express.json(), authMiddleware, async (req, res) => {
     } catch(e){
         res.json(e).status(500)
     }
+})
+
+router.post('/passwordreset', (req, res) => {
+    // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email
+    res.redirect(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${firebaseOptions.apiKey}`)
 })
 
 module.exports = router;

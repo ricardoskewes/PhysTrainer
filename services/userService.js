@@ -35,7 +35,6 @@ const updateUser = async (username, data) => {
         console.log(e)
         throw {error: "Could not update data", code: 500}
     }
-
 }
 
 const userService = {getUser, updateUser}

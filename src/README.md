@@ -16,6 +16,9 @@ More info will be shown if the requester is said user
 ### `POST /api/1/users/:username`
 Only available if the requester is said user. Modifies the user data
 
+### `POST /api/1/users/passwordreset`
+Sends a password reset email
+
 ----
 Groups
 --
