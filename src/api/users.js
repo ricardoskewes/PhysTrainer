@@ -4,7 +4,7 @@ const authMiddleware = require('../auth-middleware');
 const userService = require('../../services/userService');
 const fileMiddleware = require('../file-middleware');
 
-// POST /api/1/user/passwordreset
+// POST /api/1/user/passwordreset?email=
 // Send a link to reset password
 router.post('/passwordreset', (req, res) => {
     // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email

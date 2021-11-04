@@ -9,17 +9,76 @@ Users
 --
 Used to manage user data and profiles
 
-### `GET /api/1/users/:username`
-Will return a JSON object with relevant information about the user
-More info will be shown if the requester is said user
-
-### `POST /api/1/users/:username`
-Only available if the requester is said user. Modifies the user data
-
 ### `POST /api/1/users/passwordreset`
-Sends a password reset email
+(Under development) Sends a link to reset password through mail.
+
+**Params**
+- __email__ (Required) Email to send the link to.
+
+
+### `GET /api/1/users`
+Gets a specific user, either through username or userID. 
+> This is the only endpoint that uses username to identify a user
+
+**Params**
+- __userID__ Id of user to get
+- __username__ Username of user to get
+
+### `GET /api/1/users/exercises`
+Gets the ids and titles of the exercises authored by a user.
+**Params**
+- __userID__ (Required) Id of user to get exercises from
+
+### `POST /api/1/users/update`
+Updates the info of the currently authenticated user.
+
+**Body**
+JSON PTUser object
+
+### `POST /api/1/users/pic`
+Uploads a profile picture for the currently authenticated user.
+
+**Body**
+Image File
 
 ----
+
+Exercises
+--
+Used to manage exercises
+
+### `GET /api/1/exercises/`
+Gets a specific exercise.
+
+**Params**
+- __exerciseID__ (Required) Id of exercise to get
+
+
+### `POST /api/1/exercises/create`
+Creates a new exercise, authored by the currently authenticated user.
+
+**Body**
+{"title"}
+
+### `POST /api/1/exercises/update`
+Updates an exercise. Only available if said exercise is authored by the currently authenticated user.
+
+**Params**
+- __exerciseID__ (Required) Id of exercise to update
+
+**Body**
+JSON PTExercise object
+
+### `POST /api/1/exercises/delete`
+Deletes an exercise. Only available if said exercise is authored by the currently authenticated user.
+
+**Params**
+- __exerciseID__ (Required) Id of exercise to delete
+
+
+----
+<div style="background: red; color: white; text-align: center">Endpoints below have not yet been implemented, and likely wont for the MVP release</div>
+
 Groups
 --
 Used to manage data about groups of users
@@ -60,21 +119,6 @@ Only available if the requester is the author of said collection. Modifies the c
 
 ### `GET /api/1/collections/:collectionID/exercies`
 Gets all the exercises inside a collection
-
-----
-
-Exercises
---
-Used to manage exercises
-
-### `GET /api/1/exercises/:exerciseID`
-Returns data about an exercise
-
-### `POST /api/1/exercises/:exerciseID`
-Modified data from an exercise
-
-### `PUT /api/1/exercises`
-Creates a new exercise
 
 ----
 

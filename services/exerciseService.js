@@ -113,5 +113,5 @@ const remove = async (exerciseID, currentUser) => {
     }
 }
 
-const exerciseService = {converter, create, update, get, delete};
+const exerciseService = {converter, create, update, get, delete}
 module.exports = exerciseService;
