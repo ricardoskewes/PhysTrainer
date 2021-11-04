@@ -18,19 +18,21 @@ export default firebase;
 /**
  * Fetch data securely from Phystrainer API
  * @param {String} url URL of resource to fetch
- * @param {RequestInit} options 
+ * @param {RequestInit} _options 
  * @returns {Promise<Response>}
  */
-const phystrainerAPI = async (url, options = {})=>{
+const phystrainerAPI = async (url, _options = {})=>{
     if(firebase.auth().currentUser === undefined) throw "Only logged users can communicate with API";
-    const idToken = await firebase.auth().currentUser.getIdToken();
-    return await fetch(url, {
-        ...options, 
+    const idToken = await firebase.auth().currentUser?.getIdToken();
+    const options = {
+        ..._options, 
         headers: {
-            ...options?.headers,
-            Authorization: `Bearer ${idToken}`
+            ..._options.headers
         }
-    })
+    }
+    if(idToken) options.headers.Authorization = `Bearer ${idToken}`;
+
+    return await fetch(url, options);
 }
 
 export {phystrainerAPI};

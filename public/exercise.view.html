@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <title>Problema por @<%~it.username%> - Phystrainer</title>
+    <script>
+        // This line ensures that the username always corresponds to the URL. 
+        // DO NOT MODIFY
+        const username = <%~ JSON.stringify(it.username) %>;
+        const exerciseID = <%~ JSON.stringify(it.exerciseID) %>;
+    </script>
+</head>
+<body>
+    <h1 id="exercise-title"></h1>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../../phystrainerAPI.js';
+        firebase.auth().onAuthStateChanged(async ()=>{
+            // Get exercise data
+            const exerciseDataRequest = await phystrainerAPI(`/api/1/exercises?exerciseID=${exerciseID}`);
+            const exerciseData = await exerciseDataRequest.json();
+            // Render
+            document.querySelector('#exercise-title').innerHTML = exerciseData.title;
+        });
+    </script>
+</body>
+</html>

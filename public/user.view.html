@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@<%~it.username%> - Phystrainer</title>
+    <script>
+        // This line ensures that the username always corresponds to the URL. 
+        // DO NOT MODIFY
+        const username = <%~ JSON.stringify(it.username) %>
+    </script>
+</head>
+<body>
+    <header>
+        <h1 id="user-fullName"></h1>
+        <h3 id="user-username"></h3>
+        <p id="user-biography"></p>
+    </header>
+
+    <section>
+        <h1>Exercises</h1>
+        <ul id="exercises"></ul>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        firebase.auth().onAuthStateChanged(async ()=>{
+            // Get user data
+            const userDataRequest = await phystrainerAPI(`/api/1/users?username=${username}`);
+            const userData = await userDataRequest.json();
+            // Get exercises
+            const exercisesRequest = await phystrainerAPI(`/api/1/users/exercises?userID=${userData.userID}`);
+            const exercises = await exercisesRequest.json();
+            // Is logged user
+            const isLoggedUser = userData.userID === firebase.auth().currentUser?.uid;
+            console.log(isLoggedUser)
+            // Render
+            document.querySelector('#user-fullName').innerHTML = userData.fullName;
+            document.querySelector('#user-username').innerHTML = userData.username;
+            document.querySelector('#user-biography').innerHTML = userData.biography;
+            for(let {exerciseID, title} of exercises){
+                document.querySelector('#exercises').innerHTML += `
+                    <li><a href="exercises/${exerciseID}">${title}</a></li>
+                `
+            }
+        });
+    </script>
+</body>
+</html>

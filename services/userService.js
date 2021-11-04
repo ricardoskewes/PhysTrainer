@@ -43,10 +43,10 @@ const converter = {
  * @param {{userID: String, username: String}} param0 
  * @returns {Promise<PTUser>}
  */
-const get = async ({userID = null, username = null}) => {
-    if(userID == null && username == null) throw {error: "userID or username were not specified", code: 400};
+const get = async ({userID = undefined, username = undefined} = {}) => {
+    if(userID == undefined && username == undefined) throw {error: "userID or username were not specified", code: 400};
     // Get by userID
-    if(userID != null){
+    if(userID){
         // Find user
         const doc = await firebase.firestore().collection('users').doc(userID)
             .withConverter(converter).get();
@@ -54,7 +54,7 @@ const get = async ({userID = null, username = null}) => {
         if(!doc.exists) throw {error: "User not found", code: 404}
         // Else return
         return doc.data();
-    } else if(username != null){
+    } else if(username){
         // FInd user
         const query = await firebase.firestore().collection('users')
             .where("username", "==", username)
@@ -62,7 +62,7 @@ const get = async ({userID = null, username = null}) => {
         // Check if exists
         if(query.empty) throw {error: "User not found", code: 404}
         // Else return 
-        query.docs[0].data()
+        return query.docs[0].data()
     }
 }
 

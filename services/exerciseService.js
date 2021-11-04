@@ -73,7 +73,7 @@ const get = async exerciseID => {
     const doc = await firebase.firestore().collection('exercises').doc(exerciseID)
         .withConverter(converter).get();
     if(!doc.exists) throw {error: "Exercise not found", code: 404}
-    return doc;
+    return doc.data();
 }
 
 /**
@@ -113,5 +113,5 @@ const remove = async (exerciseID, currentUser) => {
     }
 }
 
-const exerciseService = {converter, create, update, get, delete}
+const exerciseService = {converter, create, update, get, remove}
 module.exports = exerciseService;

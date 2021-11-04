@@ -14,7 +14,7 @@ router.post('/passwordreset', (req, res) => {
 // GET /api/1/users?userID=
 // GET /api/1/users?username=
 // Get a specific user
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
     if(!req.query.userID && !req.query.username) return res.json({error: "Specify a username or userID"}).status(400)
     try{
         res.json(await userService.get({userID: req.query.userID, username: req.query.username}))
@@ -25,7 +25,7 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // GET /api/1/users/exercises?userID=
 // Get user exercises
-router.get('/exercises', authMiddleware, async (req, res) => {
+router.get('/exercises', async (req, res) => {
     if(!req.query.userID) return res.json({error: "Specify a userID"}).status(400);
     try{
         res.json(await userService.getExercises(req.query.userID));
