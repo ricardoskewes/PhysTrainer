@@ -40,6 +40,23 @@ const converter = {
 }
 
 /**
+ * Returns data of a specific user
+ * @param {string} username Username to look for
+ * @returns {Promise<PTUser>}
+ */
+const getByUsername = async username => {
+    // Find user
+    const query = await firebase.firestore().collection('users')
+        .where("username", "==", username)
+        .withConverter(converter).get();
+    // Throw error if user does not exist
+    if(query.empty) throw {error: "User not found", code: 404}
+    // Return data if found
+    return query.docs[0].data();
+}
+
+
+/**
  * Returns the data of a specific user
  * @param {string} userID Id of user to look for
  * @returns {Promise<PTUser>}
@@ -47,13 +64,13 @@ const converter = {
  */
 const get = async userID => {
     // Find user
-    const query = await firebase.firestore().collection('users')
+    const doc = await firebase.firestore().collection('users')
         .doc(userID)
         .withConverter(converter).get()
     // Throw error if user does not exist
-    if(query.empty) throw {error: "User not found", code: 404}
+    if(!doc.exists) throw {error: "User not found", code: 404}
     // Return data if found
-    return query.docs[0].data();
+    return doc.data();
 }
 
 /**
@@ -126,5 +143,5 @@ const getExercises = async (userID) => {
     }
 }
 
-const userService = {converter, get, update, uploadProfilePicture, getExercises};
+const userService = {converter, get, getByUsername, update, uploadProfilePicture, getExercises};
 module.exports = userService;

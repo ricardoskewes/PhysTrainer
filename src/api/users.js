@@ -7,15 +7,24 @@ const fileMiddleware = require('../file-middleware');
 // Send a link to reset password
 router.post('/passwordreset', (req, res) => {
     // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email
-    res.json({message: "Feature not implemented yet"})
+    res.json({message: "Feature not implemented yet"});
+})
+
+// Get by username
+router.get('/username/:username', authMiddleware, async (req, res) => {
+    try{
+        res.json(await userService.getByUsername(req.params.username));
+    } catch(e){
+        res.send(e).code(e.code);
+    }
 })
 
 // Get user info
 router.get('/:userID', express.json(), authMiddleware, async (req, res) => {
     try{
-        res.json(await userService.get(req.params.userID))
+        res.json(await userService.get(req.params.userID));
     } catch(e){
-        res.send(e).code(e.code)
+        res.send(e).code(e.code);
     }
 })
 
@@ -23,12 +32,13 @@ router.get('/:userID', express.json(), authMiddleware, async (req, res) => {
 router.post('/:userID', express.json(), authMiddleware, async (req, res) => {
     const body = req.body;
     // Endpoint only available for authenticated user
-    if(req.firebaseUser.userID !== req.params.userID) return res.json({message: "You can only modify your own user"}).status(403)
+    if(req.firebaseUser.userID !== req.params.userID) 
+        return res.json({message: "You can only modify your own user"}).status(403);
     // Update user data
     try{
-        res.json(await userService.update(req.params.userID, body))
+        res.json(await userService.update(req.params.userID, body));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
@@ -36,21 +46,22 @@ router.post('/:userID', express.json(), authMiddleware, async (req, res) => {
 router.post('/:userID/profilepic', authMiddleware, fileMiddleware, async (req, res) => {
     const file = req.file;
     // Endpoint only available for authenticated user
-    if(req.firebaseUser.userID !== req.params.userID) return res.json({message: "You can only modify your own user"}).status(403)
+    if(req.firebaseUser.userID !== req.params.userID) 
+        return res.json({message: "You can only modify your own user"}).status(403);
     // Update user data
     try{
-        res.json(await userService.uploadProfilePicture(req.query.userID, file))
+        res.json(await userService.uploadProfilePicture(req.query.userID, file));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
 // Get user exercises
 router.get('/:userID/exercises', authMiddleware, async (req, res) => {
     try{
-        res.json(await userService.getExercises(req.query.userID))
+        res.json(await userService.getExercises(req.query.userID));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
