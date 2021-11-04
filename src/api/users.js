@@ -15,22 +15,11 @@ router.post('/passwordreset', (req, res) => {
 // GET /api/1/users?username=
 // Get a specific user
 router.get('/', authMiddleware, async (req, res) => {
-    if(req.query.userID){
-        try{
-            // Find by user id
-            res.json(await userService.get(req.query.userID))
-        } catch(e){
-            res.send(e).code(e.code)
-        }
-    } else if(req.query.username){
-        try{
-            // Find by username
-            res.json(await userService.getByUsername(req.query.username))
-        } catch(e){
-            res.send(e).code(e.code)
-        }
-    } else {
-        res.send({error: "Specify a username or userID"}).status(400);
+    if(!req.query.userID && !req.query.username) return res.json({error: "Specify a username or userID"}).status(400)
+    try{
+        res.json(await userService.get({userID: req.query.userID, username: req.query.username}))
+    } catch(e){
+        res.json(e).status(e.code);
     }
 })
 
@@ -59,7 +48,7 @@ router.post('/update', authMiddleware, async (req, res) => {
 // Upload profile picture
 router.post('/pic', authMiddleware, fileMiddleware.single('profilepic'), async (req, res) => {
     try{
-        res.json(await userService.updatePic(req.firebaseUser.userID, req.file))
+        res.json(await userService.uploadProfilePicture(req.firebaseUser.userID, req.file))
     } catch(e){
         res.json(e).status(e.code);
     }

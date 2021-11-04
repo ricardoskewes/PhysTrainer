@@ -17,7 +17,6 @@ const exerciseService = require('./exerciseService');
 
 const converter = {
     /**
-     * 
      * @param {firebase.firestore.DocumentSnapshot} snapshot 
      * @param {*} options 
      * @returns {PTUser}
@@ -40,35 +39,31 @@ const converter = {
 }
 
 /**
- * Returns data of a specific user
- * @param {string} userID Id of user to look for
+ * Gets a user either by userID or username
+ * @param {{userID: String, username: String}} param0 
  * @returns {Promise<PTUser>}
  */
-const get = async userID => {
-    // Find user
-    const doc = await firebase.firestore().collection('users')
-        .doc(userID)
-        .withConverter(converter).get()
-    // Throw error if user does not exist
-    if(!doc.exists) throw {error: "User not found", code: 404}
-    // Return data if found
-    return doc.data();
-}
-
-/**
- * Returns data of a specific user
- * @param {string} username Username to look for
- * @returns {Promise<PTUser>}
- */
- const getByUsername = async username => {
-    // Find user
-    const query = await firebase.firestore().collection('users')
-        .where("username", "==", username)
-        .withConverter(converter).get();
-    // Throw error if user does not exist
-    if(query.empty) throw {error: "User not found", code: 404}
-    // Return data if found
-    return query.docs[0].data();
+const get = async ({userID = null, username = null}) => {
+    if(userID == null && username == null) throw {error: "userID or username were not specified", code: 400};
+    // Get by userID
+    if(userID != null){
+        // Find user
+        const doc = await firebase.firestore().collection('users').doc(userID)
+            .withConverter(converter).get();
+        // Check if exists
+        if(!doc.exists) throw {error: "User not found", code: 404}
+        // Else return
+        return doc.data();
+    } else if(username != null){
+        // FInd user
+        const query = await firebase.firestore().collection('users')
+            .where("username", "==", username)
+            .withConverter(converter).get();
+        // Check if exists
+        if(query.empty) throw {error: "User not found", code: 404}
+        // Else return 
+        query.docs[0].data()
+    }
 }
 
 
@@ -91,36 +86,28 @@ const update = async (userID, data) => {
 }
 
 /**
- * Uploads profile pic of a specific user
- * @param {string} userID Id of user uploading profile picture
- * @param {Express.Multer.File} file File to be uploaded as profile picture
- * @returns {Promise<{message: string}>}
+ * Uploads a file to serve as the profile picture of the user
+ * @param {String} userID Id of user uploading profile picture
+ * @param {Express.Multer.File} file Picture file
  */
-const updatePic = async (userID, file) => {
+const uploadProfilePicture = async (userID, file) => {
     try{
         // Upload file
         const uploadedFile = await firebase.storage().bucket('users')
             .upload(file.path, {destination: userID});
-        // Make file public
+        // Make file publit
         await uploadedFile[0].makePublic();
-        // Update photoURL of user
-        await firebase.firestore().collection('users')
-            .doc(userID)
+        // Update user with public url
+        await firebase.firestore().collection('users').doc(userID)
             .update({
                 photoURL: uploadedFile[0].publicUrl()
             })
-        return {message: "success"}
+        return {message: "Sucess"}
     } catch(e){
-        console.log(e.errors)
         throw {error: "Could not update data", code: 500}
     }
 }
 
-/**
- * Get all exercises from user
- * @param {string} userID Id of user to get exercises from
- * @returns {Promise<Array<import('./exerciseService').PTExercise>>}
- */
 const getExercises = async (userID) => {
     try{
         // Get exercises
@@ -128,18 +115,16 @@ const getExercises = async (userID) => {
             .where("author", "==", firebase.firestore().collection('users').doc(userID))
             .get();
         // If empty return empty
-        if(exercises.empty) return []
-        // Return exerciseID and title for each doc
-        return exercises.docs.map(doc => {
-            return {
-                exerciseID: doc.id, 
-                title: doc.data().title
-            }
-        })
+        if(exercises.empty) return [];
+        // Map only title and exerciseID
+        return exercises.docs.map(doc => ({
+            exerciseID: doc.id, 
+            title: doc.data().title
+        }))
     } catch(e){
-        throw {error: "Could not insert data", code: 500}
+        throw {error: "Could not upload", code: 500}
     }
 }
 
-const userService = {converter, get, getByUsername, update, updatePic, getExercises};
+const userService = {converter, get, update, uploadProfilePicture, getExercises};
 module.exports = userService;

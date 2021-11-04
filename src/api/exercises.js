@@ -3,16 +3,24 @@ const exerciseService = require('../../services/exerciseService');
 const router = express.Router();
 const authMiddleware = require('../auth-middleware');
 
+// GET /api/1/exercises?exerciseID=
+router.get('/', authMiddleware, async (req, res) => {
+    if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
+    try{
+        res.json(await exerciseService.get(req.query.exerciseID));
+    } catch(e){
+        res.json(e).status(e.code)
+    }
+})
+
+
 // POST /api/1/exercises/create
 router.post('/create', authMiddleware, async (req, res) => {
-    console.dir(req.body)
+    const author = req.firebaseUser;
+    const title = req.body.title;
     try{
-        res.json(
-            await exerciseService.create({
-                author: req.firebaseUser._ref, 
-                title: req.body.title
-            })
-        )
+        // Create
+        res.json(await exerciseService.create({author, title}))
     } catch(e){
         res.json(e).status(e.code)
     }
@@ -22,26 +30,20 @@ router.post('/create', authMiddleware, async (req, res) => {
 router.post('/update', authMiddleware, async (req, res) => {
     if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
     try{
-        // Get exercise
-        const exercise = await exerciseService.get(req);
-        // If exercise does not belong to user throw error
-        if(exercise.author.userID != req.firebaseUser.userID)
-            res.json({error: "Unauthorized. Only the author can update"}).status(401)
-        // Update
-        await exercise._ref.withConverter(exerciseService.converter).update()
+        res.json(await exerciseService.update(req.query.exerciseID, req.body, req.firebaseUser))
     } catch(e){
-
+        res.json(e).status(e.code)
     }
 })
 
-
-router.get('/:exerciseID', authMiddleware, async (req, res) => {
-    res.json({message: "Get data from exercise id"});
+// DELETE /api/1/exercices/delete?exerciseID=
+router.delete('/delete', authMiddleware, async (req, res) => {
+    if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
+    try{
+        res.json(await exerciseService.delete(req.query.exerciseID, req.firebaseUser))
+    } catch(e){
+        res.json(e).status(e.code)
+    }
 })
-
-router.post('/:exerciseID', authMiddleware, async (req, res) => {
-    res.json({message: "Update exercise data"});
-})
-
 
 module.exports = router;

@@ -20,7 +20,6 @@ const firebase = require('../firebase/index')
 
 const converter = {
     /**
-     * 
      * @param {firebase.firestore.DocumentSnapshot} snapshot 
      * @param {*} options 
      * @returns {PTExercise}
@@ -50,54 +49,69 @@ const converter = {
 }
 
 /**
- * Create a new exercise
- * @param {PTExercise} data - Initial data of exercise
- * @returns {Promise<{message: String}>}
- * @throws {{error: String, code: Number}}
+ * Creates a new exercise with initial data
+ * @param {PTExercise} data Initial data of exercise
+ * @returns {Promise}
  */
 const create = async data => {
     try{
-        await firebase.firestore().collection('exercises')
-            .doc()
-            .withConverter(converter)
-            .create(data);
-        return {message: "success"}
+        // Create a new document
+        await firebase.firestore().collection('exercises').doc()
+            .withConverter(converter).create(data);
+        return {message: "Success"}
     } catch(e){
-        console.log(e)
-        throw {error: "Could not insert data", code: 500}
-    } 
+        throw {error: "Could not create new exercise", code: 500}
+    }
 }
 
 /**
- * Get a specific exercise
- * @param {string} exerciseID - Id of exercise to get
+ * Gets a specific exercise
+ * @param {String} exerciseID Id of exercise to get
  * @returns {Promise<PTExercise>}
- * @throws {{error: String, code: Number}}
  */
 const get = async exerciseID => {
-    const doc = await firebase.firestore().collection('exercises')
-        .withConverter(converter)
-        .doc(exerciseID)
-        .get(); 
-    if(!doc.exists) throw {error: "Exercise not found", code: 404};
+    const doc = await firebase.firestore().collection('exercises').doc(exerciseID)
+        .withConverter(converter).get();
+    if(!doc.exists) throw {error: "Exercise not found", code: 404}
     return doc;
 }
 
 /**
- * Update the contents of a specific exercise
- * @param {string} exerciseID - Id of exercise to get
- * @param {PTExercise} data 
- * @throws {{error: String, code: Number}}
+ * (Only available for the author of the exercise) Updates the contents of an exercise
+ * @param {String} exerciseID Id of exercise to update
+ * @param {PTExercise} data Data to update
+ * @param {import('./userService').PTUser} currentUser User who is updating the exercise
  */
-const update = async (exerciseID, data) => {
+const update = async (exerciseID, data, currentUser) => {
+    // Get exercise
     const exercise = await get(exerciseID);
+    if(exercise.author.userID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
+        // Update
         await exercise._ref.update(data);
-        return {message: "success"}
+        return {message: "Success"}
     } catch(e){
-        throw {error: "Could not update data", code: 500};
+        throw {error: "Could not update exercise", code: 500}
     }
 }
 
-const exerciseService = {converter, create, update, get};
+/**
+ * Deletes an exercise and all its associated contents
+ * @param {String} exerciseID Id of exercise to remove
+ * @param {import('./userService').PTUser} currentUser User who is deleting the exercise
+ */
+const remove = async (exerciseID, currentUser) => {
+    // Get exercise
+    const exercise = await get(exerciseID);
+    if(exercise.author.userID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    try{
+        // Delete
+        await exercise._ref.delete();
+        return {message: "Success"}
+    } catch(e){
+        throw {error: "Could not remove exercise", code: 500}
+    }
+}
+
+const exerciseService = {converter, create, update, get, delete};
 module.exports = exerciseService;
