@@ -44,7 +44,7 @@ const converter = {
         return {
             author: typeof data.author === 'string' ? firebase.firestore().collection('users').doc(data.author) : data.author,
             title: data.title, 
-            items: data.items
+            items: data.items || []
         }
     }
 }
@@ -58,10 +58,12 @@ const converter = {
 const create = async data => {
     try{
         await firebase.firestore().collection('exercises')
+            .doc()
             .withConverter(converter)
-            .add(data);
+            .create(data);
         return {message: "success"}
     } catch(e){
+        console.log(e)
         throw {error: "Could not insert data", code: 500}
     } 
 }
@@ -97,5 +99,5 @@ const update = async (exerciseID, data) => {
     }
 }
 
-const exerciseService = {converter, create, update};
+const exerciseService = {converter, create, update, get};
 module.exports = exerciseService;

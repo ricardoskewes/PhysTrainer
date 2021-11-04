@@ -41,26 +41,8 @@ const converter = {
 
 /**
  * Returns data of a specific user
- * @param {string} username Username to look for
- * @returns {Promise<PTUser>}
- */
-const getByUsername = async username => {
-    // Find user
-    const query = await firebase.firestore().collection('users')
-        .where("username", "==", username)
-        .withConverter(converter).get();
-    // Throw error if user does not exist
-    if(query.empty) throw {error: "User not found", code: 404}
-    // Return data if found
-    return query.docs[0].data();
-}
-
-
-/**
- * Returns the data of a specific user
  * @param {string} userID Id of user to look for
  * @returns {Promise<PTUser>}
- * @throws {{error: string, code: number}}
  */
 const get = async userID => {
     // Find user
@@ -74,11 +56,27 @@ const get = async userID => {
 }
 
 /**
+ * Returns data of a specific user
+ * @param {string} username Username to look for
+ * @returns {Promise<PTUser>}
+ */
+ const getByUsername = async username => {
+    // Find user
+    const query = await firebase.firestore().collection('users')
+        .where("username", "==", username)
+        .withConverter(converter).get();
+    // Throw error if user does not exist
+    if(query.empty) throw {error: "User not found", code: 404}
+    // Return data if found
+    return query.docs[0].data();
+}
+
+
+/**
  * Updates data of a specific user
  * @param {string} userID Id of user to update
  * @param {PTUser} data Data to be updated
  * @returns {Promise<{message: string}>}
- * @throws {{error: string, code: number}}
  */
 const update = async (userID, data) => {
     try{
@@ -97,9 +95,8 @@ const update = async (userID, data) => {
  * @param {string} userID Id of user uploading profile picture
  * @param {Express.Multer.File} file File to be uploaded as profile picture
  * @returns {Promise<{message: string}>}
- * @throws {{error: string, code: number}}
  */
-const uploadProfilePicture = async (userID, file) => {
+const updatePic = async (userID, file) => {
     try{
         // Upload file
         const uploadedFile = await firebase.storage().bucket('users')
@@ -114,6 +111,7 @@ const uploadProfilePicture = async (userID, file) => {
             })
         return {message: "success"}
     } catch(e){
+        console.log(e.errors)
         throw {error: "Could not update data", code: 500}
     }
 }
@@ -130,9 +128,9 @@ const getExercises = async (userID) => {
             .where("author", "==", firebase.firestore().collection('users').doc(userID))
             .get();
         // If empty return empty
-        if(exercises.empty) return [];
+        if(exercises.empty) return []
         // Return exerciseID and title for each doc
-        exercises.docs.map(doc => {
+        return exercises.docs.map(doc => {
             return {
                 exerciseID: doc.id, 
                 title: doc.data().title
@@ -143,5 +141,5 @@ const getExercises = async (userID) => {
     }
 }
 
-const userService = {converter, get, getByUsername, update, uploadProfilePicture, getExercises};
+const userService = {converter, get, getByUsername, update, updatePic, getExercises};
 module.exports = userService;

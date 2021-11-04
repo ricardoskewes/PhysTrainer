@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 
-const storage = multer.memoryStorage();
-const fileMiddleware = multer({storage}).single('file');
+const fileMiddleware = multer({dest: 'temp-uploads/'})
 
 module.exports = fileMiddleware;

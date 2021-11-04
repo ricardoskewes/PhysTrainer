@@ -59,17 +59,15 @@
         document.querySelector('#getuser').addEventListener('submit', async e=>{
             e.preventDefault();
             const username = document.querySelector('#getuser-username').value;
-            const request = await phystrainerAPI(`/api/1/users/${username}`);
+            const request = await phystrainerAPI(`/api/1/users/?username=${username}`);
             const response = await request.json();
             document.querySelector('#getuser-response').innerHTML = JSON.stringify(response, null, 2)
         })
     </script>
 
     <section>
-        <h2>Update user data</h2>
+        <h2>Update current user data</h2>
         <form action="" id="updateuser">
-            <label for="updateuser-username">Username: </label><input type="text" name="updateuser-username" id="updateuser-username">
-            <br>
             <label for="updateuser-data">Data: </label><textarea name="updateuser-data" id="updateuser-data" cols="30" rows="10"></textarea>
             <br>
             <input type="submit" value="Submit">
@@ -80,9 +78,8 @@
 
         document.querySelector('#updateuser').addEventListener('submit', async e=>{
             e.preventDefault();
-            const username = document.querySelector('#updateuser-username').value;
             const data = JSON.parse(document.querySelector('#updateuser-data').value);
-            const request = await phystrainerAPI(`/api/1/users/${username}`, {
+            const request = await phystrainerAPI(`/api/1/users/update`, {
                 method: "POST", 
                 body: JSON.stringify(data), 
                 headers: {
@@ -93,7 +90,76 @@
             alert(JSON.stringify(response))
         })
     </script>
-
-
+    <section>
+        <h2>Update user picture</h2>
+        <form id="updateprofilepic">
+            <label for="profilepic">Select file</label>
+            <input type="file" name="file" id="profilepic">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        document.querySelector('#updateprofilepic').addEventListener('submit', async e=>{
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('profilepic', document.querySelector('#profilepic').files[0]);
+            await phystrainerAPI('/api/1/users/pic', {
+                method: 'POST', 
+                body: formData
+            })
+        })
+    </script>
+    <hr>
+    <h1>Exercises</h1>
+    <section>
+        <h2>Create an exercise</h2>
+        <form action="" id="exercise-create">
+            <label for="exercise-create-title">Title</label>
+            <input type="text" name="exercise-create-title" id="exercise-create-title">
+            <br>
+            <input type="submit" value="submit">
+        </form>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        document.querySelector('#exercise-create').addEventListener('submit', async e=>{
+            e.preventDefault();
+            const title = document.querySelector('#exercise-create-title').value;
+            await phystrainerAPI('/api/1/exercises/create', {
+                method: 'POST', 
+                body: JSON.stringify({title}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        })
+    </script>
+    <section>
+        <h2>Exercises by user</h2>
+        <form action="" id="exercise-user">
+            <label for="exercises-user-userid">userID</label>
+            <input type="text" id="exercise-user-userid" name="exercise-user-userid">
+            <br>
+            <input type="submit">
+        </form>
+        <ul id="exercise-user-out"></ul>
+    </section>
+    <script type="module">
+        import firebase, {phystrainerAPI} from '../phystrainerAPI.js';
+        document.querySelector('#exercise-user').addEventListener('submit', async e=>{
+            e.preventDefault();
+            document.querySelector('#exercise-user-out').innerHTML = "";
+            const user = document.querySelector('#exercise-user-userid').value;
+            const req = await phystrainerAPI(`/api/1/users/exercises?userID=${user}`);
+            const res = await req.json();
+            for(let {exerciseID, title} of res){
+                document.querySelector('#exercise-user-out').innerHTML+=`
+                    <li><a href="${exerciseID}">${title}</a></li>
+                `
+            }
+        })
+    </script>
 </body>
 </html>

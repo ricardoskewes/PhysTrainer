@@ -1,17 +1,6 @@
 const firebase = require('../firebase/index');
+const userService = require('../services/userService');
 
-/**
- * @typedef {Express.Request} authMiddlewareRequest
- * @property {string} firebaseUser
- */
-
-/**
- * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @returns {Express.Request}
- */
 const authMiddleware = (req, res, next) => {
     // Header token
     const headerToken = req.headers.authorization;
@@ -23,7 +12,9 @@ const authMiddleware = (req, res, next) => {
     const token = headerToken.split(" ")[1];
     firebase.auth().verifyIdToken(token)
         .then(async (decodedToken)=>{
-            const doc = await firebase.firestore().collection('users').doc(decodedToken.uid).get();
+            const doc = await firebase.firestore().collection('users')
+                .doc(decodedToken.uid)
+                .withConverter(userService.converter).get();
             req.firebaseUser = doc.data();
             next();
         }) // If token is verified, continue
