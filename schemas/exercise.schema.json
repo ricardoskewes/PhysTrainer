@@ -1,0 +1,71 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "https://phystrainer.com/schemas/exercise.schema.json", 
+    "title": "Exercise schema", 
+    "description": "Used to store data and contents of esercises", 
+    "type": "object", 
+    "properties": {
+        "exerciseID": {
+            "description": "Unique identifier of exercise in database", 
+            "type": "string"
+        }, 
+        "author": {
+            "description": "User who created the exercise", 
+            "oneOf": [
+                {
+                    "type": "string", 
+                    "description": "Path in database to user"
+                }, 
+                {
+                    "$ref": "https://phystrainer.com/schemas/user.schema.json"
+                }
+            ]
+        },
+        "title": {
+            "description": "Title of exercise", 
+            "type": "string"
+        }, 
+        "creationDate": {
+            "description": "Date of exercise creation", 
+            "format": "date", 
+            "type": "string"
+        }, 
+        "lastModifiedDate": {
+            "description": "Date of last modification", 
+            "format": "date", 
+            "type": "string"
+        }, 
+        "items": {
+            "description": "Array with contents of exercise",
+            "type": "array", 
+            "items": {
+                "description": "Item for description / question inside an exercise", 
+                "type": "object", 
+                "properties": {
+                    "exerciseItemID": {
+                        "description": "Unique, immutable identifier for exercise item. Assigned automatically", 
+                        "type": "string"
+                    }, 
+                    "type": {
+                        "description": "Type of cell to be rendered / evaluated. Describes schema to expect in content field", 
+                        "type": "string",
+                        "enum": ["markdown", "question"]
+                    },
+                    "content": {
+                        "description": "Contents of the cell. Depends on type", 
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            }, 
+                            {
+                                "$ref": "https://phystrainer.com/schemas/question.schema.json"
+                            }
+                        ]
+                    }
+                },
+                "required": ["exerciseItemID", "type", "content"]
+            }
+        }
+    },
+    "required": ["exerciseID", "author", "title"]
+}

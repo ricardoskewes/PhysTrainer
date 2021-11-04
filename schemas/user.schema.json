@@ -5,7 +5,7 @@
     "description": "Describe user",
     "type": "object",
     "properties": {
-        "uuid": {
+        "userID": {
             "description": "Unique identifier in database, auth management, and hosting", 
             "type": "string"
         }, 

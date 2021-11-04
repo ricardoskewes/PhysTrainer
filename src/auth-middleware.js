@@ -1,5 +1,17 @@
 const firebase = require('../firebase/index');
 
+/**
+ * @typedef {Express.Request} authMiddlewareRequest
+ * @property {string} firebaseUser
+ */
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns {Express.Request}
+ */
 const authMiddleware = (req, res, next) => {
     // Header token
     const headerToken = req.headers.authorization;
