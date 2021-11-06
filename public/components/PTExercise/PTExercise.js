@@ -1,16 +1,19 @@
+// Directory path to this script
+const __dirname = import.meta.url.split('/').slice(0, -1).join('/');
+
 import 'https://cdn.jsdelivr.net/npm/sortablejs'
 
 const tepmlate = document.createElement('template');
 tepmlate.innerHTML = `
+    <link rel="stylesheet" href="${__dirname}/PTExercise.css">
     <form>
-        <header></header>
-        <span>
+        <span id="controls">
             <button id="add_question">Add question</button>
             <button id="add_markdown">Add markdown</button>
             <input type="submit" value="submit"></input>
+            <label><input type="checkbox" id="locked"></input> Locked?</label>
         </span>
-        <div id="items"></div>
-        <hr>
+        <div id="items"></div>  
     </form>
     <div style="display: none"><slot></slot></div>
 `
@@ -26,9 +29,13 @@ export default class PTExerciseElement extends HTMLElement{
             .map(node => node.outerHTML || node.textContent) // Return outerHTML if HTMLElement, else return textContent
             .join('') // Join to a single string
     }
-    get items(){
-        return [...this.shadowRoot.querySelector('#items').children]
+    //
+    get isLocked(){
+        return this.getAttribute('locked') === 'true'
     }
+
+
+
     data;
     constructor(){
         super();
@@ -40,9 +47,9 @@ export default class PTExerciseElement extends HTMLElement{
         this.render();
         // Make sortable
         Sortable.create(this.shadowRoot.querySelector('#items'), {
-            onUpdate: ()=>{this.data.items = this.items.map(cell => cell.data)}
+            onUpdate: this.__updateItems.bind(this)
         })
-        // Listen to buttons
+        // Listeners
         this.shadowRoot.querySelector('#add_question').addEventListener('click', e=>{
             e.preventDefault()
             this.addItem('question', {
@@ -50,41 +57,70 @@ export default class PTExerciseElement extends HTMLElement{
                 description: 'Double click to edit question'
             })
         })
-        // Listen to buttons
         this.shadowRoot.querySelector('#add_markdown').addEventListener('click', e=>{
             e.preventDefault()
             this.addItem('markdown', 'Double click to edit cell')
         })
+        this.shadowRoot.querySelector('#locked').addEventListener('change', (e)=>{
+            this.setAttribute('locked', e.target.checked)
+        })
     }
     attributeChangedCallback(attribute, oldValue, newValue){
-        if(attribute === 'contenteditable' || attribute === 'locked'){
-           this.items.forEach(cell => {
-                cell.setAttribute(attribute, newValue);
+        if(attribute === 'contenteditable' && !this.isLocked){
+            if(this.isContentEditable) this.__startEditMode();
+            else this.__endEditMode();
+            this.getItems().forEach(item => {
+                item.setAttribute('contenteditable', newValue);
             })
         }
+        if(attribute === 'locked' && newValue == 'true'){
+            Object.defineProperty(this, 'isContentEditable', {
+                writable: false, configurable: false, value: false
+            })
+            this.getItems().forEach(item=>{
+                item.setAttribute('contenteditable', 'false');
+                item.setAttribute('locked', 'true')
+            })
+        }
+    }
+    getItems(){
+        return [...this.shadowRoot.querySelector('#items').children]
     }
     render(){
         this.shadowRoot.querySelector('#items').innerHTML = ''
         // Render all contents
-        this.data.items.forEach((cell, i)=>{
-            let cellElement;
-            if(cell.type === 'question') cellElement = document.createElement('pt-exercise-cell-question')
-            else if(cell.type === 'markdown') cellElement = document.createElement('pt-exercise-cell-markdown')
-            cellElement.data = cell;
-            this.shadowRoot.querySelector('#items').append(cellElement)
-            cellElement.addEventListener('remove', e=>{
-                this.data.items.splice(i, 1);
-                this.render();
-            })
+        this.data.items.forEach((data, i)=>{
+            // Create elemnt
+            let element;
+            if(data.type === 'question') element = document.createElement('pt-exercise-cell-question')
+            else if(data.type === 'markdown') element = document.createElement('pt-exercise-cell-markdown')
+            // Attach data
+            element.data = data;
+            // Attach event listeners
+            element.addEventListener('remove', this.__updateItems.bind(this))
+            // Append
+            this.shadowRoot.querySelector('#items').append(element)
         })
     }
     addItem(type, itemContent){
-        let a = this.data.items.push({
+        this.data.items.push({
             type: type, 
             content: itemContent
         })
-        console.log(a)
         this.render()
+    }
+    // Enter edit mode
+    __startEditMode(){
+        if(this.isLocked) return;
+        this.classList.add('editing');
+    }
+    // End edit mode
+    __endEditMode(){
+        if(this.isLocked) return;
+        this.classList.remove('editing')
+    }    
+    __updateItems(){
+        this.data.items = this.getItems.map(cell => cell.data);
     }
 }
 

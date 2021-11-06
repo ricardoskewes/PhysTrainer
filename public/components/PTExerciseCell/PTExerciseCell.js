@@ -8,7 +8,7 @@ template.innerHTML = `
     <div class="input">
         <div class="input-content"></div>
         <span id="controls">
-            <button id="remove" style="color: red;">Remove</button>
+            <button id="edit-remove" style="color: red;">Remove</button>
             <button id="edit-submit">OK</button>
         </span>
     </div>
@@ -55,7 +55,7 @@ export default class PTExerciseCell extends HTMLElement{
         this.shadowRoot.querySelector('#edit-submit').addEventListener('click', ()=>{
             this.setAttribute('contenteditable', false);
         })
-        this.shadowRoot.querySelector('#remove').addEventListener('click', this.__remove.bind(this))
+        this.shadowRoot.querySelector('#edit-remove').addEventListener('click', this.__remove.bind(this))
     }
     // Called when attribute changes
     attributeChangedCallback(attribute, oldValue, newValue){
@@ -67,37 +67,36 @@ export default class PTExerciseCell extends HTMLElement{
         // Lock
         if(attribute === 'locked'&& newValue === 'true'){
             Object.defineProperty(this, "isContentEditable", {
-                writable: false, configurable: defaultAppStore, value: false
+                writable: false, configurable: false, value: false
             })
         }
     }
     // Enter edit mode
+    /// Remember, you just added the isCOntentEditable to condition
     __startEditMode(){
-        if(this.isLocked) return;
+        if(!this.isContentEditable && this.isLocked) return;
         this.classList.add('editing');
         this.dispatchEvent(new Event('editstart'));
         this.startEditingCallback();
     }
     // End edit mode
     __endEditMode(){
-        if(this.isLocked) return;
         this.classList.remove('editing');
+        if(!this.isLocked) return;
         this.dispatchEvent(new Event('editend'));
         this.endEditingCallback();
     }
     // Remove
     __remove(){
+        if(!this.isContentEditable && this.isLocked) return;
+        this.remove();
         this.dispatchEvent(new Event('remove'));
-        this.removeCallback();
     }
     // Callbacks
     startEditingCallback(){
 
     }
     endEditingCallback(){
-
-    }
-    removeCallback(){
 
     }
 }

@@ -1,67 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phystrainer Notebook Demo</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Phystrainer Notebook Demo</title>
+	<style>
+		header h1, 
+		pt-exercise {
+			max-width: 800px;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		header h1{
+			font-size: 3rem;
+			font-family: serif;
+			text-align: center;
+		}
+		
+	</style>
 </head>
+
 <body>
-        <header>
+	<header>
+		<h1>Ejercicios de magnetismo</h1>
+	</header>
+	<pt-exercise>
+		{
+		"title": "The Millenium Problems",
+		"items": [
+		{
+		"type": "markdown",
+		"content": "I am a cell"
+		},
+		{
+		"type": "question",
+		"content": {
+		"type": "PTQuestion.multipleChoice",
+		"dataPoints": [
+		{"type": "choice", "value": "Apple"},
+		{"type": "choice", "value": "Microsoft"},
+		{"type": "choice", "value": "Google"},
+		{"type": "choice", "value": "Phystrainer"}
+		]
+		}
+		}
+		]
+		}
+	</pt-exercise>
 
-        </header>
-        <pt-exercise>
-{
-        "title": "The Millenium Problems", 
-        "items": [
-                {
-                        "type": "markdown", 
-                        "content": "I am a cell"
-                }, 
-                {
-                        "type": "question", 
-                        "content": {
-                                "type": "PTQuestion.multipleChoice", 
-                                "dataPoints": [
-                                        {"type": "choice", "value": "Apple"},
-                                        {"type": "choice", "value": "Microsoft"},
-                                        {"type": "choice", "value": "Google"},
-                                        {"type": "choice", "value": "Phystrainer"}
-                                ]
-                        }
-                }
-        ]
-}
-        </pt-exercise>
-
-
-<!--         <article>
-                <pt-exercise-cell-markdown>
-                        {
-                                "content": "I am a cell"
-                        }
-                </pt-exercise-cell-markdown>
-                <pt-exercise-cell-question>
-                        {
-                                "content": {
-                                        "type": "PTQuestion.multipleChoice", 
-                                        "dataPoints": [
-                                                {"type": "choice", "value": "Apple"},
-                                                {"type": "choice", "value": "Microsoft"},
-                                                {"type": "choice", "value": "Google"},
-                                                {"type": "choice", "value": "Phystrainer"}
-                                        ]
-                                }
-                        }
-                </pt-exercise-cell-question>
-                <p>Hello!!      </p> -->
-        </article>
-
-
-
-
-        <script src="./components/PTExercise/PTExercise.js" type="module"></script>
-        <script src="./components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
-        <script src="./components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
+	<script src="./components/PTExercise/PTExercise.js" type="module"></script>
+	<script src="./components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
+	<script src="./components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
 </body>
+
 </html>
