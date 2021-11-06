@@ -66,13 +66,17 @@ export default class PTExerciseElement extends HTMLElement{
     render(){
         this.shadowRoot.querySelector('#items').innerHTML = ''
         // Render all contents
-        for(let cell of this.data.items){
+        this.data.items.forEach((cell, i)=>{
             let cellElement;
             if(cell.type === 'question') cellElement = document.createElement('pt-exercise-cell-question')
             else if(cell.type === 'markdown') cellElement = document.createElement('pt-exercise-cell-markdown')
             cellElement.data = cell;
             this.shadowRoot.querySelector('#items').append(cellElement)
-        }
+            cellElement.addEventListener('remove', e=>{
+                this.data.items.splice(i, 1);
+                this.render();
+            })
+        })
     }
     addItem(type, itemContent){
         let a = this.data.items.push({

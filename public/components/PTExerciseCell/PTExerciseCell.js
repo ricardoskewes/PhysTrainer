@@ -7,7 +7,10 @@ template.innerHTML = `
     <link rel="stylesheet" href="${__dirname}/PTExerciseCell.css">
     <div class="input">
         <div class="input-content"></div>
-        <button class="input-submit">OK</button>
+        <span id="controls">
+            <button id="remove" style="color: red;">Remove</button>
+            <button id="edit-submit">OK</button>
+        </span>
     </div>
     <div class="output"></div>
     <div style="display: none">
@@ -49,9 +52,10 @@ export default class PTExerciseCell extends HTMLElement{
         this.shadowRoot.addEventListener('dblclick', ()=>{
             if(!this.isContentEditable) this.setAttribute('contenteditable', true);
         })
-        this.shadowRoot.querySelector('.input-submit').addEventListener('click', ()=>{
+        this.shadowRoot.querySelector('#edit-submit').addEventListener('click', ()=>{
             this.setAttribute('contenteditable', false);
         })
+        this.shadowRoot.querySelector('#remove').addEventListener('click', this.__remove.bind(this))
     }
     // Called when attribute changes
     attributeChangedCallback(attribute, oldValue, newValue){
@@ -81,11 +85,19 @@ export default class PTExerciseCell extends HTMLElement{
         this.dispatchEvent(new Event('editend'));
         this.endEditingCallback();
     }
+    // Remove
+    __remove(){
+        this.dispatchEvent(new Event('remove'));
+        this.removeCallback();
+    }
     // Callbacks
     startEditingCallback(){
 
     }
     endEditingCallback(){
+
+    }
+    removeCallback(){
 
     }
 }
