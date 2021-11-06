@@ -7,20 +7,18 @@
     <title>Phystrainer Notebook Demo</title>
 </head>
 <body>
-<pt-notebook>
-        {
-                "items": [
-                        {
-                                "type": "markdown", 
-                                "content": "# Phystrainer Notebooks\n These notebooks will be used to render markdown and questions inside of exercises."
-                        }, 
-                        {
-                                "type": "markdown", 
-                                "content": "Use the buttons above to add new cells. Double click to edit.\n>Important: By design, the locked property cannot be unset without refreshing the page."
-                        }
-                ]
-        }
-</pt-notebook>
-        <script src="./notebook/PTNotebookElement.js" type="module"></script>
+        <pt-exercise-cell-markdown>
+                {
+                        "content": "I am a cell"
+                }
+        </pt-exercise-cell-markdown>
+        <pt-exercise-cell-question>
+                {
+                        "content": "I am a question hi"
+                }
+        </pt-exercise-cell-question>
+
+        <script src="./components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
+        <script src="./components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
 </body>
 </html>
