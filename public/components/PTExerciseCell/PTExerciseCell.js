@@ -37,13 +37,14 @@ export default class PTExerciseCell extends HTMLElement{
     }
     // Call when connected to a document
     connectedCallback(){
+        this.shadowRoot.innerHTML = ''
         // Append template
         this.shadowRoot.append(template.content.cloneNode(true))
         // If undefined, read data from __slotInnerHTML
         this.data = this.data || JSON.parse(this.__slotInnerHTML);
         // Event listeners to begin and end editing
         // TODO: Refactor
-        this.addEventListener('dblclick', ()=>{
+        this.shadowRoot.addEventListener('dblclick', ()=>{
             if(!this.isContentEditable) this.setAttribute('contenteditable', true);
         })
         this.shadowRoot.querySelector('.input-submit').addEventListener('click', ()=>{

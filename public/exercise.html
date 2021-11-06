@@ -7,16 +7,41 @@
     <title>Phystrainer Notebook Demo</title>
 </head>
 <body>
-        <pt-exercise-cell-markdown>
-                {
-                        "content": "I am a cell"
-                }
-        </pt-exercise-cell-markdown>
-        <pt-exercise-cell-question>
-                {
-                        "content": "I am a question hi"
-                }
-        </pt-exercise-cell-question>
+        <header>
+
+        </header>
+        <article>
+                <pt-exercise-cell-markdown>
+                        {
+                                "content": "I am a cell"
+                        }
+                </pt-exercise-cell-markdown>
+                <pt-exercise-cell-question>
+                        {
+                                "content": {
+                                        "type": "PTQuestion.multipleChoice", 
+                                        "dataPoints": [
+                                                {"type": "choice", "value": "Apple"},
+                                                {"type": "choice", "value": "Microsoft"},
+                                                {"type": "choice", "value": "Google"},
+                                                {"type": "choice", "value": "Phystrainer"}
+                                        ]
+                                }
+                        }
+                </pt-exercise-cell-question>
+                <p>Hello!!      </p>
+        </article>
+
+        <script type="module">
+                import 'https://cdn.jsdelivr.net/npm/sortablejs'
+                Sortable.create(document.querySelector('article'), {
+                        fallbackOnBody: false,
+                        removeCloneOnHide: true,
+                })
+        </script>
+
+
+
 
         <script src="./components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
         <script src="./components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
