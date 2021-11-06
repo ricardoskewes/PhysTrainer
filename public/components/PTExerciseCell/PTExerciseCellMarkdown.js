@@ -68,7 +68,6 @@ class PTExerciseCellMarkdownElement extends PTExerciseCell{
     }
     // Render output
     renderOutput(){
-        console.log('rendering output')
         // Markdown
         this.shadowRoot.querySelector('.output').innerHTML = markdown.render(this.data.content || " ");
         // KaTeX

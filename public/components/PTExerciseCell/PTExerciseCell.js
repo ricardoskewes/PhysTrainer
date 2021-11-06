@@ -30,18 +30,20 @@ export default class PTExerciseCell extends HTMLElement{
     get isLocked(){
         return this.getAttribute('locked') === 'true'
     }
-    data;
     constructor(){
         super();
         this.attachShadow({mode: 'open'})
+    }
+    adoptedCallback(){
+        console.log("Adopteme maestra")
     }
     // Call when connected to a document
     connectedCallback(){
         this.shadowRoot.innerHTML = ''
         // Append template
         this.shadowRoot.append(template.content.cloneNode(true))
-        // If undefined, read data from __slotInnerHTML
-        this.data = this.data || JSON.parse(this.__slotInnerHTML);
+        // Load data
+        this.data = this.data ?? JSON.parse(this.__slotInnerHTML)
         // Event listeners to begin and end editing
         // TODO: Refactor
         this.shadowRoot.addEventListener('dblclick', ()=>{
