@@ -6,15 +6,7 @@ import 'https://cdn.jsdelivr.net/npm/sortablejs'
 const tepmlate = document.createElement('template');
 tepmlate.innerHTML = `
     <link rel="stylesheet" href="${__dirname}/PTExercise.css">
-    <form>
-        <span id="controls">
-            <button id="add_question">Add question</button>
-            <button id="add_markdown">Add markdown</button>
-            <input type="submit" value="submit"></input>
-            <label><input type="checkbox" id="locked"></input> Locked?</label>
-        </span>
-        <div id="items"></div>  
-    </form>
+    <form id="items"></form>
     <div style="display: none"><slot></slot></div>
 `
 
@@ -33,17 +25,14 @@ export default class PTExerciseElement extends HTMLElement{
     get isLocked(){
         return this.getAttribute('locked') === 'true'
     }
-
-
-
-    data;
+    #data;
     constructor(){
         super();
         this.attachShadow({mode: 'open'});
     }
     connectedCallback(){
         this.shadowRoot.append(tepmlate.content.cloneNode(true));
-        this.data = this.data || JSON.parse(this.__slotInnerHTML);
+        this.#data = this.#data || JSON.parse(this.__slotInnerHTML);
         this.render();
         // Make sortable
         Sortable.create(this.shadowRoot.querySelector('#items'), {
@@ -89,7 +78,7 @@ export default class PTExerciseElement extends HTMLElement{
     render(){
         this.shadowRoot.querySelector('#items').innerHTML = ''
         // Render all contents
-        this.data.items.forEach((data, i)=>{
+        this.#data.items.forEach((data, i)=>{
             // Create elemnt
             let element;
             if(data.type === 'question') element = document.createElement('pt-exercise-cell-question')
@@ -103,11 +92,15 @@ export default class PTExerciseElement extends HTMLElement{
         })
     }
     addItem(type, itemContent){
-        this.data.items.push({
+        if(!this.isContentEditable || this.isLocked) return;
+        this.#data.items.push({
             type: type, 
             content: itemContent
         })
         this.render()
+    }
+    getData(){
+        return JSON.parse(JSON.stringify(this.#data))
     }
     // Enter edit mode
     __startEditMode(){
@@ -120,7 +113,10 @@ export default class PTExerciseElement extends HTMLElement{
         this.classList.remove('editing')
     }    
     __updateItems(){
-        this.data.items = this.getItems.map(cell => cell.data);
+        this.#data.items = this.getItems().map(cell => cell.data);
+    }
+    submit(){
+        
     }
 }
 

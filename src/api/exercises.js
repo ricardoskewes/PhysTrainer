@@ -16,7 +16,7 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // POST /api/1/exercises/create
 router.post('/create', authMiddleware, async (req, res) => {
-    const author = req.firebaseUser;
+    const author = req.firebaseUser._ref;
     const title = req.body.title;
     try{
         // Create

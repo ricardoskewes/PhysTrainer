@@ -1,4 +1,5 @@
-const firebase = require('../firebase/index')
+const firebase = require('../firebase/index');
+const userService = require('./userService');
 
 /**
  * @typedef {Object} PTExerciseItem
@@ -27,10 +28,9 @@ const converter = {
     fromFirestore: async (snapshot, options)=>{
         const data = snapshot.data();
         /**@type {firebase.firestore.DocumentReference} */
-        const author = data.author;
         return {
             exerciseID: snapshot.id, 
-            author: (await author.get()).id,
+            author: data.author,
             title: data.title, 
             creationDate: new Date(snapshot.createTime.seconds*1000), 
             lastModifiedDate: new Date(snapshot.updateTime.seconds*1000), 
@@ -83,14 +83,16 @@ const get = async exerciseID => {
  * @param {import('./userService').PTUser} currentUser User who is updating the exercise
  */
 const update = async (exerciseID, data, currentUser) => {
+    console.log(data)
     // Get exercise
     const exercise = await get(exerciseID);
-    if(exercise.author.userID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    if(exercise.author.id != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
         // Update
         await exercise._ref.update(data);
         return {message: "Success"}
     } catch(e){
+        console.log(e)
         throw {error: "Could not update exercise", code: 500}
     }
 }

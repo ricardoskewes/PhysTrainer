@@ -82,7 +82,7 @@ export default class PTExerciseCell extends HTMLElement{
     // End edit mode
     __endEditMode(){
         this.classList.remove('editing');
-        if(!this.isLocked) return;
+        if(!this.isContentEditable && this.isLocked) return;
         this.dispatchEvent(new Event('editend'));
         this.endEditingCallback();
     }

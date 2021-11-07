@@ -1,29 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <title>Problema por @<%~it.username%> - Phystrainer</title>
-    <script>
-        // This line ensures that the username always corresponds to the URL. 
-        // DO NOT MODIFY
-        const username = <%~ JSON.stringify(it.username) %>;
-        const exerciseID = <%~ JSON.stringify(it.exerciseID) %>;
-    </script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{exercise.title}}</title>
+	<style>
+		header h1, 
+		pt-exercise {
+			max-width: 800px;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		header h1{
+			font-size: 3rem;
+			font-family: serif;
+			text-align: center;
+		}
+		
+	</style>
 </head>
+
 <body>
-    <h1 id="exercise-title"></h1>
-    <script type="module">
-        import firebase, {phystrainerAPI} from '../../phystrainerAPI.js';
-        firebase.auth().onAuthStateChanged(async ()=>{
-            // Get exercise data
-            const exerciseDataRequest = await phystrainerAPI(`/api/1/exercises?exerciseID=${exerciseID}`);
-            const exerciseData = await exerciseDataRequest.json();
-            // Render
-            document.querySelector('#exercise-title').innerHTML = exerciseData.title;
-        });
-    </script>
+	<header>
+		<h1>{{exercise.title}}</h1>
+	</header>
+	<div>
+		<button id="exercise-update">Update</button>
+		<button id="exercise-add-question">Add question</button>
+		<button id="exercise-add-markdown">Add markdown</button>
+		<button id="exercise-submit-answers">Submit</button>
+	</div>
+	<pt-exercise contenteditable="true" locked={{}}>
+		{{{exercise.json}}}
+	</pt-exercise>
+	<button id="update">UPDATE!</button>
+	<script src="/components/PTExercise/PTExercise.js" type="module"></script>
+	<script src="/components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
+	<script src="/components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
+
+	<script type="module">
+		const exercise = document.querySelector('pt-exercise');
+		import firebase, {phystrainerAPI} from '/phystrainerAPI.js';
+		async function upload(){
+			const req = await phystrainerAPI('/api/1/exercises/update?exerciseID=bt55MYtiQqwxeQTANpN5', {
+				method: 'POST', 
+				body: JSON.stringify(document.querySelector('pt-exercise').getData()),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const res = await req.json();
+			alert(res);
+		}
+		document.querySelector('#exercise-update').addEventListener('click', upload)
+		document.querySelector('#exercise-add-question').addEventListener('click', ()=>{
+			exercise.addItem('question', {
+                type: 'PTQuestion.text',
+                description: 'Double click to edit question'
+            })
+		})
+		document.querySelector('#exercise-add-markdown').addEventListener('click', ()=>{
+			exercise.addItem('markdown', 'Double click to edit cell')
+		})
+		document.querySelector('#exercise-submit-answers').addEventListener('click', ()=>{
+			exercise.submit();
+		})
+	</script>
 </body>
+
 </html>
