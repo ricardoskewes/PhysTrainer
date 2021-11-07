@@ -22,7 +22,7 @@ export default firebase;
  * @returns {Promise<Response>}
  */
 const phystrainerAPI = async (url, _options = {})=>{
-    if(firebase.auth().currentUser === undefined) throw "Only logged users can communicate with API";
+    if(firebase.auth().currentUser == undefined) throw "Only logged users can communicate with API";
     const idToken = await firebase.auth().currentUser?.getIdToken();
     const options = {
         ..._options, 
