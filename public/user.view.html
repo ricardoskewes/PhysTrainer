@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="{{user.username}}">
+    <meta property="og:description" content="@{{user.username}} - PhysTrainer">
+    <meta property="og:image" content="{{user.photoURL}}">
+
     <title>@{{user.username}} - Phystrainer</title>
     <link rel="stylesheet" href="/user.css">
     <script>
         // This line ensures that the username always corresponds to the URL. 
         // DO NOT MODIFY
-        const userID = "{{user.userID}}"
+        const userID = "{{user.userID}}" 
     </script>
 </head>
 <body>
