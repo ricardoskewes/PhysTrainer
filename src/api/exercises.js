@@ -16,6 +16,7 @@ router.get('/', authMiddleware, async (req, res) => {
 
 // POST /api/1/exercises/create
 router.post('/create', authMiddleware, async (req, res) => {
+    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
     const author = req.firebaseUser._ref;
     const title = req.body.title;
     try{
@@ -28,6 +29,7 @@ router.post('/create', authMiddleware, async (req, res) => {
 
 // POST /api/1/exercises/update?exerciseID=
 router.post('/update', authMiddleware, async (req, res) => {
+    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
     if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
     try{
         res.json(await exerciseService.update(req.query.exerciseID, req.body, req.firebaseUser))
@@ -38,6 +40,7 @@ router.post('/update', authMiddleware, async (req, res) => {
 
 // DELETE /api/1/exercices/delete?exerciseID=
 router.delete('/delete', authMiddleware, async (req, res) => {
+    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
     if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
     try{
         res.json(await exerciseService.delete(req.query.exerciseID, req.firebaseUser))

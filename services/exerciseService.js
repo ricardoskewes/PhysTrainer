@@ -11,7 +11,7 @@ const userService = require('./userService');
 /**
  * @typedef {Object} PTExercise
  * @property {String} exerciseID - Unique identifier of exercise in database
- * @property {PTUser} author - User who created the exercise
+ * @property {PTUser|firebase.firestore.DocumentReference} author - User who created the exercise
  * @property {String} title - Title of the exercise
  * @property {Date} creationDate - Date of exercise creation
  * @property {Date} lastModifiedDate - Date of last modification
@@ -25,13 +25,12 @@ const converter = {
      * @param {*} options 
      * @returns {PTExercise}
      */
-    fromFirestore: async (snapshot, options)=>{
+    fromFirestore: (snapshot, options)=>{
         const data = snapshot.data();
-        /**@type {firebase.firestore.DocumentReference} */
         return {
             exerciseID: snapshot.id, 
-            author: data.author,
             title: data.title, 
+            author: data.author, 
             creationDate: new Date(snapshot.createTime.seconds*1000), 
             lastModifiedDate: new Date(snapshot.updateTime.seconds*1000), 
             items: data.items,
@@ -73,7 +72,18 @@ const get = async exerciseID => {
     const doc = await firebase.firestore().collection('exercises').doc(exerciseID)
         .withConverter(converter).get();
     if(!doc.exists) throw {error: "Exercise not found", code: 404}
-    return doc.data();
+    const exercise = doc.data();
+    const author = await exercise.author.get();
+    return {
+        ...exercise, 
+        author: {
+            id: author.id,
+            authorID: author.id, 
+            username: author.data().username, 
+            fullName: author.data().fullName,
+            photoURL: author.data().photoURL
+        }
+    }
 }
 
 /**
@@ -83,13 +93,14 @@ const get = async exerciseID => {
  * @param {import('./userService').PTUser} currentUser User who is updating the exercise
  */
 const update = async (exerciseID, data, currentUser) => {
-    console.log(data)
+    // Updateable properties
+    let {title, items} = data;
     // Get exercise
     const exercise = await get(exerciseID);
-    if(exercise.author.id != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    if(exercise.author.authorID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
         // Update
-        await exercise._ref.update(data);
+        await exercise._ref.update({title, items});
         return {message: "Success"}
     } catch(e){
         console.log(e)
@@ -105,7 +116,7 @@ const update = async (exerciseID, data, currentUser) => {
 const remove = async (exerciseID, currentUser) => {
     // Get exercise
     const exercise = await get(exerciseID);
-    if(exercise.author.userID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    if(exercise.author.id != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
         // Delete
         await exercise._ref.delete();

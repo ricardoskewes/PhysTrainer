@@ -37,6 +37,7 @@ router.get('/exercises', async (req, res) => {
 // POST /api/1/users/update
 // Update info of current user
 router.post('/update', authMiddleware, async (req, res) => {
+    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
     try{
         res.json(await userService.update(req.firebaseUser.userID, req.body));
     } catch(e){
@@ -47,6 +48,7 @@ router.post('/update', authMiddleware, async (req, res) => {
 // POST /api/1/users/pic
 // Upload profile picture
 router.post('/pic', authMiddleware, fileMiddleware.single('profilepic'), async (req, res) => {
+    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
     try{
         res.json(await userService.uploadProfilePicture(req.firebaseUser.userID, req.file))
     } catch(e){

@@ -34,6 +34,8 @@ export default class PTExerciseElement extends HTMLElement{
         this.shadowRoot.append(tepmlate.content.cloneNode(true));
         this.#data = this.#data || JSON.parse(this.__slotInnerHTML);
         this.render();
+        // Initial settings
+        this.setAttribute('locked', this.#data.locked)
         // Make sortable
         Sortable.create(this.shadowRoot.querySelector('#items'), {
             onUpdate: this.__updateItems.bind(this)

@@ -26,7 +26,7 @@ app.use('/api/1/users', users);
 app.use('/api/1/exercises', exercises);
 
 // Users
-app.get('/users/:username', async (req, res) => {
+app.get('/users/:username', authMiddleware, async (req, res) => {
     try{
         const user = await userService.get({username: req.params.username});
         const exercises = await userService.getExercises(user.userID);
@@ -36,7 +36,7 @@ app.get('/users/:username', async (req, res) => {
     }
 })
 
-app.get('/exercises/:exerciseID', async (req, res)=>{
+app.get('/exercises/:exerciseID', authMiddleware, async (req, res)=>{
     try{
         const exercise = await exerciseService.get(req.params.exerciseID);
         delete exercise._ref;
@@ -44,6 +44,7 @@ app.get('/exercises/:exerciseID', async (req, res)=>{
         exercise.json = () => JSON.stringify(exercise);
         res.render('exercise', {exercise})
     } catch(e){
+        console.log(e)
         res.sendFile('/404.html')
     }
 })
