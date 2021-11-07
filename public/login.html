@@ -89,22 +89,13 @@
     <script type="module">
         import firebase, {phystrainerAPI} from './apiFetch.js';
         
-        async function testSomething(){
-            const req = await phystrainerAPI('/api/1/users/edvilme');
-            const data = await req.json();
-            console.log(data)
-        }
-        window.testSomething = testSomething;
-
         document.querySelector('form').addEventListener('submit', e=>{
             e.preventDefault();
             firebase.auth().signInWithEmailAndPassword(
                 document.querySelector('#email').value, 
                 document.querySelector('#password').value
             ).then(credential => {
-                alert("Signed in!");
-        testSomething()
-
+                window.history.back()
             }).catch(e => {
                 alert(e.code)
             })
