@@ -9,19 +9,51 @@
     <meta property="og:image" content="{{user.photoURL}}">
 
     <title>@{{user.username}} - Phystrainer</title>
-    <link rel="stylesheet" href="/user.css">
-    <script>
-        // This line ensures that the username always corresponds to the URL. 
-        // DO NOT MODIFY
-        const userID = "{{user.userID}}" 
-    </script>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        header{
+            text-align: center;
+            padding: 16px;
+            box-sizing: border-box;
+            background: whitesmoke;
+        }
+        header>*, 
+        section{
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #profile-pic{
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 200px;
+            background-color: black;
+        }
+        #fullName{
+            font-size: 3.3rem;
+            font-family: serif;
+        }
+        #username{
+            color: gray;
+        }
+            #username::before{
+                content: '@';
+            }
+    </style>
 </head>
 <body>
     <header>
-        <img src="{{user.photoURL}}" alt="{{user.username}}" srcset="">
-        <h1 id="user-fullName">{{user.fullName}}</h1>
-        <h3 id="user-username">{{user.username}}</h3>
-        <p id="user-biography">{{user.biography}}</p>
+        <img src="{{user.photoURL}}" alt="{{user.username}}" srcset="" id="profile-pic">
+        <h1 id="fullName">{{user.fullName}}</h1>
+        <h3>
+            <span id="username">{{user.username}}</span> (<span id="score">{{user.score}}</span> 🏅)
+        </h3>
+        <p id="biography">{{user.biography}}</p>
     </header>
 
     <section>
@@ -32,5 +64,5 @@
             {{/exercises}}
         </ul>
     </section>
-</body>
+</body> 
 </html>
