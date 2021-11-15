@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Create, solve and share exercises online using PhysTrainer.">
+	<meta property="og:title" content="{{exercise.title}}">
+	<meta property="og:description" content="{{exercise.title}}">
+	<title>{{exercise.title}} - PhysTrainer Exercise</title>
+	<style>
+		header h1, 
+		pt-exercise {
+			max-width: 800px;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		header{
+			text-align: center;
+		}
+		header #title{
+			font-size: 3.3rem;
+			font-family: serif;
+			text-align: center;
+		}
+		header #author{
+			text-align: center;
+			display: inline-block;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1 id="title">{{exercise.title}}</h1>
+		<a href="/users/{{exercise.author.username}}" id="author">
+			<pt-user-tag 
+				username="{{exercise.author.username}}"
+				fullName="{{exercise.author.fullName}}"
+				photo-url="{{exercise.author.photoURL}}"
+			></pt-user-tag>
+		</a>
+	</header>
+	<div style="text-align: center; margin: 16px" id="edit-controls">
+		<button id="exercise-update">Update</button>
+		<button id="exercise-add-question">Add question</button>
+		<button id="exercise-add-markdown">Add markdown</button>
+		<button id="exercise-submit-answers">Submit</button>
+	</div>
+	<pt-exercise contenteditable="true">
+		{{{exercise.json}}}
+	</pt-exercise>
+	<script src="/components/PTExercise/PTExercise.js" type="module"></script>
+	<script src="/components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
+	<script src="/components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
+	<script src="/components/PTUser/PTUserTag.js" type="module"></script>
+	<script type="module"> 
+		// Get exercise object
+		const exercise = document.querySelector('pt-exercise');
+		// Remove controls if exercise is locked
+		if(exercise.getData().locked){
+			document.querySelector('#edit-controls').remove();
+		} else {
+			// Hnadle update
+			document.querySelector('#exercise-update').addEventListener('click', async ()=>{
+				const req = await fetch(`/api/v1/exercises/update?exerciseID=${exercise.getData().exerciseID}`, {
+					method: 'POST', 
+					body: JSON.stringify(exercise.getData()),
+					headers: { 'Content-Type': 'application/json'}
+				})
+				alert(JSON.stringify(await req.json()));
+			})
+			// Handle add question
+			document.querySelector('#exercise-add-question').addEventListener('click', ()=>{
+				exercise.addItem('question', {
+					type: 'PTQuestion.text',
+					description: 'Double click to edit question'
+				})
+			})
+			// Handle add markdown
+			document.querySelector('#exercise-add-markdown').addEventListener('click', ()=>{
+				exercise.addItem('markdown', 'Double click to edit cell')
+			})
+			// Handle submit answers
+			document.querySelector('#exercise-submit-answers').addEventListener('click', ()=>{
+				exercise.submit();
+			})
+		}
+	</script>
+</body>
+
+</html>

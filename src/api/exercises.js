@@ -1,51 +1,63 @@
 const express = require('express');
 const exerciseService = require('../../services/exerciseService');
+const authenticationMiddleware = require('../middleware/authentication');
 const router = express.Router();
-const authMiddleware = require('../auth-middleware');
 
-// GET /api/1/exercises?exerciseID=
-router.get('/', authMiddleware, async (req, res) => {
-    if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
+// GET /?exerciseID=
+router.get('/', authenticationMiddleware.verify, async (req, res) => {
+    const {exerciseID} = req.query;
+    if(!exerciseID) return res.status(400).json({error: 'Missing exerciseID'});
     try{
-        res.json(await exerciseService.get(req.query.exerciseID));
+        // Get exercise data
+        const exercise = await exerciseService.get(exerciseID);
+        // If exercise is authored by me
+        if(exercise.author.userID == req.firebaseUser.uid) exercise.editable = true;
+        // Return
+        res.json(exercise);
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
-
-// POST /api/1/exercises/create
-router.post('/create', authMiddleware, async (req, res) => {
-    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
-    const author = req.firebaseUser._ref;
-    const title = req.body.title;
+// POST /create
+router.get('/create', authenticationMiddleware.verify, async (req, res) => {
+    // Only for authenticated users
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(401).json({error: 'Unauthorized'});
     try{
         // Create
-        res.json(await exerciseService.create({author, title}))
+        res.json(await exerciseService.create({...req.body, author}));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
-// POST /api/1/exercises/update?exerciseID=
-router.post('/update', authMiddleware, async (req, res) => {
-    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
-    if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
+// POST /update?exerciseID=
+router.post('/update', authenticationMiddleware.verify, async (req, res) => {
+    const {exerciseID} = req.query;
+    if(!exerciseID) return res.status(400).json({error: 'Missing exerciseID'});
+    // Only for authenticated users
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(401).json({error: 'Unauthorized'});
     try{
-        res.json(await exerciseService.update(req.query.exerciseID, req.body, req.firebaseUser))
+        res.json(await exerciseService.update(exerciseID, req.body, me.uid));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 
-// DELETE /api/1/exercices/delete?exerciseID=
-router.delete('/delete', authMiddleware, async (req, res) => {
-    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
-    if(!req.query.exerciseID) return res.json({error: "Provide an exerciseID"}).status(400)
+// DELETE /delete?exerciseID
+// POST /update?exerciseID=
+router.delete('/delete', authenticationMiddleware.verify, async (req, res) => {
+    const {exerciseID} = req.query;
+    if(!exerciseID) return res.status(400).json({error: 'Missing exerciseID'});
+    // Only for authenticated users
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(401).json({error: 'Unauthorized'});
     try{
-        res.json(await exerciseService.delete(req.query.exerciseID, req.firebaseUser))
+        res.json(await exerciseService.delete(exerciseID, me.uid));
     } catch(e){
-        res.json(e).status(e.code)
+        res.json(e).status(e.code);
     }
 })
 

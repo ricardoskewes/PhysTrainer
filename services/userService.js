@@ -38,6 +38,24 @@ const converter = {
     }
 }
 
+const __getByUserID = async userID => {
+    // Find user document
+    return await firebase.firestore().collection('users')
+        .doc(userID)
+        .withConverter(converter)
+        .get();
+}
+
+const __getByUsername = async username => {
+    return await firebase.firestore().collection('users')
+        .where('username', '==', username)
+        .withConverter(converter)
+        .get();
+    // Find document
+
+}
+
+
 /**
  * Gets a user either by userID or username
  * @param {{userID: String, username: String}} param0 
@@ -45,25 +63,21 @@ const converter = {
  */
 const get = async ({userID = undefined, username = undefined} = {}) => {
     if(userID == undefined && username == undefined) throw {error: "userID or username were not specified", code: 400};
-    // Get by userID
+    let user; 
     if(userID){
         // Find user
-        const doc = await firebase.firestore().collection('users').doc(userID)
-            .withConverter(converter).get();
+        const doc = await __getByUserID(userID);
         // Check if exists
         if(!doc.exists) throw {error: "User not found", code: 404}
-        // Else return
-        return doc.data();
+        user = doc.data();
     } else if(username){
-        // FInd user
-        const query = await firebase.firestore().collection('users')
-            .where("username", "==", username)
-            .withConverter(converter).get();
+        // Find user
+        const query = await __getByUsername(username);
         // Check if exists
         if(query.empty) throw {error: "User not found", code: 404}
-        // Else return 
-        return query.docs[0].data()
+        user = query.docs[0].data()
     }
+    return user;
 }
 
 
@@ -93,7 +107,8 @@ const update = async (userID, data) => {
 const uploadProfilePicture = async (userID, file) => {
     try{
         // Upload file
-        const uploadedFile = await firebase.storage().bucket('users')
+        const uploadedFile = await firebase.storage()
+            .bucket('users')
             .upload(file.path, {destination: userID});
         // Make file publit
         await uploadedFile[0].makePublic();
@@ -109,10 +124,11 @@ const uploadProfilePicture = async (userID, file) => {
 }
 
 const getExercises = async (userID) => {
+    const userReference = firebase.firestore().collection('users').doc(userID);
     try{
         // Get exercises
         const exercises = await firebase.firestore().collection('exercises')
-            .where("author", "==", firebase.firestore().collection('users').doc(userID))
+            .where("author", "==", userReference)
             .get();
         // If empty return empty
         if(exercises.empty) return [];
