@@ -1,59 +1,69 @@
 const express = require('express');
-const router = express.Router();
-const authMiddleware = require('../auth-middleware');
 const userService = require('../../services/userService');
-const fileMiddleware = require('../file-middleware');
+const authenticationMiddleware = require('../middleware/authentication');
+const router = express.Router();
 
-// POST /api/1/user/passwordreset?email=
-// Send a link to reset password
-router.post('/passwordreset', (req, res) => {
-    // https://firebase.google.com/docs/reference/rest/auth/#section-send-password-reset-email
-    res.json({message: "Feature not implemented yet"});
+// GET /me
+// Gets info about the current user
+router.get('/me', authenticationMiddleware.verify, async (req, res)=>{
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(401).json({error: 'Unauthorized'});
+    // Get user by id
+    const user = await userService.get({userID: me.uid});
+    // Return data
+    res.json(user); 
 })
 
-// GET /api/1/users?userID=
-// GET /api/1/users?username=
-// Get a specific user
-router.get('/', async (req, res) => {
-    if(!req.query.userID && !req.query.username) return res.json({error: "Specify a username or userID"}).status(400)
+// GET /data?userID=
+// GET /data?username=
+router.get('/info', authenticationMiddleware.verify, async (req, res)=>{
+    const {userID, username} = req.query;
+    if(!userID && !username)
+        return res.status(400).json({error: 'Specify a username or userID'});
     try{
-        res.json(await userService.get({userID: req.query.userID, username: req.query.username}))
+        // Get user
+        const user = await userService.get({userID, username});
+        // Do something if user is authenticated user
+        if(user.userID == req.firebaseUser?.uid) {}
+        // Return user
+        res.json(user);
+    } catch(e){
+        res.json(e).status(e.code)
+    }
+})
+
+// GET /exercises?userID=
+router.get('/exercises', authenticationMiddleware.verify, async (req, res)=>{
+    const {userID} = req.query;
+    if(!userID)
+        return res.status(400).json({error: 'Specify a userID'});
+    try{
+        // Get exercises
+        const exercises = await userService.getExercises(userID);
+        // Return exercises
+        res.json(exercises);
     } catch(e){
         res.json(e).status(e.code);
     }
 })
 
-// GET /api/1/users/exercises?userID=
-// Get user exercises
-router.get('/exercises', async (req, res) => {
-    if(!req.query.userID) return res.json({error: "Specify a userID"}).status(400);
+// POST /update
+router.post('/update', authenticationMiddleware.verify, async (req, res)=>{
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(404).json({error: 'Unauthorized'});
     try{
-        res.json(await userService.getExercises(req.query.userID));
+        // Update with data from body
+        res.json(await userService.update(req.firebaseUser.uid, req.body));
     } catch(e){
         res.json(e).status(e.code);
     }
 })
 
-// POST /api/1/users/update
-// Update info of current user
-router.post('/update', authMiddleware, async (req, res) => {
-    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
-    try{
-        res.json(await userService.update(req.firebaseUser.userID, req.body));
-    } catch(e){
-        res.json(e).status(e.code);
-    }
-})
-
-// POST /api/1/users/pic
-// Upload profile picture
-router.post('/pic', authMiddleware, fileMiddleware.single('profilepic'), async (req, res) => {
-    if(req.firebaseUser == undefined) res.send("Unauthorized").status(403)
-    try{
-        res.json(await userService.uploadProfilePicture(req.firebaseUser.userID, req.file))
-    } catch(e){
-        res.json(e).status(e.code);
-    }
+// POST /profile-pictue
+router.post('/profile-picture', authenticationMiddleware.verify, async (req, res)=>{
+    const me = req.firebaseUser;
+    if(me == undefined) res.status(404).json({error: 'Unauthorized'});
+    res.json({message: 'Method coming soon'})
 })
 
 module.exports = router;

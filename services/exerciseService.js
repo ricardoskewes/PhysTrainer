@@ -55,8 +55,10 @@ const converter = {
 const create = async data => {
     try{
         // Create a new document
-        await firebase.firestore().collection('exercises').doc()
-            .withConverter(converter).create(data);
+        await firebase.firestore().collection('exercises')
+            .doc()
+            .withConverter(converter)
+            .create(data);
         return {message: "Success"}
     } catch(e){
         throw {error: "Could not create new exercise", code: 500}
@@ -69,8 +71,10 @@ const create = async data => {
  * @returns {Promise<PTExercise>}
  */
 const get = async exerciseID => {
-    const doc = await firebase.firestore().collection('exercises').doc(exerciseID)
-        .withConverter(converter).get();
+    const doc = await firebase.firestore().collection('exercises')
+        .doc(exerciseID)
+        .withConverter(converter)
+        .get();
     if(!doc.exists) throw {error: "Exercise not found", code: 404}
     const exercise = doc.data();
     const author = await exercise.author.get();
@@ -90,20 +94,19 @@ const get = async exerciseID => {
  * (Only available for the author of the exercise) Updates the contents of an exercise
  * @param {String} exerciseID Id of exercise to update
  * @param {PTExercise} data Data to update
- * @param {import('./userService').PTUser} currentUser User who is updating the exercise
+ * @param {String} currentUserID Id of user who is updating the exercise
  */
-const update = async (exerciseID, data, currentUser) => {
+const update = async (exerciseID, data, currentUserID) => {
     // Updateable properties
     let {title, items} = data;
     // Get exercise
     const exercise = await get(exerciseID);
-    if(exercise.author.authorID != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    if(exercise.author.authorID != currentUserID) 
+        throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
-        // Update
         await exercise._ref.update({title, items});
         return {message: "Success"}
     } catch(e){
-        console.log(e)
         throw {error: "Could not update exercise", code: 500}
     }
 }
@@ -111,14 +114,14 @@ const update = async (exerciseID, data, currentUser) => {
 /**
  * Deletes an exercise and all its associated contents
  * @param {String} exerciseID Id of exercise to remove
- * @param {import('./userService').PTUser} currentUser User who is deleting the exercise
+ * @param {String} currentUserID Id of user who is deleting the exercise
  */
-const remove = async (exerciseID, currentUser) => {
+const remove = async (exerciseID, currentUserID) => {
     // Get exercise
     const exercise = await get(exerciseID);
-    if(exercise.author.id != currentUser.userID) throw {error: "Unauthorized. Only the author can update", code: 401}
+    if(exercise.author.id != currentUserID) 
+        throw {error: "Unauthorized. Only the author can update", code: 401}
     try{
-        // Delete
         await exercise._ref.delete();
         return {message: "Success"}
     } catch(e){

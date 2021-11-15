@@ -1,54 +1,38 @@
 const express = require('express');
-const authMiddleware = require('./src/auth-middleware');
-const path = require('path');
-const mustacheExpress = require('mustache-express')
+const csurf = require('csurf');
+const cookieParser = require('cookie-parser');
+const authenticationMiddleware = require('./src/middleware/authentication');
 
+// Init express app
 const app = express();
-// JSON Middleware
-app.use(express.json())
-// Templates
-app.set('views', 'public');
-app.set('view engine', 'view.html');
-app.engine('view.html', mustacheExpress());
+app.use(express.json());
+app.use(cookieParser());
 
-// Routes
-const users = require('./src/api/users');
-const exercises = require('./src/api/exercises');
-const userService = require('./services/userService');
-const exerciseService = require('./services/exerciseService');
+// Authentication endpoint
+const authenticationPaths = require('./src/api/authentication');
+app.use('/api/v1/authentication', authenticationPaths);
 
-// Static files
-app.use(express.static(path.join(__dirname, '/public')))
-app.use('/entities', express.static(path.join(__dirname, '/entities')))
+// Users endpoints
+const userPaths = require('./src/api/users');
+app.use('/api/v1/users', userPaths);
 
-// API
-app.use('/api/1/users', users);
-app.use('/api/1/exercises', exercises);
+// Exercises endpoints
+const exercisePaths = require('./src/api/exercises');
+app.use('/api/v1/exercises', exercisePaths);
 
-// Users
-app.get('/users/:username', authMiddleware, async (req, res) => {
-    try{
-        const user = await userService.get({username: req.params.username});
-        const exercises = await userService.getExercises(user.userID);
-        res.render('user', {user, exercises})
-    } catch(e){
-        res.sendFile('/404.html')
-    }
+app.get('/test', authenticationMiddleware.verify, (req, res)=>{
+    res.end(req.firebaseUser?.email || 'You need to log in');
+});
+
+app.get('/logout', (req, res)=>{
+    res.redirect('//api/v1/authentication/logout')
 })
 
-app.get('/exercises/:exerciseID', authMiddleware, async (req, res)=>{
-    try{
-        const exercise = await exerciseService.get(req.params.exerciseID);
-        delete exercise._ref;
-        // Get json
-        exercise.json = () => JSON.stringify(exercise);
-        res.render('exercise', {exercise})
-    } catch(e){
-        console.log(e)
-        res.sendFile('/404.html')
-    }
-})
+app.use(express.static('public'))
 
-app.listen(process.env.PORT || 8080, ()=>{
-    console.log(`App listening at port ${(process.env.PORT || 8080)}`)
+
+// Listen to port
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>{
+    console.log(`Live at port ${PORT}`)
 })
