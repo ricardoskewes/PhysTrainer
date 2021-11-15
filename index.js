@@ -15,9 +15,6 @@ const userService = require('./services/userService');
 const exerciseService = require('./services/exerciseService');
 app.use('/api/v1', apiPaths);
 
-// Public static endpoints
-app.use(express.static('public'))
-
 // Templates and views
 app.set('views', 'views');
 app.set('view engine', 'view.html');
@@ -39,8 +36,9 @@ app.get('/users/:username', authenticationMiddleware.verify, async (req, res) =>
         const exercises = await userService.getExercises(user.userID);
         res.render('user', {user, exercises});
     } catch(e){
-        console.log(e);
-        res.sendFile('./public/404.html');
+        // console.log(e);
+        console.log('Could not load users page because', e)
+        res.render('404');
     }
 })
 // Exercise page
@@ -49,13 +47,18 @@ app.get('/exercises/:exerciseID', authenticationMiddleware.verify, async (req, r
     try{
         const exercise = await exerciseService.get(exerciseID);
         delete exercise._ref;
-        exercise.locked = exercise.author.authorID != req.firebaseUser.uid;
+        exercise.locked = exercise.author.authorID != req.firebaseUser?.uid;
         exercise.json = () => JSON.stringify(exercise);
         res.render('exercise', {exercise});
     } catch(e){
-        res.sendFile('./public/404.html');
+        console.log('Could not load exercises page because', e)
+
+        res.render('404');
     }
 })
+
+// Public static endpoints
+app.use(express.static('public'))
 
 // Listen to port
 const PORT = process.env.PORT || 3000;

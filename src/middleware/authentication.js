@@ -40,8 +40,6 @@ const logout = (req, res, next)=>{
 const verify = async (req, res, next)=>{
     // Get session cookie
     const sessionCookie = req.cookies.session;
-    // Move to next if empty
-    if(!sessionCookie) next();
     // Try to get user
     try{
         req.firebaseUser = await firebase.auth().verifySessionCookie(sessionCookie, true);
