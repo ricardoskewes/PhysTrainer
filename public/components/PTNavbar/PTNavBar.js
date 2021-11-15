@@ -22,4 +22,4 @@ class PTNavbarElement extends HTMLElement{
     }
 }
 
-customElements.define('pt-navbar', PTNavbarElement);
+customElements.define('pt-navbar', PTNavbarElement); 
