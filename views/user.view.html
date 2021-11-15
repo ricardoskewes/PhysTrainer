@@ -12,6 +12,8 @@
     <style>
         body{
             font-family: Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
         }
         header{
             text-align: center;
@@ -47,6 +49,7 @@
     </style>
 </head>
 <body>
+    <pt-navbar></pt-navbar>
     <header>
         <img src="{{user.photoURL}}" alt="{{user.username}}" srcset="" id="profile-pic">
         <h1 id="fullName">{{user.fullName}}</h1>
@@ -64,5 +67,6 @@
             {{/exercises}}
         </ul>
     </section>
+    <script src="/components/PTNavbar/PTNavBar.js" type="module"></script>
 </body> 
 </html>

@@ -10,6 +10,10 @@
 	<meta property="og:description" content="{{exercise.title}}">
 	<title>{{exercise.title}} - PhysTrainer Exercise</title>
 	<style>
+		body{
+			padding: 0;
+			margin: 0;
+		}
 		header h1, 
 		pt-exercise {
 			max-width: 800px;
@@ -19,6 +23,8 @@
 		}
 		header{
 			text-align: center;
+			padding: 16px;
+			box-sizing: border-box;
 		}
 		header #title{
 			font-size: 3.3rem;
@@ -33,6 +39,7 @@
 </head>
 
 <body>
+	<pt-navbar></pt-navbar>
 	<header>
 		<h1 id="title">{{exercise.title}}</h1>
 		<a href="/users/{{exercise.author.username}}" id="author">
@@ -56,6 +63,7 @@
 	<script src="/components/PTExerciseCell/PTExerciseCellMarkdown.js" type="module"></script>
 	<script src="/components/PTExerciseCell/PTExerciseCellQuestion.js" type="module"></script>
 	<script src="/components/PTUser/PTUserTag.js" type="module"></script>
+    <script src="/components/PTNavbar/PTNavBar.js" type="module"></script>
 	<script type="module"> 
 		// Get exercise object
 		const exercise = document.querySelector('pt-exercise');
