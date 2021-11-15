@@ -1,20 +1,20 @@
 // Directory path to this script
-const __dirname = import.meta.url.sp
+const __dirname = import.meta.url.split('/').slice(0, -1).join('/');
 
 // Template for user tag
 const template = document.createElement('template');
 template.innerHTML = `
     <link rel="stylesheet" href="${__dirname}/PTUserTag.css">
-    <img id="profile-pic">
-    <span id="fullname"></span>
+    <img id="photo">
+    <span id="fullName"></span>
     <span id="username"></span>
 `;
 
-export default class PTUserTag extends HTMLElement{
+export default class PTUserTagElement extends HTMLElement{
     static get observedAttributes(){
-        return ['photo-url', 'username', 'full-name']
+        return ['photo-url', 'username', 'fullname']
     }
-    get profilePic(){
+    get photoURL(){
         return this.getAttribute('photo-url');
     }
     get username(){
@@ -35,8 +35,9 @@ export default class PTUserTag extends HTMLElement{
         this.render();
     }
     render(){
-        this.shadowRoot.querySelector('#profile-pic').setAttribute('src', this.profilePic);
-        this.shadowRoot.querySelector('#fullname').innerHTML = this.fullName;
+        this.shadowRoot.querySelector('#photo').setAttribute('src', this.photoURL);
+        this.shadowRoot.querySelector('#fullName').innerHTML = this.fullName;
         this.shadowRoot.querySelector('#username').innerHTML = this.username;
     }
 }
+customElements.define('pt-user-tag', PTUserTagElement);

@@ -40,7 +40,7 @@ router.post('/update', authenticationMiddleware.verify, async (req, res) => {
     const me = req.firebaseUser;
     if(me == undefined) res.status(401).json({error: 'Unauthorized'});
     try{
-        res.json(await exerciseService.update(exerciseID, req.body, me));
+        res.json(await exerciseService.update(exerciseID, req.body, me.uid));
     } catch(e){
         res.json(e).status(e.code);
     }
@@ -55,7 +55,7 @@ router.delete('/delete', authenticationMiddleware.verify, async (req, res) => {
     const me = req.firebaseUser;
     if(me == undefined) res.status(401).json({error: 'Unauthorized'});
     try{
-        res.json(await exerciseService.delete(exerciseID, me));
+        res.json(await exerciseService.delete(exerciseID, me.uid));
     } catch(e){
         res.json(e).status(e.code);
     }

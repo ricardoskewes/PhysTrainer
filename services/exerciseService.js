@@ -19,7 +19,7 @@ const userService = require('./userService');
  * @property {firebase.firestore.DocumentReference} _ref - Reference to firebase document
  */
 
-const converter = {
+const __converter = {
     /**
      * @param {firebase.firestore.DocumentSnapshot} snapshot 
      * @param {*} options 
@@ -57,7 +57,7 @@ const create = async data => {
         // Create a new document
         await firebase.firestore().collection('exercises')
             .doc()
-            .withConverter(converter)
+            .withConverter(__converter)
             .create(data);
         return {message: "Success"}
     } catch(e){
@@ -73,7 +73,7 @@ const create = async data => {
 const get = async exerciseID => {
     const doc = await firebase.firestore().collection('exercises')
         .doc(exerciseID)
-        .withConverter(converter)
+        .withConverter(__converter)
         .get();
     if(!doc.exists) throw {error: "Exercise not found", code: 404}
     const exercise = doc.data();
@@ -129,5 +129,5 @@ const remove = async (exerciseID, currentUserID) => {
     }
 }
 
-const exerciseService = {converter, create, update, get, remove}
+const exerciseService = {converter: __converter, create, update, get, remove}
 module.exports = exerciseService;

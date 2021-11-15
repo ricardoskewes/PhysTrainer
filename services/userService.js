@@ -42,13 +42,15 @@ const __getByUserID = async userID => {
     // Find user document
     return await firebase.firestore().collection('users')
         .doc(userID)
-        .withConverter(converter);
+        .withConverter(converter)
+        .get();
 }
 
 const __getByUsername = async username => {
-    const query = await firebase.firestore().collection('users')
+    return await firebase.firestore().collection('users')
         .where('username', '==', username)
-        .withConverter(converter);
+        .withConverter(converter)
+        .get();
     // Find document
 
 }

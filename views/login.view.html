@@ -35,7 +35,7 @@
                 <img src="/assets/img/logo_gris.png" alt="Ir a Página Principal">
 
                 <!--FORMULARIO-->
-                <form action="">
+                <form action="" id="login">
                     <div class="inputWithIcon">
                         <input type="email" name="email" id="email" placeholder="Correo Electrónico">    
                         <i data-feather="user" aria-hidden="true"></i>
@@ -87,19 +87,33 @@
     </script>
 
     <script type="module">
-        import firebase, {phystrainerAPI} from './apiFetch.js';
-        
-        document.querySelector('form').addEventListener('submit', e=>{
-            e.preventDefault();
-            firebase.auth().signInWithEmailAndPassword(
-                document.querySelector('#email').value, 
-                document.querySelector('#password').value
-            ).then(credential => {
-                window.history.back()
-            }).catch(e => {
-                alert(e.code)
+        import firebase from '/firebase-client.js';
+        document
+            .querySelector('#login')
+            .addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const {email, password} = e.target;
+                // Sign in using firebase
+                try{
+                    const {user} = await firebase.auth().signInWithEmailAndPassword(email.value, password.value);
+                    // Get user token
+                    const userToken = await user.getIdToken();
+                    // Authenticate in server
+                    const request = await fetch('/api/v1/authentication/login', {
+                        method: 'POST', 
+                        headers: {
+                            Accept: 'application/json', 
+                            'Content-Type': 'application/json'
+                        }, 
+                        body: JSON.stringify({userToken})
+                    })
+                    // Get response
+                    const response = await request.json();
+                    alert(JSON.stringify(response));
+                } catch(e){
+                    alert(JSON.stringify(e))
+                }
             })
-        })
     </script>
 
 
