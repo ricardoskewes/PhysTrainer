@@ -22,7 +22,8 @@ These routes redirect to test or static endpoints
 """
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    #return "<p>Hello, World!</p>"
+    return redirect("/explore")
 
 @app.route("/constuction")
 @authentication.login_optional_decorator
@@ -48,13 +49,15 @@ def login():
     # Redirect back
     if(request.args.get("redirect") is not None):
         return redirect(request.args.get("redirect"))
-    return user._data
+    if(request.args.get("json")):
+        return user._data
+    return redirect("/explore")
 
 @app.route("/logout", methods=["GET"])
 def logout():
     if("current_id_token" in session):
         session.pop("current_id_token")
-    return "done"
+    return redirect("/login")
 
 """
 PROFILE MANAGEMENT (ME)
@@ -273,4 +276,4 @@ def post_submission(notebook_id, item_id):
  
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run()
