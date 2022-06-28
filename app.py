@@ -1,6 +1,7 @@
 """
 
 """
+from crypt import methods
 import json
 import os
 import tempfile
@@ -57,6 +58,13 @@ def logout():
     if("current_id_token" in session):
         session.pop("current_id_token")
     return redirect("/login")
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password():
+    data = request.get_json(force=True)
+    email = data["email"]
+    authentication.email_password_reset_link(email)
+    return "done"
 
 """
 PROFILE MANAGEMENT (ME)

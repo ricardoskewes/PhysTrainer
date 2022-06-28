@@ -36,9 +36,26 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
         <br>
+        <br>
+        <a id="reset-password" href="">Forgot password?</a>
         <hr>
         <input type="submit" value="Login">
     </form>
 
+    <script>
+        document.querySelector('#reset-password').addEventListener('click', async e=>{
+            e.preventDefault();
+            const email = document.querySelector('#email').value;
+            if(email == "")
+                return alert("Please enter your email address")
+
+            const request = await fetch('/reset-password', {
+                method: 'POST', 
+                body: JSON.stringify({ email })
+            });
+            const response = await request.text();
+            alert("Password reset link sent!")
+        })
+    </script>
 </body>
 </html>
