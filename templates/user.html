@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Phystrainer</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 1rem;
+            background-color: snow;
+        }
+        pt-navbar{
+            position: sticky;
+            top: 0;
+            border-bottom: 0.5px solid gray;
+        }
+        header div, 
+        section {
+            padding: 16px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+        header{
+            background-color: white;
+        }
+            header div{
+                min-height: 50vmin;
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 16px;
+                align-items: flex-end;
+                justify-content: space-between;
+            }
+                header h1{
+                    font-size: 3.2rem;
+                }
+                header #photo{
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 100px;
+                    object-fit: cover;
+                }
+        #notebooks{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+            #notebooks h2{
+                flex-basis: 100%;
+            }
+        
+        .notebook {
+            margin: 10px;
+            width: 200px;
+            height: 282.84px;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            font-weight: bold;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
+    <header>
+        <div>
+            <label for="photo-input">
+                <img src="{{user.photo_url}}" alt="" srcset="" id="photo">
+            </label>
+            <input type="file" name="photo" id="photo-input" accept="image/*" hidden>
+
+            <h1 id="display-name" contenteditable="{{protected != true}}" original-value="{{user.display_name}}">{{user.display_name}}</h1>
+        </div>
+    </header>
+    <section id="notebooks">
+        <h2>Notebooks</h2>
+        {% for notebook in notebooks %}
+            <a href="/notebooks/{{notebook.id}}">
+                <div class="notebook">
+                    {{notebook.title}}
+                </div>
+            </a>
+        {% endfor %}
+    </section>
+    {% if protected == false %}
+        <section style="text-align: center">
+            <a href="/logout">Logout</a>
+        </section>
+    {% endif %}
+
+    <script src="/static/pt_navbar.js" type="module"></script>
+
+    <script type="text/javascript">
+        document.querySelector("#photo-input").addEventListener('change', async e=>{
+            const data = new FormData();
+            data.append('photo', e.target.files[0])
+            const request = await fetch('/me/photo', {
+                method: 'POST', 
+                body: data
+            });
+            document.querySelector("#photo").src = document.querySelector("#photo").src+"?t="+new Date().getTime()
+        })
+        document.querySelector('#display-name')
+            .addEventListener('blur', async e => {
+                if(e.target.getAttribute("original-value") == e.target.innerText) return true;
+                const request = await fetch(`/me/update`, {
+                    method: 'POST', 
+                    body: JSON.stringify({display_name: e.target.innerText})
+                });
+                console.log(await request.text())
+                e.target.setAttribute("original-value", e.target.innerText)
+            })
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{notebook.title}} - Phystrainer Notebook</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 1rem;
+            background-color: snow;
+        }
+        pt-navbar{
+            position: sticky;
+            top: 0;
+            border-bottom: 0.5px solid gray;
+        }
+
+        #toolbar{
+            padding: 16px;
+            text-align: center;
+        }
+        header {
+            min-height: 50vmin;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+            pointer-events: none
+        }
+        header, 
+        pt-notebook-cell{
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+            header #title{
+                font-size: 3.2rem;
+                pointer-events: all;
+            }
+        pt-notebook-cell{
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
+    {% if notebook.protected == false %}
+        <div id="toolbar">
+            <button id="new-text">+ Text</button>
+            <button id="new-question">+ Question</button>
+            <button id="delete">Delete notebook...</button>
+        </div>
+    {% endif %}
+    <header>
+        <h1 contenteditable="{{notebook.protected is false}}" id="title" original-value="{{notebook.title}}">
+            {{notebook.title}}
+        </h1>
+    </header>
+<!--     <pt-notebook-cell type="code">
+print("Hi")
+    </pt-notebook-cell> -->
+    <div id="notebook">
+        {%set contents = notebook.contents %}
+        {%for item in contents %}
+            {% if item.type == "text" %}
+            <pt-notebook-cell type="text" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}" protected="{{notebook.protected}}">{{item.text}}</pt-notebook-cell>
+            {% else %}
+            <pt-notebook-cell type="question" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}" protected="{{notebook.protected}}">{{item.to_json()}}</pt-notebook-cell>
+            {% endif %}
+        {%endfor%}
+    </div>
+
+    <script src="/static/pt_navbar.js" type="module"></script>
+    <script src="/static/pt_markdown.js" type="module"></script>
+    <script src="/static/pt_question.js" type="module"></script>
+    <script src="/static/pt_notebook_cell.js" type="module"></script>
+    <script>
+        const notebook_id = "{{notebook.id}}"
+
+        document.querySelector("#notebook")
+            ?.addEventListener("moveup", async e=>{
+                const target = e.target;
+                const next = e.target.nextElementSibling;
+                await target.update()
+                await next.update();
+                console.log(target, next)
+            })
+
+        document.querySelector("#notebook")
+            ?.addEventListener("movedown", async e=>{
+                const target = e.target;
+                const previous = e.target.previousElementSibling;
+                await target.update();
+                await previous.update();
+                console.log(target, previous)
+            })
+
+        document.querySelector('#new-text')
+            ?.addEventListener('click', async e => {
+                // Request
+                const request = await fetch(`/notebooks/${notebook_id}/contents`, {
+                    method: 'POST', 
+                    body: JSON.stringify({type: "text"})
+                });
+                const response = await request.text();
+                window.location.reload()
+            })
+        document.querySelector('#new-question')
+            ?.addEventListener('click', async e => {
+                // Request
+                const request = await fetch(`/notebooks/${notebook_id}/contents`, {
+                    method: 'POST', 
+                    body: JSON.stringify({type: "question"})
+                });
+                const response = await request.text();
+                window.location.reload()
+            })
+        document.querySelector('#title')
+            .addEventListener('blur', async e => {
+                if(e.target.getAttribute("original-value") == e.target.innerText) return true;
+                const request = await fetch(`/notebooks/${notebook_id}/update`, {
+                    method: 'POST', 
+                    body: JSON.stringify({title: e.target.innerText})
+                });
+                console.log(await request.text())
+                e.target.setAttribute("original-value", e.target.innerText)
+            })
+        document.querySelector('#delete')
+            ?.addEventListener('click', async e => {
+                if(confirm("Are you sure you want to delete this notebook? This cannot be undone")){
+                    const request = await fetch(`/notebooks/${notebook_id}/delete`, {
+                        method: 'POST'
+                    });
+                    window.location.replace("/explore")
+                }
+            })
+    </script>
+</body>
+
+</html>

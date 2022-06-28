@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "physolympiadtrainer",
+  "private_key_id": "8e918331c66d186e60d3e70d0eb8ed762ce95097",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC3Lbega9N+yreb\n428TwrNU1rYvLz8LS4XxtWcPIoO6QgVtfNeiZVsrHbpasMXUdYsT7FAdZSFCWMYa\nEUEk6KeFOsRZXJvbLOlT1rN/UQqOXgQKRRUyu9T2AUi0O0yP8CPERV8Ot1bxt29h\nnNbw3vfYiVxsVY53dEK81QTzCAZ/34Wv4ViOxXVXGJgvpBg+haC87PcCfOu50RUT\nSikvEPVHvBOJnYA/Ai/0pxYia27xHStfV9edLMh495L9STP5OWcl4wxwEOOOk66y\nNWXfrW6W52aotfPFKYt+8OGpdxUikcbE5R7off1J31NPYQBUPsSfXYuEXUAN7Xk4\nSyq6eRI5AgMBAAECggEAWc61P5Z926UBvhEUjWigyZB3Q8zzKNN/OREKFRaD5Nan\nmJVjl0AAIbRygDI428BBTqRGZxME6mVhwrgA61qRfzVfvLw1wZBUWQFjgaE2/rPD\nYVGbYgNLFs1sWsjT8aH3tyuXvjxPCTU5C298xh1bADPgN1D/Bzvd2HzL72dY4Gne\nUhKAhvzr7zS6rE2oNN1wz9DllnPx+r2Oa5rjsUJNvAWrV3o8SQ8mw7k7UrmgBYgU\nPWeaEQUa8RWcrEw8lANd3ixlB5tEsagYhHZyTl+xjT8/KeqDM98tI6Xi8m46/ado\nXNSxVWH7j9zmaaK6IbhaiyN460R+BMwMorFLoSQV3QKBgQDpNPCc+i4a75uWYEnF\nM40gpdMgr+vVHz8IqXh0SAqFDQSCPW7IFWCaMvB6BvI7KYCfH69LDtkspBc9ZH/R\n7TMXdbmPkYtKnU87wViWQiwuHFV45gu4Hi4Hs/JGor9v2qrDPRpKKl0TrRGonSxs\nDFTIGaEooQ21yB4bVc0drlz7FwKBgQDJFQXjqxyHULxzyoWfgG2+M7CyRnnaGhut\nAK3Z3rMDEM4vH1BFnPq/12aLkT9qtq4V/CTgVgUM9Xt+PTnoR4qcUnSgZVHUuOpu\nnjusKW2WxiRr+G5z6jVPZJLZlWdg/EHDHLvwTR/ourecYeao+gNWJsvh4916Dogi\nh5/7QrhvLwKBgDYZLNQNiVKAUQSCU7qmac+wCBkmFjw7YmD9B09aQu54hZo87A0I\nQH+k33o/UEP/LbI8JGryB9k+O5HnVWt6bga8LY6rgbeOZIoFISrCMQOFWSKRoxhU\nD/ODf+l46ZXmEQT3kLixuSPOWzFVPK/X8Hb20xbcvZR01t8aeVmwUCuDAoGABmHE\nbhVgMms9j+89jnJlCURat03FUEbD2hnLar7Gr7I42QYFZjA1RSFw/7z8Zkal/8yg\n3v3b6y1fXgJTdCvRGmUDjpOopTe5OQmMm0o1UDO5tDOOTd+BEaP/hShYv5tB+w9O\nZ7IK8Tf729q/l11X/cP9dI3m2ZjceTwUt8TGVcECgYAtmkk69/BejPAT7XMCXVq+\nq1UleuCaFyEMHfbqXp0SdSii5pTSsj/LZd6sg+5wUxGYmBz9JrTKZF59QqTE8uoD\nLNGdBjfwMv0B0qCYskWzw87iM/yYNbVjgMVIGhr8sMHk+NsltZe5x+sYtLrXuTsK\nz7V7tPBFnWqjH4ki5urcrg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-76gpw@physolympiadtrainer.iam.gserviceaccount.com",
+  "client_id": "111582452807284949639",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-76gpw%40physolympiadtrainer.iam.gserviceaccount.com"
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New notebook - Phystrainer</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 1rem;
+            background-color: snow;
+        }
+        pt-navbar{
+            position: sticky;
+            top: 0;
+            border-bottom: 0.5px solid gray;
+        }
+        form{
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 16px;
+        }
+        #title{
+            border: 0px;
+            appearance: none;
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: transparent;
+            width: 100%;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
+
+    <form >
+        <h2>Create new notebook</h2>
+        <input type="text" name="title" id="title" placeholder="Notebook title">
+        <hr>
+        <input type="submit" value="Create">
+    </form>
+
+    <script src="/static/pt_navbar.js" type="module"></script>
+    <script>
+        document.querySelector("form")
+            .addEventListener('submit', async e=>{
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(document.querySelector("form")));
+                const request = await fetch("/notebooks", {
+                    method: "POST", 
+                    body: JSON.stringify(data)
+                });
+                const response = await request.json();
+                window.location.replace(`/notebooks/${response.id}`)
+            })
+    </script>
+
+</body>
+</html>
