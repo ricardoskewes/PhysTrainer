@@ -42,6 +42,7 @@ template.innerHTML = `
             <button class="controls-hidden" id="moveup">Up</button>
             <button class="controls-hidden" id="movedown">Down</button>
             <button class="controls-hidden" id="delete">Delete</button>
+            <button id="anchor">Copy link</button>
             <button id="editmode">Edit</button>
         </span>
     </div>
@@ -52,7 +53,7 @@ template.innerHTML = `
 class pt_notebook_cell extends HTMLElement {
 
     static get observedAttributes() {
-        return ["type", "contenteditable", "protected"]
+        return ["type", "contenteditable", "protected", "pt-notebook-item-id"]
     }
 
     constructor() {
@@ -88,6 +89,10 @@ class pt_notebook_cell extends HTMLElement {
             })
             this.shadowRoot.querySelector('.controls').style.display = "none";
         }
+        this.shadowRoot.querySelector('#anchor').addEventListener('click', ()=>{
+            const location = `${window.location}#${this.id}`;
+            navigator.clipboard.writeText(location);
+        })
         // Detect on moveup event
         this.shadowRoot.querySelector('#moveup').addEventListener('click', this.moveup.bind(this));
         // Detect on movedown event
@@ -112,6 +117,9 @@ class pt_notebook_cell extends HTMLElement {
             this.shadowRoot.querySelector("#output").setAttribute("contenteditable", newValue);
             this.innerHTML = this.shadowRoot.querySelector("#output").innerHTML;
             if(!this.isContentEditable) this.update()
+        }
+        if (attr == "pt-notebook-item-id"){
+            this.id = "item-"+newValue;
         }
     }
 
