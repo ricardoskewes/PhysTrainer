@@ -1,4 +1,6 @@
 from functools import wraps
+import json
+import os
 from flask import abort, redirect, request, session
 import requests
 import firebase_admin
@@ -6,7 +8,7 @@ from firebase_admin import firestore, credentials, auth, storage
 from sympy import use
 
 # Use the application default credentials
-app = firebase_admin.initialize_app(credentials.Certificate("./firebase_key.json"), {
+app = firebase_admin.initialize_app(credentials.Certificate({**json.loads(os.environ['FIREBASE_KEY'])}), {
   'projectId': "physolympiadtrainer",
   'storageBucket': 'physolympiadtrainer.appspot.com'
 })
