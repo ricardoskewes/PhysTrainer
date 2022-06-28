@@ -3,6 +3,7 @@ import "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"
 import texmath from "https://esm.run/markdown-it-texmath"
 import markdownItHighlight from 'https://esm.run/markdown-it-highlightjs'
 import kbd from 'https://esm.run/markdown-it-kbd' // https://github.com/jGleitz/markdown-it-kbd
+import checkbox from 'https://esm.run/markdown-it-task-checkbox'
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -33,6 +34,7 @@ template.innerHTML = `
 `
 
 const md = markdownit({ html: true })
+    .use(checkbox)
     .use(texmath, {
         engine: katex,
         delimiters: 'dollars'

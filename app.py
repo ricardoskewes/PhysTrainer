@@ -1,7 +1,6 @@
 """
 
 """
-from crypt import methods
 import json
 import os
 import tempfile
