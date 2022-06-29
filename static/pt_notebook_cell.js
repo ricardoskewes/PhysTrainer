@@ -206,7 +206,7 @@ class pt_notebook_cell extends HTMLElement {
         const itemId = this.getAttribute('pt-notebook-item-id');
         const notebookId = this.getAttribute('pt-notebook-id');
         // Make request to api
-        const request = await fetch(`/notebooks/${notebookId}/contents/${itemId}/submit`, {
+        const request = await fetch(`/api/notebooks/${notebookId}/contents/${itemId}/submit`, {
             method: 'POST',
             body: JSON.stringify(data)
         });
