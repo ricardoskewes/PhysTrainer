@@ -194,7 +194,6 @@ class pt_notebook_cell extends HTMLElement {
         const request = await fetch(`/api/notebooks/${notebookId}/contents/${itemId}/delete`, {
             method: 'POST'
         });
-        const response = await request.json();
         // Remove and callbacks
         this.remove();
         this.dispatchEvent(new Event("delete"));

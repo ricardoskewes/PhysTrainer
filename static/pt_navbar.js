@@ -48,7 +48,7 @@ template.innerHTML = `
         <ul>
             <li><a href="/explore">Explore</li></li>
             <li><a href="/constuction">Collections</li></li>
-            <li><a href="/notebooks/new">New notebook</li></li>
+            <li><a href="/notebooks/new">New problem</li></li>
             <li><a href="/constuction">Search</li></li>
         </ul>
         <a id="user">

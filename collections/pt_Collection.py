@@ -12,7 +12,7 @@ class pt_Collection:
         return cls(doc_dict)
 
     id: str = ""
-    name: str = ""
+    title: str = ""
     description: str = ""
     author_uid: str = ""
     notebook_ids: list = []
@@ -20,7 +20,7 @@ class pt_Collection:
 
     def __init__(self, data: dict) -> None:
         self.id = data.get("id", "")
-        self.name = data.get("name", "")
+        self.title = data.get("title", "")
         self.description = data.get("description", "")
         self.author_uid = data.get("author_uid", "")
         self.notebook_ids = data.get("notebook_ids", [])
