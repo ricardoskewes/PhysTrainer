@@ -103,7 +103,7 @@
         document.querySelector("#photo-input").addEventListener('change', async e=>{
             const data = new FormData();
             data.append('photo', e.target.files[0])
-            const request = await fetch('/me/photo', {
+            const request = await fetch('/api/me/photo', {
                 method: 'POST', 
                 body: data
             });
@@ -112,7 +112,7 @@
         document.querySelector('#display-name')
             .addEventListener('blur', async e => {
                 if(e.target.getAttribute("original-value") == e.target.innerText) return true;
-                const request = await fetch(`/me/update`, {
+                const request = await fetch(`/api/me/update`, {
                     method: 'POST', 
                     body: JSON.stringify({display_name: e.target.innerText})
                 });

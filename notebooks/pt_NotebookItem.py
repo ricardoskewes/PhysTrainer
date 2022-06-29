@@ -1,15 +1,23 @@
 import json
 from pt_Firebase import database
+from pt_DBCache import cache
 
 class pt_NotebookItem:
     @classmethod
     def read(cls, notebook_id: str, item_id: str):
+        # Get from cache
+        """cached = cache.collection("pt_notebookitems").get_data(notebook_id+"/"+item_id)
+        if(cached is not None):
+            return cached"""
         # Get item reference
         item_ref = database.collection("pt_notebooks").document(notebook_id).collection("contents").document(item_id)
         item = item_ref.get()
         item_dict = item.to_dict()
         item_dict["id"] = item.id
-        return cls(item_dict)
+        # Create object and tore in cache
+        obj = cls(item_dict)
+        cached = cache.collection("pt_notebookitems").add_data(notebook_id+"/"+item_id, obj)
+        return obj
 
     id: str = ""
     notebook_id: str = ""
@@ -61,6 +69,8 @@ class pt_NotebookItem:
             ref.add(dict)
         else:
             ref.document(self.id).update(dict)
+        # Update in cache
+        cache.collection("pt_notebookitems").add_data(self.notebook_id+"/"+self.id, self)
         return self
 
     def delete(self):
@@ -68,4 +78,6 @@ class pt_NotebookItem:
             return
         ref = database.collection("pt_notebooks").document(self.notebook_id).collection("contents")
         ref.document(self.id).delete()
+        # Delete in cache
+        cache.collection("pt_notebookitems").remove_data(self.notebook_id+"/"+self.id, self)
         return True

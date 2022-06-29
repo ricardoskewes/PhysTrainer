@@ -1,10 +1,26 @@
+"""
+Author: Eduardo Villalpando
+This file handles all operations related to Firebase communication: firestore, 
+storage and authentication. 
+
+A firebase key file is needed for authenticating the API, stored as an environment
+variable in the system. 
+
+The authentication API by firebase-admin provides limited functionality, leaving many
+to be used in the frontend or to be implemented by the developer. For safety reasons
+and for easier development, all operations must be executed on the server. 
+For that reason the class ExtendedAuthClient provides additional methods for signing 
+in with email and password, verifying and returning users from id token, sending password
+reset links, and flask decorators for endpoints that require authentication. 
+"""
+
 from functools import wraps
 import json
 import os
 from flask import abort, redirect, request, session
 import requests
 import firebase_admin
-from firebase_admin import firestore, credentials, auth, storage
+from firebase_admin import firestore, credentials, auth, storage, exceptions
 from sympy import use
 
 # Use the application default credentials
@@ -12,7 +28,6 @@ app = firebase_admin.initialize_app(credentials.Certificate({**json.loads(os.env
   'projectId': "physolympiadtrainer",
   'storageBucket': 'physolympiadtrainer.appspot.com'
 })
-
 
 class ExtendedAuthClient(auth.Client):
   def __init__(self, app, tenant_id=None):
@@ -50,7 +65,7 @@ class ExtendedAuthClient(auth.Client):
         user = self.get_user_by_id_token(token)
       except Exception as e:
         print(e)
-        return abort(401)
+        return abort(403)
       return f(user, *args, **kwargs)
     return decorated_function
 

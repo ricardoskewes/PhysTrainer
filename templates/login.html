@@ -23,14 +23,12 @@
     </style>
 </head>
 <body>
-    <form action="" method="POST">
+    <form action="/api/auth/login" method="POST">
         <h1>Login</h1>
         <div>
             <label for="email">Email:</label> <br>
             <input type="email" name="email" id="email">
         </div>
-
-
         <br>
         <br>
         <label for="password">Password</label>
@@ -49,7 +47,7 @@
             if(email == "")
                 return alert("Please enter your email address")
 
-            const request = await fetch('/reset-password', {
+            const request = await fetch('/api/auth/reset-password', {
                 method: 'POST', 
                 body: JSON.stringify({ email })
             });

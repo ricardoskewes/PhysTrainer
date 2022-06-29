@@ -1,10 +1,10 @@
 import json
 from typing import Optional
 from pydantic import NoneIsAllowedError
+from pt_DBCache import cache
 from pt_Firebase import database
 from notebooks.pt_NotebookItem import pt_NotebookItem
 from notebooks.pt_Question import pt_Question
-
 
 def parse_notebook_item(item):
     if(isinstance(item, pt_NotebookItem)):
@@ -17,26 +17,22 @@ def parse_notebook_item(item):
 class pt_Notebook:
     @classmethod
     def read(cls, notebook_id: str, include_contents: Optional[bool] = True):
-        # Document
+        # Check in cache
+        cached = cache.collection("pt_notebooks").get_data(notebook_id)
+        if(cached is not None):
+            if(include_contents):
+                cached.get_contents()
+            return cached
+        # Check in firebase
         doc_ref = database.collection("pt_notebooks").document(notebook_id)
         doc = doc_ref.get()
         doc_dict = doc.to_dict()
         doc_dict["id"] = doc.id
-        # Get contents
-        """if(include_contents):
-            doc_dict["contents"] = []
-            contents = doc_ref.collection("contents").get()
-            for content in contents:
-                content_dict = content.to_dict()
-                content_dict["id"] = content.id
-                content_dict["notebook_id"] = doc.id
-                # Parse and append
-                doc_dict["contents"].append(parse_notebook_item(content_dict))
-            doc_dict["contents"].sort(key=lambda x: x.display_index)
-        return cls(doc_dict)"""
         nb = cls(doc_dict)
         if(include_contents):
             nb.get_contents()
+        # Store in cache
+        cache.collection("pt_notebooks").add_data(notebook_id, nb)
         return nb
 
     @classmethod
@@ -100,6 +96,8 @@ class pt_Notebook:
             self.id = new_doc[1].id
         else:
             ref.document(self.id).set(dict)
+        # Store updates in cache
+        cache.collection("pt_notebooks").add_data(self.id, self)
         return self
 
     def delete(self):
@@ -109,6 +107,8 @@ class pt_Notebook:
         doc.delete()
         for content in self.contents:
             content.delete()
+        # Store updates in cache
+        cache.collection("pt_notebooks").remove_data(self.id)
         return True
 
     def add_content(self, type: str):
@@ -124,9 +124,12 @@ class pt_Notebook:
         if(content_dict["type"] == "question"):
             content = pt_Question(content_dict)
         content.update({})
+        # Store updates in cache
+        cache.collection("pt_notebooks").add_data(self.id, self)
         return content
 
     def get_contents(self):
+        self.contents = []
         contents = database.collection("pt_notebooks").document(self.id).collection("contents").get()
         for content in contents:
             content_dict = content.to_dict()
@@ -135,4 +138,3 @@ class pt_Notebook:
             # Parse and append
             self.contents.append(parse_notebook_item(content_dict))
         self.contents.sort(key=lambda x: x.display_index)
-        

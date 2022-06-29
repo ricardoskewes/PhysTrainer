@@ -53,4 +53,6 @@ class pt_Question(pt_NotebookItem):
         self.__answer = answer
     
     def update(self, new_data: dict):
+        if("answer" in new_data):
+            self.set_answer(new_data["answer"])
         return super().update(new_data)

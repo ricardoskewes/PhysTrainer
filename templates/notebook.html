@@ -104,27 +104,39 @@ print("Hi")
         document.querySelector('#new-text')
             ?.addEventListener('click', async e => {
                 // Request
-                const request = await fetch(`/notebooks/${notebook_id}/contents`, {
+                const request = await fetch(`/api/notebooks/${notebook_id}/contents`, {
                     method: 'POST', 
                     body: JSON.stringify({type: "text"})
                 });
-                const response = await request.text();
-                window.location.reload()
+                const response = await request.json();
+                const cell = document.createElement("pt-notebook-cell");
+                cell.setAttribute("pt-notebook-item-id", response.id)
+                cell.setAttribute("pt-notebook-id", response.notebook_id)
+                cell.setAttribute("protected", false)
+                cell.setAttribute("type", "text")
+                cell.innerHTML = response.text;
+                document.querySelector("#notebook").append(cell)
             })
         document.querySelector('#new-question')
             ?.addEventListener('click', async e => {
                 // Request
-                const request = await fetch(`/notebooks/${notebook_id}/contents`, {
+                const request = await fetch(`/api/notebooks/${notebook_id}/contents`, {
                     method: 'POST', 
                     body: JSON.stringify({type: "question"})
                 });
-                const response = await request.text();
-                window.location.reload()
+                const response = await request.json();
+                const cell = document.createElement("pt-notebook-cell");
+                cell.setAttribute("pt-notebook-item-id", response.id)
+                cell.setAttribute("pt-notebook-id", response.notebook_id)
+                cell.setAttribute("protected", false)
+                cell.setAttribute("type", "question")
+                cell.innerHTML = JSON.stringify(response)
+                document.querySelector("#notebook").append(cell)
             })
         document.querySelector('#title')
             .addEventListener('blur', async e => {
                 if(e.target.getAttribute("original-value") == e.target.innerText) return true;
-                const request = await fetch(`/notebooks/${notebook_id}/update`, {
+                const request = await fetch(`/api/notebooks/${notebook_id}/update`, {
                     method: 'POST', 
                     body: JSON.stringify({title: e.target.innerText})
                 });
@@ -134,7 +146,7 @@ print("Hi")
         document.querySelector('#delete')
             ?.addEventListener('click', async e => {
                 if(confirm("Are you sure you want to delete this notebook? This cannot be undone")){
-                    const request = await fetch(`/notebooks/${notebook_id}/delete`, {
+                    const request = await fetch(`/api/notebooks/${notebook_id}/delete`, {
                         method: 'POST'
                     });
                     window.location.replace("/explore")

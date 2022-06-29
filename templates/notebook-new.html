@@ -51,7 +51,7 @@
             .addEventListener('submit', async e=>{
                 e.preventDefault();
                 const data = Object.fromEntries(new FormData(document.querySelector("form")));
-                const request = await fetch("/notebooks", {
+                const request = await fetch("/api/notebooks", {
                     method: "POST", 
                     body: JSON.stringify(data)
                 });

@@ -174,11 +174,11 @@ class pt_notebook_cell extends HTMLElement {
         const itemId = this.getAttribute('pt-notebook-item-id');
         const notebookId = this.getAttribute('pt-notebook-id');
         // Make request to api
-        const request = await fetch(`/notebooks/${notebookId}/contents/${itemId}/update`, {
+        const request = await fetch(`/api/notebooks/${notebookId}/contents/${itemId}/update`, {
             method: 'POST',
             body: JSON.stringify(this.data)
         });
-        const response = await request.text();
+        const response = await request.json();
         console.log(response);
         // Callbacks
         this.dispatchEvent(new Event("update"));
@@ -191,10 +191,10 @@ class pt_notebook_cell extends HTMLElement {
         const itemId = this.getAttribute('pt-notebook-item-id');
         const notebookId = this.getAttribute('pt-notebook-id');
         // Make request to api
-        const request = await fetch(`/notebooks/${notebookId}/contents/${itemId}/delete`, {
+        const request = await fetch(`/api/notebooks/${notebookId}/contents/${itemId}/delete`, {
             method: 'POST'
         });
-        const response = await request.text();
+        const response = await request.json();
         // Remove and callbacks
         this.remove();
         this.dispatchEvent(new Event("delete"));
