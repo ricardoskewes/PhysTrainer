@@ -5,6 +5,7 @@ from pt_DBCache import cache
 from pt_Firebase import database
 from notebooks.pt_NotebookItem import pt_NotebookItem
 from notebooks.pt_Question import pt_Question
+from users.pt_User import pt_User
 
 def parse_notebook_item(item):
     if(isinstance(item, pt_NotebookItem)):
@@ -78,6 +79,10 @@ class pt_Notebook:
             "protected": True
         }
         return dict
+
+    def get_author(self):
+        user = pt_User.read(self.author_uid)
+        return user
 
     def update(self, new_data: dict):
         # Assign new values

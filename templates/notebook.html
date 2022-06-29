@@ -38,6 +38,17 @@
             margin-left: auto;
             margin-right: auto;
         }
+            header #author{
+                display: flex;
+                align-items: center;
+                column-gap: 8px;
+            }
+            header #author img{
+                height: 40px;
+                width: 40px;
+                object-fit: cover;
+                border-radius: 20px;
+            }
             header #title{
                 font-size: 3.2rem;
                 pointer-events: all;
@@ -58,6 +69,10 @@
         </div>
     {% endif %}
     <header>
+        <div id="author">
+            <img src="{{notebook_author.photo_url}}" alt="" srcset="">
+            {{notebook_author.display_name}}
+        </div>
         <h1 contenteditable="{{notebook.protected is false}}" id="title" original-value="{{notebook.title}}">
             {{notebook.title}}
         </h1>

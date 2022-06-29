@@ -198,12 +198,13 @@ def render_notebook(user, notebook_id):
     try:
         # Get notebook
         notebook = pt_Notebook.read(notebook_id)
+        notebook_author = notebook.get_author()
         # Check ownership and protect
         if(user is None or notebook.author_uid != user.uid):
             notebook.protected = True
         else:
             notebook.protected = False
-        return render_template("notebook.html", notebook=notebook, user=user)
+        return render_template("notebook.html", notebook=notebook, notebook_author=notebook_author, user=user)
     except firebase_exceptions.NotFoundError:
         abort(404)
     except Exception as e:
