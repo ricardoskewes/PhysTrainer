@@ -79,6 +79,22 @@ def login():
         return user._data
     return redirect("/explore")
 
+@app.route("/api/auth/register", methods=["POST"])
+def register():
+    try:
+        # Get data
+        email = request.form.get("email")
+        password = request.form.get("password")
+        display_name = request.form.get("display_name")
+        # Create user
+        authentication.create_user(display_name=display_name, email=email, password=password)
+        # Login
+        token = authentication.sign_in_with_email_and_password(email=email, password=password)
+        session["current_id_token"] = token
+        return redirect("/explore")
+    except:
+        return abort(403)
+
 # API send reset link
 @app.route("/api/auth/reset-password", methods=["POST"])
 def reset_password():
