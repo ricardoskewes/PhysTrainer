@@ -61,13 +61,15 @@
 
 <body>
     <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
-    {% if notebook.protected == false %}
-        <div id="toolbar">
-            <button id="new-text">+ Text</button>
-            <button id="new-question">+ Question</button>
-            <button id="delete">Delete notebook...</button>
+    <div id="toolbar">
+            {% if notebook.protected == false %}
+                <button id="new-text">+ Text</button>
+                <button id="new-question">+ Question</button>
+                <button id="delete">Delete notebook...</button>
+            {% endif %}
+            <button id="share">Share...</button>
+            <button id="add-collection">Add to collection...</button>
         </div>
-    {% endif %}
     <header>
         <div id="author">
             <img src="{{notebook_author.photo_url}}" alt="" srcset="">
