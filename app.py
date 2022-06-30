@@ -406,7 +406,8 @@ def add_contents(user, notebook_id):
         return new_content.to_json()
     except firebase_exceptions.NotFoundError:
         abort(404)
-    except:
+    except Exception as e:
+        print(e)
         abort(500)
 
 # API Update content

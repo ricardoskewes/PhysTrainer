@@ -66,7 +66,8 @@ class pt_NotebookItem:
         del dict["id"]
         # Update or add
         if(self.id is None):
-            ref.add(dict)
+            new_doc = ref.add(dict)
+            self.id = new_doc[1].id
         else:
             ref.document(self.id).update(dict)
         # Update in cache
