@@ -2,7 +2,7 @@ import json
 from typing import Optional
 from pydantic import NoneIsAllowedError
 from pt_DBCache import cache
-from pt_Firebase import database
+from pt_Firebase import database, exceptions as firebase_exceptions
 from notebooks.pt_NotebookItem import pt_NotebookItem
 from notebooks.pt_Question import pt_Question
 from users.pt_User import pt_User
@@ -25,8 +25,9 @@ class pt_Notebook:
                 cached.get_contents()
             return cached
         # Check in firebase
-        doc_ref = database.collection("pt_notebooks").document(notebook_id)
-        doc = doc_ref.get()
+        doc = database.collection("pt_notebooks").document(notebook_id).get()
+        if(doc.exists == False):
+            raise firebase_exceptions.NotFoundError("404")
         doc_dict = doc.to_dict()
         doc_dict["id"] = doc.id
         nb = cls(doc_dict)

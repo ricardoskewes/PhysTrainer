@@ -1,17 +1,18 @@
 """
 
 """
-from crypt import methods
+
 import json
 import os
 import tempfile
 from flask import Flask, abort, redirect, render_template, request, session
 from sympy import re
+
 from pt_Firebase import database, authentication, bucket, exceptions as firebase_exceptions
 from notebooks.pt_Notebook import pt_Notebook
 from notebooks.pt_NotebookItem import pt_NotebookItem
 from notebooks.pt_Question import pt_Question
-
+from pt_Collection import pt_Collection
 
 app = Flask(__name__)
 app.secret_key = "PhysTr41n3r"
@@ -182,6 +183,103 @@ def render_explore(user):
         abort(500)
 
 """
+COLLECTIONS 
+"""
+
+# Get a collection
+@app.route("/collections/<collection_id>", methods=["GET"])
+@authentication.login_optional_decorator
+def render_collection(user, collection_id):
+    collection = pt_Collection.read(collection_id, True, False)
+    return collection.to_dict()
+
+# API Create a collection
+@app.route("/api/collections", methods=["POST"])
+@authentication.login_required_decorator
+def create_collection(user):
+    try:
+        data = request.get_json(force=True)
+        if "id" in data:
+            del data["id"]
+        data["author_uid"] = user.uid
+        collection = pt_Collection(data)
+        collection.update({})
+        return collection.to_dict()
+    except Exception as e:
+        print(e)
+        abort(500)
+        pass
+
+# API Update a collection
+@app.route("/api/collections/<collection_id>/update", methods=["POST"])
+@authentication.login_required_decorator
+def update_collection(user, collection_id):
+    try:
+        data = request.get_json(force=True)
+        if "id" in data:
+            del data["id"]
+        collection = pt_Collection.read(collection_id)
+        if(collection.author_uid != user.uid):
+            abort(403)
+        collection.update(data)
+        return collection.to_dict()
+    except firebase_exceptions.NotFoundError:
+        abort(404)
+    except:
+        abort(500)
+
+# API Delete a collection
+@app.route("/api/collections/<collection_id>/delete", methods=["POST"])
+@authentication.login_required_decorator
+def delete_collection(user, collection_id):
+    try:
+        collection = pt_Collection.read(collection_id)
+        if(collection.author_uid != user.uid):
+            abort(403)
+        collection.delete()
+        return {
+            "message": "success"
+        }
+    except firebase_exceptions.NotFoundError:
+        abort(404)
+    except:
+        abort(500)
+
+@app.route("/api/collections/<collection_id>/notebooks/add", methods=["POST"])
+@authentication.login_required_decorator
+def add_notebook_to_collection(user, collection_id):
+    try:
+        notebook_id = request.get_json(force=True)["notebook_id"]
+        collection = pt_Collection.read(collection_id)
+        if(collection.author_uid != user.uid):
+            abort(403)
+        collection.add_notebook(notebook_id)
+        return {
+            "message": "success"
+        }
+    except firebase_exceptions.NotFoundError:
+        abort(404)
+    except:
+        abort(500)
+
+@app.route("/api/collections/<collection_id>/notebooks/remove", methods=["POST"])
+@authentication.login_required_decorator
+def remove_notebook_from_collection(user, collection_id):
+    try:
+        notebook_id = request.get_json(force=True)["notebook_id"]
+        collection = pt_Collection.read(collection_id)
+        if(collection.author_uid != user.uid):
+            abort(403)
+        collection.remove_notebook(notebook_id)
+        return {
+            "message": "success"
+        }
+    except firebase_exceptions.NotFoundError:
+        abort(404)
+    except:
+        abort(500)
+
+"""
 NOTEBOOKS
 For managing notebooks and contents
 """
@@ -219,6 +317,7 @@ def create_notebook(user):
         # Get data
         dict = request.get_json(force=True)
         # Attatch uid of current user
+        del dict["id"]
         dict["author_uid"] = user.uid
         nb = pt_Notebook(dict)
         nb.update({})

@@ -35,8 +35,8 @@ class pt_DBCacheItem:
 class pt_DBCacheCollection:
     __data: dict[pt_DBCacheItem] = {}
     max_size: int = 10
-    max_time = 60
-    def __init__(self, max_size: int=10, max_time: int = 1000*30) -> None:
+    max_time = 30
+    def __init__(self, max_size: int=10, max_time: int = 30) -> None:
         self.max_size = max_size
         self.max_time = max_time
 
