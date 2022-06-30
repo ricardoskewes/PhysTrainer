@@ -67,8 +67,10 @@
                 <button id="new-question">+ Question</button>
                 <button id="delete">Delete notebook...</button>
             {% endif %}
+            {% if user is not none %}
             <button id="share">Share...</button>
             <button id="add-collection">Add to collection...</button>
+            {% endif %}
         </div>
     <header>
         <div id="author">
@@ -93,10 +95,20 @@ print("Hi")
         {%endfor%}
     </div>
 
+    <ui-modal id="add-collection-modal" title="Add notebook to collection">
+        Select one of your collections
+        <form action="" method="dialog">
+            <div id="add-collection-options">
+            </div>
+            <input type="submit" value="Add">
+        </form>
+    </ui-modal>
+
     <script src="/static/pt_navbar.js" type="module"></script>
     <script src="/static/pt_markdown.js" type="module"></script>
     <script src="/static/pt_question.js" type="module"></script>
     <script src="/static/pt_notebook_cell.js" type="module"></script>
+    <script src="/static/ui_modal.js" type="module"></script>
     <script>
         const notebook_id = "{{notebook.id}}"
 
@@ -134,6 +146,7 @@ print("Hi")
                 cell.innerHTML = response.text;
                 document.querySelector("#notebook").append(cell)
             })
+        
         document.querySelector('#new-question')
             ?.addEventListener('click', async e => {
                 // Request
@@ -166,7 +179,7 @@ print("Hi")
         
         document.querySelector('#add-collection')
             .addEventListener('click', async e => {
-                alert("Feature coming soon")
+                document.querySelector('#add-collection-modal').showModal()
             })
 
         document.querySelector('#title')
@@ -179,6 +192,7 @@ print("Hi")
                 console.log(await request.text())
                 e.target.setAttribute("original-value", e.target.innerText)
             })
+        
         document.querySelector('#delete')
             ?.addEventListener('click', async e => {
                 if(confirm("Are you sure you want to delete this notebook? This cannot be undone")){
@@ -187,6 +201,37 @@ print("Hi")
                     });
                     window.location.replace("/explore")
                 }
+            })
+    
+        document.querySelector('#add-collection-modal')
+            .addEventListener('show', async e => {
+                document.querySelector('#add-collection-options').innerHTML = ""
+                const request = await fetch('/api/me/collections');
+                const response = await request.json();
+                for(let collection of response){
+                    const option = document.createElement('input');
+                    option.setAttribute('type', 'radio');
+                    option.setAttribute('name', 'collection');
+                    option.setAttribute('value', collection.id);
+                    option.setAttribute('id', `add-collection-option-${collection.id}`)
+                    const label = document.createElement('label');
+                    label.setAttribute('for', `add-collection-option-${collection.id}`)
+                    label.innerHTML = collection.title;
+                    const br = document.createElement('br')
+                    document.querySelector('#add-collection-options').append(option, label, br)
+                }
+            })
+        document.querySelector('#add-collection-modal form')
+            .addEventListener('submit', async e => {
+                const data = new FormData(e.target);
+                const collection_id = data.get("collection");
+                const request = await fetch(`/api/collections/${collection_id}/notebooks/add`, {
+                    method: 'POST', 
+                    body: JSON.stringify({notebook_id})
+                })
+                const response = await request.text();
+                alert(response);
+                e.preventDefault();
             })
     </script>
 </body>
