@@ -33,20 +33,23 @@ class pt_Question(pt_NotebookItem):
         return dict
 
     def verify_submission(self, submission: str) -> bool:
-        if(self.comparison == "pt_comparison_text_strict"):
-            return pt_comparison_text_strict(submission, self.__answer)
-        if(self.comparison == "pt_comparison_text_medium"):
-            return pt_comparison_text_medium(submission, self.__answer)
-        if(self.comparison == "pt_comparison_text_similarity"):
-            return pt_comparison_text_similarity(submission, self.__answer)
-        if(self.comparison == "pt_comparison_num_strict"):
-            return pt_comparison_num_strict(submission, self.__answer)
-        if(self.comparison == "pt_comparison_math_equality"):
-            return pt_comparison_math_equality(submission, self.__answer)
-        if(self.comparison == "pt_comparison_options_all"):
-            return pt_comparison_options_all(submission, self.__answer)
-        if(self.comparison == "pt_comparison_options_some"):
-            return pt_comparison_options_some(submission, self.__answer)
+        try:
+            if(self.comparison == "pt_comparison_text_strict"):
+                return pt_comparison_text_strict(submission, self.__answer)
+            if(self.comparison == "pt_comparison_text_medium"):
+                return pt_comparison_text_medium(submission, self.__answer)
+            if(self.comparison == "pt_comparison_text_similarity"):
+                return pt_comparison_text_similarity(submission, self.__answer)
+            if(self.comparison == "pt_comparison_num_strict"):
+                return pt_comparison_num_strict(submission, self.__answer)
+            if(self.comparison == "pt_comparison_math_equality"):
+                return pt_comparison_math_equality(submission, self.__answer)
+            if(self.comparison == "pt_comparison_options_all"):
+                return pt_comparison_options_all(submission, self.__answer)
+            if(self.comparison == "pt_comparison_options_some"):
+                return pt_comparison_options_some(submission, self.__answer)
+        except:
+            pass
         return False
 
     def set_answer(self, answer: str):
