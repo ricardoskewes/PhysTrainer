@@ -20,7 +20,8 @@
             top: 0;
             border-bottom: 0.5px solid gray;
         }
-        section{
+        section, 
+        body>h1{
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
@@ -84,11 +85,12 @@
         {% endfor %}
     </section>
     
+    <h1>Collections</h1>
     {% for collection in collections %}
     <section class="collection">
         <div class="collection-info">
             {% set collection_author = collection.get_author() %}
-            <h1>{{collection.title}}</h1>
+            <h2>{{collection.title}}</h2>
             <span class="author">
                 <img src="{{collection_author.photo_url}}" alt="">
                 {{collection_author.display_name}}
