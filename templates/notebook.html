@@ -150,6 +150,25 @@ print("Hi")
                 cell.innerHTML = JSON.stringify(response)
                 document.querySelector("#notebook").append(cell)
             })
+
+        document.querySelector('#share')
+            .addEventListener('click', async e => {
+                try{
+                    await navigator.share({
+                        url: location.href,
+                        title: "Phystrainer", 
+                        text: "Learn and practice with problems. Check this one out!"
+                    })
+                } catch(e){
+
+                }
+            })
+        
+        document.querySelector('#add-collection')
+            .addEventListener('click', async e => {
+                alert("Feature coming soon")
+            })
+
         document.querySelector('#title')
             .addEventListener('blur', async e => {
                 if(e.target.getAttribute("original-value") == e.target.innerText) return true;
