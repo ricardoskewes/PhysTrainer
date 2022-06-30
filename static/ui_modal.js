@@ -39,7 +39,7 @@ template.innerHTML = `
         <dialog class="fixed">
             <nav>
                 <span class="title"></span>
-                <button class="close">&#x2717;</button>
+                <button class="close">&#x2573;</button>
             </nav>
             <main><slot></slot></main>
         </dialog>
