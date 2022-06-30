@@ -2,6 +2,7 @@ from typing import Optional
 from notebooks.pt_Notebook import pt_Notebook
 from pt_Firebase import database, exceptions as firebase_exceptions, firestore
 from pt_DBCache import cache
+from users.pt_User import pt_User
 
 class pt_Collection:
     @classmethod
@@ -37,6 +38,7 @@ class pt_Collection:
         self.title = data.get("title", "")
         self.description = data.get("description", "")
         self.author_uid = data.get("author_uid", "")
+        self.__notebook_references = []
 
         for item in data.get("notebooks", []):
             if(isinstance(item, pt_Notebook)):
@@ -56,6 +58,9 @@ class pt_Collection:
             "notebooks": list(map(lambda n: n.to_dict(), self.notebooks))
         }
 
+    def get_author(self):
+        return pt_User.read(self.author_uid)
+
     def get_contents(self, include_notebook_contents: Optional[bool] = False):
         self.notebooks = []
         for doc in self.__notebook_references:
@@ -65,7 +70,7 @@ class pt_Collection:
             except firebase_exceptions.NotFoundError:
                 self.remove_notebook(doc)
                 pass
-
+ 
     def remove_notebook(self, doc):
         # Convert to doc reference
         if(isinstance(doc, str)):

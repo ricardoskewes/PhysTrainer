@@ -52,7 +52,7 @@ class pt_DBCacheCollection:
         item = pt_DBCacheItem(key, data)
         if len(self.__data) >= self.max_size:
             # Get oldest record and delete
-            oldest_key = max(self.__data, key=self.__data.get.get_age())
+            oldest_key = max(self.__data, key = lambda k: self.__data[k].get_age())
             del self.__data[oldest_key]
             # Add
         self.__data[key] = item

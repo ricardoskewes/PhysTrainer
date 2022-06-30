@@ -13,6 +13,7 @@ from notebooks.pt_Notebook import pt_Notebook
 from notebooks.pt_NotebookItem import pt_NotebookItem
 from notebooks.pt_Question import pt_Question
 from pt_Collection import pt_Collection
+from pt_DBCache import cache
 
 app = Flask(__name__)
 app.secret_key = "PhysTr41n3r"
@@ -167,19 +168,36 @@ def update_user_info(user):
 """
 DISCOVERY
 Endpoints for the discovery of new content and notebooks
+Important! These objects will be customized/curated and cached
 """
 # Get explore page
 @app.route("/explore", methods=["GET"])
 @authentication.login_optional_decorator
 def render_explore(user):
     try:
-        docs = []
-        for doc in database.collection("pt_notebooks").stream():
-            doc_dict = doc.to_dict()
-            doc_dict["id"] = doc.id
-            docs.append( pt_Notebook(doc_dict).to_dict_protected() )
-        return render_template("explore.html", docs=docs, user=user)
-    except:
+        # Get all notebooks
+        notebooks = []
+        for doc in database.collection("pt_notebooks").get():
+            doc_dic = doc.to_dict()
+            doc_dic["id"] = doc.id
+            notebook = pt_Notebook(doc_dic)
+            # Store in cache
+            cache.collection("pt_notebooks").add_data(doc.id, notebook)
+            notebooks.append(notebook)
+        # Get all collections
+        collections = []
+        for doc in database.collection("pt_collections").get():
+            doc_dic = doc.to_dict()
+            doc_dic["id"] = doc.id
+            collection = pt_Collection(doc_dic)
+            collection.get_contents()
+            # Store in cache
+            cache.collection("pt_collections").add_data(doc.id, collection)
+            collections.append(collection)
+
+        return render_template("explore.html", notebooks=notebooks, collections=collections, user=user)
+    except Exception as e:
+        print(e)
         abort(500)
 
 """
@@ -317,12 +335,14 @@ def create_notebook(user):
         # Get data
         dict = request.get_json(force=True)
         # Attatch uid of current user
-        del dict["id"]
+        if "id" in dict:
+            del dict["id"]
         dict["author_uid"] = user.uid
         nb = pt_Notebook(dict)
         nb.update({})
         return nb.to_dict()
-    except:
+    except Exception as e:
+        print(e)
         abort(500)
 
 # API Update notebook

@@ -27,11 +27,31 @@
             padding: 16px;
         }
 
-        #all {
+        .collection {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-evenly;
+            padding: 16px;
+            box-sizing: border-box;
+            background-color: white;
+            margin: 8px auto;
         }
+            .collection .collection-info{
+                flex-basis: 100%;
+                margin-bottom: 1rem;
+            }
+            .collection .author{
+                display: flex;
+                align-items: center;
+                column-gap: 0.5rem;
+                font-size: 1rem;
+            }
+                .collection .author img{
+                    height: 2rem;
+                    width: 2rem;
+                    object-fit: cover;
+                    border-radius: 1rem;
+                }
         .notebook {
             color: white;
             font-weight: bold;
@@ -50,12 +70,12 @@
 
 <body>
     <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
-    <section>
-        <h1>Explore</h1>
-        These are problems created by members of the community
-    </section>
-    <section id="all">
-        {% for item in docs %}
+    <section class="collection">
+        <div class="collection-info">
+            <h1>Explore</h1>
+            These are problems created by members of the community. This includes ALL notebooks so far
+        </div>
+        {% for item in notebooks %}
             <a href="/notebooks/{{item.id}}">
                 <div class="notebook" id="notebook-{{item.id}}">
                     {{item.title}}
@@ -64,6 +84,26 @@
         {% endfor %}
     </section>
     
+    {% for collection in collections %}
+    <section class="collection">
+        <div class="collection-info">
+            {% set collection_author = collection.get_author() %}
+            <h1>{{collection.title}}</h1>
+            <span class="author">
+                <img src="{{collection_author.photo_url}}" alt="">
+                {{collection_author.display_name}}
+            </span>
+        </div>
+        {% for item in collection.notebooks %}
+            <a href="/notebooks/{{item.id}}">
+                <div class="notebook" id="notebook-{{item.id}}">
+                    {{item.title}}
+                </div>
+            </a>
+        {% endfor %}
+    </section>
+    {% endfor %}
+
     <script src="/static/pt_navbar.js" type="module"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
     <script>
