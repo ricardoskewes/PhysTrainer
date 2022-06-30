@@ -6,6 +6,7 @@ import json
 import os
 import tempfile
 from flask import Flask, abort, redirect, render_template, request, session
+from importlib_metadata import method_cache
 from sympy import re
 
 from pt_Firebase import database, authentication, bucket, exceptions as firebase_exceptions
@@ -164,6 +165,26 @@ def update_user_info(user):
     except:
         abort(500)
 
+# API Get my collections
+@app.route("/api/me/collections", methods=["GET"])
+@authentication.login_required_decorator
+def get_my_collections(user):
+    try:
+        # Get collections
+        collections = []
+        for doc in database.collection("pt_collections").where("author_uid", "==", user.uid).get():
+            doc_dict = doc.to_dict()
+            doc_dict["id"] = doc.id
+            collection = pt_Collection(doc_dict)
+        # Store in cache
+            cache.collection("pt_collections").add_data(doc.id, collection)
+            collections.append(collection.to_dict())
+        return json.dumps(collections)
+    except firebase_exceptions.NotFoundError:
+        abort(403)
+    except Exception as e:
+        print(e)
+        abort(500)
 
 """
 DISCOVERY

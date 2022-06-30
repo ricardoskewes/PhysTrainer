@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 from notebooks.pt_Notebook import pt_Notebook
 from pt_Firebase import database, exceptions as firebase_exceptions, firestore
@@ -57,6 +58,9 @@ class pt_Collection:
             "author_uid": self.author_uid, 
             "notebooks": list(map(lambda n: n.to_dict(), self.notebooks))
         }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
     def get_author(self):
         return pt_User.read(self.author_uid)
