@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection - Phystrainer Collection</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        header{
+            min-height: 50vmin;
+            display: flex;
+            align-items: flex-end;
+            color: white;
+        }
+            header .section-centered{
+                flex: 1;
+            }
+        #problems{
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 8px;
+            row-gap: 8px;
+            justify-content: space-around;
+        }
+            #problems h2{
+                flex-basis: 100%;
+            }
+    </style>
+</head>
+<body>
+    <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
+    <header>
+        <div class="section-centered">
+            {%set author = collection.get_author()%}
+            <div class="user-cell">
+                <img src="{{author.photo_url}}" alt="" srcset="">
+                {{author.display_name}}
+            </div>
+            <h1>{{collection.title}}</h1>
+        </div>
+    </header>
+    <section class="section-centered">
+        <pt-markdown>{{collection.description}}</pt-markdown>
+    </section>
+
+    <section class="section-centered" id="problems">
+        {%for notebook in collection.notebooks%}
+            <a href="/notebooks/{{notebook.id}}">
+                <div class="notebook-thumbnail">
+                    {{notebook.title}}
+                </div>
+            </a>
+        {%endfor%}
+    </section>
+
+    <script src="/static/pt_navbar.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+    <script>
+        const collection_id = "{{collection.id}}"
+        document.querySelector('header').style.backgroundImage = GeoPattern.generate(collection_id).toDataUrl();
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 1rem;
+    background-color: snow;
+}
+pt-navbar{
+    position: sticky;
+    top: 0;
+    border-bottom: 0.5px solid gray;
+}
+
+.section-centered{
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+}
+
+.notebook-thumbnail {
+    color: white;
+    background: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 4px;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12),
+        0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+}
+    .user-cell img{
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+        object-fit: cover;
+        background: black;
+    }

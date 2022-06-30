@@ -33,6 +33,7 @@ class pt_Collection:
     author_uid: str = ""
     notebooks: list[pt_Notebook] = []
     __notebook_references: list = []
+    protected: bool = False
 
     def __init__(self, data: dict):
         self.id = data.get("id", None)

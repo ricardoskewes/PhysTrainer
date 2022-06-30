@@ -7,7 +7,7 @@ import os
 import tempfile
 from flask import Flask, abort, redirect, render_template, request, session
 from importlib_metadata import method_cache
-from sympy import re
+from sympy import re, use
 
 from pt_Firebase import database, authentication, bucket, exceptions as firebase_exceptions
 from notebooks.pt_Notebook import pt_Notebook
@@ -229,8 +229,15 @@ COLLECTIONS
 @app.route("/collections/<collection_id>", methods=["GET"])
 @authentication.login_optional_decorator
 def render_collection(user, collection_id):
-    collection = pt_Collection.read(collection_id, True, False)
-    return collection.to_dict()
+    try:
+        collection = pt_Collection.read(collection_id, True, False)
+        if(user is None or collection.author_uid != user.uid):
+            collection.protected = True
+        return render_template("collection.html", collection=collection, user=user)
+    except firebase_exceptions.NotFoundError:
+        abort(404)
+    except:
+        abort(500)
 
 # API Create a collection
 @app.route("/api/collections", methods=["POST"])

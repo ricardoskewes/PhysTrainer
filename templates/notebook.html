@@ -6,26 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{notebook.title}} - Phystrainer Notebook</title>
+    <link rel="stylesheet" href="/static/styles.css">
     <style>
         body{
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 1rem;
-            background-color: snow;
+            background: white;
         }
-        pt-navbar{
-            position: sticky;
-            top: 0;
-            border-bottom: 0.5px solid gray;
-        }
-
         #toolbar{
             padding: 16px;
             text-align: center;
         }
         header {
-            min-height: 50vmin;
+            /* min-height: 50vmin; */
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -229,7 +220,9 @@ print("Hi")
                     method: 'POST', 
                     body: JSON.stringify({notebook_id})
                 })
-                const response = await request.text();
+                const response = await request.json();
+                if(response.message == "success")
+                    location.replace(`/collections/${collection_id}`)
                 e.preventDefault();
             })
     </script>

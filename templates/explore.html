@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore - Phystrainer</title>
+    <link rel="stylesheet" href="/static/styles.css">
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -41,31 +42,7 @@
                 flex-basis: 100%;
                 margin-bottom: 1rem;
             }
-            .collection .author{
-                display: flex;
-                align-items: center;
-                column-gap: 0.5rem;
-                font-size: 1rem;
-            }
-                .collection .author img{
-                    height: 2rem;
-                    width: 2rem;
-                    object-fit: cover;
-                    border-radius: 1rem;
-                }
-        .notebook {
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin: 4px;
-            width: 150px;
-            height: 150px;
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                0 3px 1px -2px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            box-sizing: border-box;
-        }
+        
     </style>
 </head>
 
@@ -78,7 +55,7 @@
         </div>
         {% for item in notebooks %}
             <a href="/notebooks/{{item.id}}">
-                <div class="notebook" id="notebook-{{item.id}}">
+                <div class="notebook-thumbnail" id="notebook-{{item.id}}">
                     {{item.title}}
                 </div>
             </a>
@@ -90,15 +67,17 @@
     <section class="collection">
         <div class="collection-info">
             {% set collection_author = collection.get_author() %}
-            <h2>{{collection.title}}</h2>
-            <span class="author">
+            <span class="user-cell">
                 <img src="{{collection_author.photo_url}}" alt="">
                 {{collection_author.display_name}}
             </span>
+            <a href="/collections/{{collection.id}}">
+                <h2>{{collection.title}}</h2>
+            </a>
         </div>
         {% for item in collection.notebooks %}
             <a href="/notebooks/{{item.id}}">
-                <div class="notebook" id="notebook-{{item.id}}">
+                <div class="notebook-thumbnail" id="notebook-{{item.id}}">
                     {{item.title}}
                 </div>
             </a>
