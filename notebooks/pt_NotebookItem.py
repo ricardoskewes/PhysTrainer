@@ -14,6 +14,7 @@ class pt_NotebookItem:
         item = item_ref.get()
         item_dict = item.to_dict()
         item_dict["id"] = item.id
+        item_dict["creation_date"] = item.create_time
         # Create object and tore in cache
         obj = cls(item_dict)
         cached = cache.collection("pt_notebookitems").add_data(notebook_id+"/"+item_id, obj)
@@ -24,13 +25,15 @@ class pt_NotebookItem:
     display_index: int = 0
     type: str = ""
     text: str = ""
-    
+    creation_date = None
+
     def __init__(self, data: dict) -> None:
         self.id = data.get("id", None)
         self.notebook_id = data.get("notebook_id", None)
         self.display_index = data.get("display_index", 0)
         self.type = data.get("type", "text")
         self.text = data.get("text", "")
+        self.creation_date = data.get("creation_date", None)
 
     def to_dict(self):
         return {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collection - Phystrainer Collection</title>
+    <title>{{collection.title}} - Phystrainer Collection</title>
     <link rel="stylesheet" href="/static/styles.css">
     <style>
         header{
@@ -49,16 +49,36 @@
             <a href="/notebooks/{{notebook.id}}">
                 <div class="notebook-thumbnail">
                     {{notebook.title}}
+                    {%if collection.protected == false%}
+                        <button class="delete" pt-notebook-id="{{notebook.id}}"></button>
+                    {%endif%}
                 </div>
             </a>
         {%endfor%}
     </section>
 
     <script src="/static/pt_navbar.js" type="module"></script>
+    <script src="/static/pt_markdown.js" type="module"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
     <script>
         const collection_id = "{{collection.id}}"
         document.querySelector('header').style.backgroundImage = GeoPattern.generate(collection_id).toDataUrl();
+
+        document.querySelectorAll('.notebook-thumbnail .delete').forEach(item => {
+            item.addEventListener('click', async e=>{
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                const notebook_id = item.getAttribute('pt-notebook-id');
+                const request = await fetch(`/api/collections/${collection_id}/notebooks/remove`, {
+                    method: 'POST', 
+                    body: JSON.stringify({notebook_id})
+                });
+                const response = await request.json();
+                if(response.message == "success"){
+                    item.parentElement.parentElement.remove();
+                }
+            })
+        })
     </script>
 </body>
 </html>

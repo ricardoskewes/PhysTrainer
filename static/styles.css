@@ -31,10 +31,27 @@ pt-navbar{
         0 3px 1px -2px rgba(0, 0, 0, 0.2);
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
 }
+    .notebook-thumbnail .delete{
+        appearance: none;
+        height: 2.4rem;
+        width: 2.4rem;
+        border-radius: 1.2rem;
+        background: red;
+        border: none;
+        position: absolute;
+        top: -1.2rem;
+        left: -1.2rem;
+    }
+    .notebook-thumbnail .delete::before{
+        content: '-';
+        font-size: 1rem;
+        color: white;
+    }
 
 .user-cell {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     column-gap: 0.5rem;
 }

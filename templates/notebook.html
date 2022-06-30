@@ -8,13 +8,15 @@
     <title>{{notebook.title}} - Phystrainer Notebook</title>
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        body{
+        body {
             background: white;
         }
-        #toolbar{
+
+        #toolbar {
             padding: 16px;
             text-align: center;
         }
+
         header {
             /* min-height: 50vmin; */
             display: flex;
@@ -23,28 +25,33 @@
             padding: 16px;
             pointer-events: none
         }
-        header, 
-        pt-notebook-cell{
+
+        header,
+        pt-notebook-cell {
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
         }
-            header #author{
-                display: flex;
-                align-items: center;
-                column-gap: 8px;
-            }
-            header #author img{
-                height: 2rem;
-                width: 2rem;
-                object-fit: cover;
-                border-radius: 1rem;
-            }
-            header #title{
-                font-size: 3.2rem;
-                pointer-events: all;
-            }
-        pt-notebook-cell{
+
+        header #author {
+            display: flex;
+            align-items: center;
+            column-gap: 8px;
+        }
+
+        header #author img {
+            height: 2rem;
+            width: 2rem;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        header #title {
+            font-size: 3.2rem;
+            pointer-events: all;
+        }
+
+        pt-notebook-cell {
             background-color: white;
         }
     </style>
@@ -53,35 +60,39 @@
 <body>
     <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url}}"></pt-navbar>
     <div id="toolbar">
-            {% if notebook.protected == false %}
-                <button id="new-text">+ Text</button>
-                <button id="new-question">+ Question</button>
-                <button id="delete">Delete notebook...</button>
-            {% endif %}
-            {% if user is not none %}
-            <button id="share">Share...</button>
-            <button id="add-collection">Add to collection...</button>
-            {% endif %}
-        </div>
+        {% if notebook.protected == false %}
+        <button id="new-text">+ Text</button>
+        <button id="new-question">+ Question</button>
+        <button id="delete">Delete notebook...</button>
+        {% endif %}
+        {% if user is not none %}
+        <button id="share">Share...</button>
+        <button id="add-collection">Add to collection...</button>
+        {% endif %}
+    </div>
     <header>
-        <div id="author">
-            <img src="{{notebook_author.photo_url}}" alt="" srcset="">
-            {{notebook_author.display_name}}
-        </div>
+        <span style="display: inline-flex; align-items: center; column-gap: 1ch;">
+            <span class="user-cell">
+                <img src="{{notebook_author.photo_url}}" alt="" srcset="">
+                {{notebook_author.display_name}}
+            </span> {{notebook.creation_date}}
+        </span>
         <h1 contenteditable="{{notebook.protected is false}}" id="title" original-value="{{notebook.title}}">
             {{notebook.title}}
         </h1>
     </header>
-<!--     <pt-notebook-cell type="code">
+    <!--     <pt-notebook-cell type="code">
 print("Hi")
     </pt-notebook-cell> -->
     <div id="notebook">
         {%set contents = notebook.contents %}
         {%for item in contents %}
             {% if item.type == "text" %}
-            <pt-notebook-cell type="text" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}" protected="{{notebook.protected}}">{{item.text}}</pt-notebook-cell>
+            <pt-notebook-cell type="text" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}"
+                protected="{{notebook.protected}}">{{item.text}}</pt-notebook-cell>
             {% else %}
-            <pt-notebook-cell type="question" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}" protected="{{notebook.protected}}">{{item.to_json()}}</pt-notebook-cell>
+            <pt-notebook-cell type="question" pt-notebook-item-id="{{item.id}}" pt-notebook-id="{{notebook.id}}"
+                protected="{{notebook.protected}}">{{item.to_json()}}</pt-notebook-cell>
             {% endif %}
         {%endfor%}
     </div>
@@ -104,7 +115,7 @@ print("Hi")
         const notebook_id = "{{notebook.id}}"
 
         document.querySelector("#notebook")
-            ?.addEventListener("moveup", async e=>{
+            ?.addEventListener("moveup", async e => {
                 const target = e.target;
                 const next = e.target.nextElementSibling;
                 await target.update()
@@ -113,7 +124,7 @@ print("Hi")
             })
 
         document.querySelector("#notebook")
-            ?.addEventListener("movedown", async e=>{
+            ?.addEventListener("movedown", async e => {
                 const target = e.target;
                 const previous = e.target.previousElementSibling;
                 await target.update();
@@ -125,8 +136,8 @@ print("Hi")
             ?.addEventListener('click', async e => {
                 // Request
                 const request = await fetch(`/api/notebooks/${notebook_id}/contents`, {
-                    method: 'POST', 
-                    body: JSON.stringify({type: "text"})
+                    method: 'POST',
+                    body: JSON.stringify({ type: "text" })
                 });
                 const response = await request.json();
                 const cell = document.createElement("pt-notebook-cell");
@@ -137,13 +148,13 @@ print("Hi")
                 cell.innerHTML = response.text;
                 document.querySelector("#notebook").append(cell)
             })
-        
+
         document.querySelector('#new-question')
             ?.addEventListener('click', async e => {
                 // Request
                 const request = await fetch(`/api/notebooks/${notebook_id}/contents`, {
-                    method: 'POST', 
-                    body: JSON.stringify({type: "question"})
+                    method: 'POST',
+                    body: JSON.stringify({ type: "question" })
                 });
                 const response = await request.json();
                 const cell = document.createElement("pt-notebook-cell");
@@ -157,17 +168,17 @@ print("Hi")
 
         document.querySelector('#share')
             .addEventListener('click', async e => {
-                try{
+                try {
                     await navigator.share({
                         url: location.href,
-                        title: "Phystrainer", 
+                        title: "Phystrainer",
                         text: "Learn and practice with problems. Check this one out!"
                     })
-                } catch(e){
+                } catch (e) {
 
                 }
             })
-        
+
         document.querySelector('#add-collection')
             .addEventListener('click', async e => {
                 document.querySelector('#add-collection-modal').showModal()
@@ -175,31 +186,31 @@ print("Hi")
 
         document.querySelector('#title')
             .addEventListener('blur', async e => {
-                if(e.target.getAttribute("original-value") == e.target.innerText) return true;
+                if (e.target.getAttribute("original-value") == e.target.innerText) return true;
                 const request = await fetch(`/api/notebooks/${notebook_id}/update`, {
-                    method: 'POST', 
-                    body: JSON.stringify({title: e.target.innerText})
+                    method: 'POST',
+                    body: JSON.stringify({ title: e.target.innerText })
                 });
                 console.log(await request.text())
                 e.target.setAttribute("original-value", e.target.innerText)
             })
-        
+
         document.querySelector('#delete')
             ?.addEventListener('click', async e => {
-                if(confirm("Are you sure you want to delete this notebook? This cannot be undone")){
+                if (confirm("Are you sure you want to delete this notebook? This cannot be undone")) {
                     const request = await fetch(`/api/notebooks/${notebook_id}/delete`, {
                         method: 'POST'
                     });
                     window.location.replace("/explore")
                 }
             })
-    
+
         document.querySelector('#add-collection-modal')
             .addEventListener('show', async e => {
                 document.querySelector('#add-collection-options').innerHTML = ""
                 const request = await fetch('/api/me/collections');
                 const response = await request.json();
-                for(let collection of response){
+                for (let collection of response) {
                     const option = document.createElement('input');
                     option.setAttribute('type', 'radio');
                     option.setAttribute('name', 'collection');
@@ -217,11 +228,11 @@ print("Hi")
                 const data = new FormData(e.target);
                 const collection_id = data.get("collection");
                 const request = await fetch(`/api/collections/${collection_id}/notebooks/add`, {
-                    method: 'POST', 
-                    body: JSON.stringify({notebook_id})
+                    method: 'POST',
+                    body: JSON.stringify({ notebook_id })
                 })
                 const response = await request.json();
-                if(response.message == "success")
+                if (response.message == "success")
                     location.replace(`/collections/${collection_id}`)
                 e.preventDefault();
             })

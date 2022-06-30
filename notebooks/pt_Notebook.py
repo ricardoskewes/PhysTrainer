@@ -30,6 +30,7 @@ class pt_Notebook:
             raise firebase_exceptions.NotFoundError("404")
         doc_dict = doc.to_dict()
         doc_dict["id"] = doc.id
+        doc_dict["creation_date"] = doc.create_time
         nb = cls(doc_dict)
         if(include_contents):
             nb.get_contents()
@@ -54,6 +55,7 @@ class pt_Notebook:
     author_uid: str = ""
     protected: bool = False
     tags: list = []
+    creation_date = None
 
     def __init__(self, data: dict) -> None:
         self.id = data.get("id", None)
@@ -61,6 +63,7 @@ class pt_Notebook:
         self.contents = list(map(lambda x: parse_notebook_item(x), data.get("contents", [])))
         self.author_uid = data.get("author_uid", "")
         self.tags = data.get("tags", [])
+        self.creation_date = data.get("creation_date", None)
 
         self.contents.sort(key=lambda x: x.display_index)
 
@@ -69,7 +72,8 @@ class pt_Notebook:
             "id": self.id, 
             "title": self.title, 
             "contents": list(map(lambda x: x.to_dict(), self.contents)), 
-            "author_uid": self.author_uid
+            "author_uid": self.author_uid, 
+            "creation_date": self.creation_date
         }
 
     def to_dict_protected(self):
@@ -77,7 +81,8 @@ class pt_Notebook:
             "id": self.id, 
             "title": self.title, 
             "contents": list(map(lambda x: x.to_dict_protected(), self.contents)), 
-            "protected": True
+            "protected": True, 
+            "creation_date": self.creation_date
         }
         return dict
 
@@ -96,6 +101,7 @@ class pt_Notebook:
         dict = self.to_dict()
         del dict["contents"]
         del dict["id"]
+        del dict["creation_date"]
         # Updte or add
         if(self.id is None):
             new_doc = ref.add(dict)
