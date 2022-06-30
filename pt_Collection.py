@@ -67,6 +67,10 @@ class pt_Collection:
         return pt_User.read(self.author_uid)
 
     def get_contents(self, include_notebook_contents: Optional[bool] = False):
+        # Check if cached (necessary to avoid weird behavior)
+        cached = cache.collection("pt_collections").get_data(self.id)
+        if( cached and len(cached.notebooks) > 0 ):
+            return
         self.notebooks = []
         for doc in self.__notebook_references:
             try:
@@ -75,6 +79,8 @@ class pt_Collection:
             except firebase_exceptions.NotFoundError:
                 self.remove_notebook(doc)
                 pass
+        # Store again in cache
+        cache.collection("pt_collections").add_data(self.id, self)
  
     def remove_notebook(self, doc):
         # Convert to doc reference

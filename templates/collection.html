@@ -49,6 +49,7 @@
             <a href="/notebooks/{{notebook.id}}">
                 <div class="notebook-thumbnail">
                     {{notebook.title}}
+                    <img src="{{notebook.get_author().photo_url}}" alt="" srcset="">
                     {%if collection.protected == false%}
                         <button class="delete" pt-notebook-id="{{notebook.id}}"></button>
                     {%endif%}

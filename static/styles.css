@@ -32,7 +32,16 @@ pt-navbar{
     padding: 20px;
     box-sizing: border-box;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+    .notebook-thumbnail img{
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 0.75rem;
+        object-fit: cover;
+    }
     .notebook-thumbnail .delete{
         appearance: none;
         height: 2.4rem;

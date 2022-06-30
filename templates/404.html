@@ -5,9 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404</title>
+    <link rel="stylesheet" href="/static/styles.css">
+
 </head>
 <body>
-    <h1>404</h1>
-    Perdoname pero no. 
+    <pt-navbar user-display-name="{{user.email or ''}}" user-photo-url="{{user.photo_url or ''}}"></pt-navbar>
+    <main>
+        <h1>404 - Not found</h1>
+        <h2>Perdóname pero no</h2>
+    </main>
+    <script src="/static/pt_navbar.js" type="module"></script>
 </body>
 </html>

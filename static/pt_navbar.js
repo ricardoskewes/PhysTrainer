@@ -12,27 +12,40 @@ template.innerHTML = `
             background: white;
             flex-wrap: wrap
         }
+            nav > .controls {
+                display: flex;
+                align-items: center;
+                column-gap: 0.5rem;
+                width: fit-content;
+                flex-wrap: wrap
+            }
+                nav > .controls > * {
+                    flex: 1
+                }
         img {
             height: 30px;
-            margin-right: 16px
+            object-fit: contain;
+            object-position: left;
         }
-        ul{
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            flex: 1;
+        #new {
+            /*appearance: button;
+            -webkit-appearance: button;
+            padding: 8px;
+            line-height: 100%;
+            text-decoration: none;
+            margin: 3px;*/
         }
-            ul li{
-                flex: 1;
-                text-align: center;
-                flex-shrink: 0;
-            }
+        #search {
+            appearance: textfield;
+            -webkit-appearance: textfield;
+            padding: 6px;
+            margin: 3px
+        }
         #user{
             margin-left: auto; 
             display: flex;
-            align-items: center
+            align-items: center;
+            justify-content: flex-end;
         }
         #user-photo{
             margin-left: 8px;
@@ -44,12 +57,13 @@ template.innerHTML = `
         }
     </style>
     <nav>
-        <img src="/static/img/logo.png" id="logo">
-        <ul>
-            <li><a href="/explore">Explore</li></li>
-            <li><a href="/notebooks/new">New problem</li></li>
-            <li><a href="/constuction">Search</li></li>
-        </ul>
+        <div class="controls">
+            <img src="/static/img/logo.png" id="logo">
+            <a href="/explore">Explore</a>
+            <a href="/notebooks/new" id="new">Create problem...</a>
+            <a href="/collections/new" id="new">Create collection...</a>
+            <input type="search" placeholder="Search" value="" id="search">
+        </div>
         <a id="user">
             <span id="user-display-name"></span>
             <img id="user-photo" />

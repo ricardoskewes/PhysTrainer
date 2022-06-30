@@ -25,8 +25,9 @@ CONFIGURATION AND ERROR HANDLERS
 """
 # 404
 @app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@authentication.login_optional_decorator
+def page_not_found(user, e):
+    return render_template('404.html', user=user), 404
 
 """
 STATIC ENDPOINTS

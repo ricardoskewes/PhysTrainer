@@ -1,10 +1,14 @@
 from pt_Firebase import authentication, auth
-
+from pt_DBCache import cache
 class pt_User(auth.UserRecord):
     @classmethod
     def read(cls, uid: str):
+        cached = cache.collection("pt_users").get_data(uid)
+        if(cached is not None):
+            return cached
         user = authentication.get_user(uid=uid)
         user.__class__ = cls
+        cache.collection("pt_users").add_data(uid, user)
         return user
 
     def __init__(self, data: dict) -> None:
